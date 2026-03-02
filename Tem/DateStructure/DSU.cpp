@@ -9,10 +9,8 @@ using namespace std;
 template <typename T = int>
 class DSU{
 private:
-    vector<T>fa,sz;
     int n;
-
-
+    vector<T>fa,sz;
 public:
     DSU(int n):n(n),fa(n+1),sz(n+1){
         iota(fa.begin(),fa.end(),0);
