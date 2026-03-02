@@ -12,7 +12,7 @@ private:
     int n;
     vector<T>fa,sz;
 public:
-    DSU(int n):n(n),fa(n+1),sz(n+1){
+    DSU(int n):n(n),fa(n+1),sz(n+1,1){
         iota(fa.begin(),fa.end(),0);
     }
 
