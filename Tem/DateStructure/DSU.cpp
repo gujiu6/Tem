@@ -1,49 +1,54 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MAXX=2e5;
-typedef long long ll;
 
 
 
 
 
 
+template <typename T = int>
+class DSU{
+private:
+    vector<T>fa,sz;
+    int n;
 
 
-array<int,MAXX>fa,sz;
+public:
+    DSU(int n):n(n),fa(n+1),sz(n+1){
+        iota(fa.begin(),fa.end(),0);
+    }
 
-void build(int n){
-	for(int i=1;i<=n;i++){
-		fa[i]=i;
-		sz[i]=1;
-	}
-}
+    T find(T i){
+        if(fa[i]!=i){
+            fa[i]=find(fa[i]);
+        }
+        return fa[i];
+    }
 
-int find(int i){
-	if(fa[i]!=i){
-		fa[i]=find(fa[i]);
-	}
-	return fa[i];
-}
+    bool issame(T x,T y){
+        return find(x)==find(y);
+    }
 
-bool issame(int x,int y){
-	return find(x)==find(y);
-}
+    void merge(T x,T y){
+        int fx=find(x);
+        int fy=find(y);
+        if(fx!=fy){
+            if(sz[fx]>=sz[fy]){
+                sz[fx]+=sz[fy];
+                fa[fy]=fx;
+            }
+            else{
+                sz[fy]+=sz[fx];
+                fa[fx]=fy;
+            }
+        }
+    }
 
-void merge(int x,int y){
-	int fx=find(x);
-	int fy=find(y);
-	if(fx!=fy){
-		if(sz[fx]>=sz[fy]){
-			sz[fx]+=sz[fy];
-			fa[fy]=fx;
-		}
-		else{
-			sz[fy]+=sz[fx];
-			fa[fx]=fy;
-		}
-	}
-}
+    T size(T x){
+        return sz[find(x)];
+    }
+};
+
 
 
 
