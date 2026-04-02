@@ -27,9 +27,6 @@ public:
         ll v=h[r]-h[l-1]*p[r-l+1]%MOD;
         return (v%MOD+MOD)%MOD;
     }
-    bool equal(int l1,int r1,int l2,int r2){
-        return get(l1,r1)==get(l2,r2);
-    }
 };
 
 
