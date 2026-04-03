@@ -11,6 +11,16 @@ class CC{
 private:
     vector<ll>f,inv;
 public:
+    ll power(ll a,ll b){
+            ll ans=1;
+            a%=MOD;
+            while(b>0){
+                if(b&1) ans=(ans*a)%MOD;
+                a=(a*a)%MOD;
+                b>>=1;
+            }
+            return ans;
+        }
     CC(int n):f(n+1,0),inv(n+1,0){
         f[0]=1;
         for(int i=1;i<=n;i++){
@@ -20,16 +30,6 @@ public:
         for(int i=n-1;i>=0;i--){
             inv[i]=inv[i+1]*(i+1)%MOD;
         }
-    }
-    ll power(ll a,ll b){
-        ll ans=1;
-        a%=MOD;
-        while(b>0){
-            if(b&1) ans=(ans*a)%MOD;
-            a=(a*a)%MOD;
-            b>>=1;
-        }
-        return ans;
     }
     ll C(int n,int m){
         if(m<0||m>n) return 0;
