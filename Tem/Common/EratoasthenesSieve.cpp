@@ -11,7 +11,7 @@ typedef long long ll;
 
 vector<ll>prime;
 
-void isprime(ll n){
+void Prime(ll n){
     vector<bool>nums(n+1);
     for(int i=2;i<=n;i++){
         if(!nums[i]) prime.emplace_back(i);
