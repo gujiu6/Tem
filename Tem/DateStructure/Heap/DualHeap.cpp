@@ -1,7 +1,4 @@
 #include <bits/stdc++.h>
-#include <functional>
-#include <queue>
-#include <vector>
 using namespace std;
 
 
