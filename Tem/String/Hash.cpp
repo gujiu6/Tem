@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MOD=1e9+7;
 typedef long long ll;
 
 
@@ -12,9 +11,9 @@ typedef long long ll;
 class Hash{
 private:
     vector<ll>h,p;
-    const ll B=131;
+    const ll B=131,MOD=1e9+7;
 public:
-    Hash(const string& s){
+    Hash(const string& s,ll B=131,ll MOD=1e9+7):B(B),MOD(MOD){
         int n=s.size();
         h.resize(n+1,0);
         p.resize(n+1,1);
@@ -24,8 +23,7 @@ public:
         }
     }
     ll get(int l,int r){
-        ll v=h[r]-h[l-1]*p[r-l+1]%MOD;
-        return (v%MOD+MOD)%MOD;
+        return ((h[r]-h[l-1]*p[r-l+1])%MOD+MOD)%MOD;
     }
 };
 
