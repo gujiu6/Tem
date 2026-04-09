@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int MAXX=2e5;
-const int MOD=1e9+7;
 typedef long long ll;
 
 
@@ -10,7 +9,7 @@ typedef long long ll;
 
 
 
-ll power(ll a,ll b){
+ll power(ll a,ll b,ll MOD=1e9+7){
 	ll ans=1;
 	a%=MOD;
 	while(b>0){
@@ -21,7 +20,7 @@ ll power(ll a,ll b){
 	return ans;
 }
 
-ll getinv(int n){
-    return power(n,MOD-2);
+ll getinv(int n,int MOD=1e9+7){
+    return power(n,MOD-2,MOD);
 }
 
