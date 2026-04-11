@@ -16,7 +16,7 @@ const int INF=1e9+7;
 const int MAXX=2e5+10;
 const int MOD=1e9+7;
 const double eps=1e-6;
-int dx4[]={0,0,1,-1},dy4[]={1,-1,0,0};
+int dx[]={0,0,1,-1},dy[]={1,-1,0,0};
 int dx8[]={0,0,1,1,1,-1,-1,-1},dy8[]={1,-1,-1,0,1,-1,0,1};
 
 
