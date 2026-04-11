@@ -2,14 +2,9 @@
 #include <ranges>
 using namespace std;
 #define endl "\n"
-#define all0(A) A.begin(), A.end()
-#define all1(A) A.begin()+1,A.end()
-#define lrp(l,r) for(int i=l;i<=r;i++)
-#define prl(l,r) for(int i=r;i>=l;i--)
-#define rep(x) for(int i=0;i<x;i++)
-#define pre(x) for(int i=x-1;i>=0;i--)
-#define rpp(x) for(int i=1;i<=x;i++)
-#define ppr(x) for(int i=x;i>=1;i--)
+#define all(A,i) A.begin()+i, A.end()
+#define rep(i,l,r) for(int i=l;i<=r;i++)
+#define per(i,l,r) for(int i=r;i>=l;i--)
 #define pb push_back
 #define dbg(A) cout<<#A<<"=="<<A<<'\n';
 #define int long long
