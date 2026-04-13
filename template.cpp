@@ -6,7 +6,7 @@ using ld = long double;
 using ull = unsigned long long;
 using pii = array<int, 2>;
 #define endl '\n'
-#define int long long
+//#define int long long
 #define all(A,i) A.begin()+i, A.end()
 #define rep(i,l,r) for(int i=l;i<=r;i++)
 #define per(i,l,r) for(int i=r;i>=l;i--)
