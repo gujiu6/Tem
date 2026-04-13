@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MAXX=2e5;
+const int MAXN=2e5;
 typedef long long ll;
 
 
@@ -9,7 +9,7 @@ typedef long long ll;
 
 
 
-array<int,MAXX>fa;
+array<int,MAXN>fa;
 
 void build(int n){
     for(int i=1;i<=n;i++){

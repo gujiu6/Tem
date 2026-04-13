@@ -13,7 +13,8 @@ typedef long long ll;
 const int MAXN=5001,MAXM=400001;
 
 int cnt,nodeCnt;
-array<int,MAXM>h,nxt,to,wei;
+array<int,MAXN>h;
+array<int,MAXM>nxt,to,wei;
 
 array<array<int,2>,MAXN>heap;
 array<int,MAXN>where;//-1:未进  -2:弹出  >=0:位置

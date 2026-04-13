@@ -5,8 +5,8 @@ const int INF=1e9+7;
 
 
 int cnt;
-array<int,MAXM>to,wei;
-array<int,MAXN>h,nxt;
+array<int,MAXM>to,wei,nxt;
+array<int,MAXN>h;
 
 array<int,MAXN>heap;
 array<int,MAXN>where,dis;//-1:未进  -2:弹出  >=0:位置
