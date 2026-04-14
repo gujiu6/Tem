@@ -6,7 +6,7 @@ const int INF=1e9+7;
 
 int cnt;
 array<int,MAXN>h;
-array<int,MAXM>nxt,to,wei;
+array<int,MAXM<<1>nxt,to,wei;
 vector<int>dis(MAXN,INF),updateCnt(MAXN),enter(MAXN);
 
 void build(){

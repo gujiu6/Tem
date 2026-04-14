@@ -11,7 +11,7 @@ typedef long long ll;
 
 int cnt;
 array<int,MAXN>h;
-array<int,MAXM>nxt,to,wei;
+array<int,MAXM<<1>nxt,to,wei;
 
 void build(){
     cnt=1;

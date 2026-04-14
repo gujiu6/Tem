@@ -10,8 +10,8 @@ typedef long long ll;
 
 
 
-array<int,MAXN>head;
-array<int,MAXM>nxt,to,indegree,outdegree;
+array<int,MAXN>head,indegree,outdegree;
+array<int,MAXM<<1>nxt,to;
 int cnt;
 priority_queue<int,vector<int>,greater<int>>q;
 

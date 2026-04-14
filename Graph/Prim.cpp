@@ -14,7 +14,7 @@ const int MAXN=5001,MAXM=400001;
 
 int cnt,nodeCnt;
 array<int,MAXN>h;
-array<int,MAXM>nxt,to,wei;
+array<int,MAXM<<1>nxt,to,wei;
 
 array<array<int,2>,MAXN>heap;
 array<int,MAXN>where;//-1:未进  -2:弹出  >=0:位置
