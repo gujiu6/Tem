@@ -31,7 +31,7 @@ public:
         return find(x)==find(y);
     }
 
-    void merge(T x,T y){
+    bool merge(T x,T y){
         int fx=find(x);
         int fy=find(y);
         if(fx!=fy){
@@ -43,7 +43,9 @@ public:
                 sz[fy]+=sz[fx];
                 fa[fx]=fy;
             }
+            return 1;
         }
+        return 0;
     }
 
     T size(T x){

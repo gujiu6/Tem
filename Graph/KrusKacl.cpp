@@ -1,59 +1,95 @@
 #include <bits/stdc++.h>
+#define all(A,i) A.begin()+i, A.end()
 using namespace std;
-const int MAXN=2e5;
-typedef long long ll;
+const int MAXN=2e5+10,MAXM=5e5+10;
+using ll=long long;
 
 
+int cnt;
+array<int,MAXN>h;
+array<int,MAXM<<1>nxt,to,wei;
 
-
-
-
-
-array<int,MAXN>fa;
-
-void build(int n){
-    for(int i=1;i<=n;i++){
-        fa[i]=i;
-    }
+void build(){
+    cnt=1;
+    h.fill(0);
 }
 
-int find(int i){
-    if(i!=fa[i]){
-        fa[i]=find(fa[i]);
-    }
-    return fa[i];
+void addEdge(int u,int v,int w=0){
+    nxt[cnt]=h[u];
+    to[cnt]=v;
+    wei[cnt]=w;
+    h[u]=cnt++;
 }
 
-bool merge(int x,int y){
-    int fx=find(x);
-    int fy=find(y);
-    if(fx!=fy){
-        fa[fx]=fy;
-        return 1;
+template <typename T = int>
+class DSU{
+private:
+    int n;
+    int row,col;
+    vector<T>fa,sz;
+public:
+    DSU(int n):n(n),row(0),col(0),fa(n+1),sz(n+1,1){
+        iota(fa.begin(),fa.end(),0);
     }
-    return 0;
-}
+    DSU(int r,int c):n(r*c),row(r),col(c),fa(r*c+1),sz(r*c+1,1){
+        iota(fa.begin(),fa.end(),0);
+    }
+
+    T find(T i){
+        if(fa[i]!=i){
+            fa[i]=find(fa[i]);
+        }
+        return fa[i];
+    }
+
+    bool issame(T x,T y){
+        return find(x)==find(y);
+    }
+
+    bool merge(T x,T y){
+        int fx=find(x);
+        int fy=find(y);
+        if(fx!=fy){
+            if(sz[fx]>=sz[fy]){
+                sz[fx]+=sz[fy];
+                fa[fy]=fx;
+            }
+            else{
+                sz[fy]+=sz[fx];
+                fa[fx]=fy;
+            }
+            return 1;
+        }
+        return 0;
+    }
+
+    T size(T x){
+        return sz[find(x)];
+    }
+    int id(int i,int j){
+        return i*col+j;
+    }
+};
 
 
 
-void KrusKal(){
-    int n,m,cnt=0;
-    cin>>n>>m;
-    build(n);
-    long long ans=0;
-    vector<array<int,3>>edge(m);
+int KrusKal(vector<array<int,3>>edge,int n){
+    int m=edge.size(),cnt=0;
+    DSU dsu(n);
+    ll ans=0;
+    sort(all(edge,0),[](const auto x,const auto y){
+        return x[2]<y[2];
+    });
     for(int i=0;i<m;i++){
-        cin>>edge[i][1]>>edge[i][2]>>edge[i][0];
-    }
-    sort(edge.begin(),edge.end());
-    for(int i=0;i<m;i++){
-        if(merge(edge[i][1],edge[i][2])){
+        if(dsu.merge(edge[i][0],edge[i][1])){
             ans+=edge[i][0];
             cnt++;
+            addEdge(edge[i][1],edge[i][0],edge[i][2]);
+            addEdge(edge[i][0],edge[i][1],edge[i][2]);
         }
     }
-    if(cnt==n-1) cout<<ans<<endl;
-    else cout<<"orz"<<endl;
+    if(cnt==n-1) return ans;
+    return -1;
     
 }
 
