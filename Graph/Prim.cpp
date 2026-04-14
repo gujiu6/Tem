@@ -28,7 +28,7 @@ void build(){
     where.fill(-1);
 }
 
-void addEdge(int u,int v,int w){
+void addEdge(int u,int v,int w=0){
     nxt[cnt]=h[u];
     to[cnt]=v;
     wei[cnt]=w;
