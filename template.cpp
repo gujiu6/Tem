@@ -14,7 +14,7 @@ using pii = array<int, 2>;
 #define dbg(x) cout<<#x<<"="<<x<<endl;
 const int INF=1e9+7;
 const int MOD=1e9+7;
-const int MAXX=2e5+10,MAXN=1005,MAXM=2e5+10,LIMIT=20;
+const int MAXX=2e5+10,MAXN=5e5+10,MAXM=5e5+10,LIMIT=20;
 const double eps=1e-6;
 int dx[]={0,0,1,-1}, dy[]={1,-1,0,0};
 int dx8[]={0,0,1,1,1,-1,-1,-1}, dy8[]={1,-1,-1,0,1,-1,0,1};
