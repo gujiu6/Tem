@@ -8,7 +8,9 @@ typedef long long ll;
 
 
 
-
+int lowbit(int i){
+	return i&-i;
+}
 
 //2^k
 bool isPowerOfTwo(int n){
@@ -53,6 +55,7 @@ ll getXor(ll x){
 	if(x%4==1) return 1;
 	if(x%4==2) return x+1;
 	if(x%4==3) return 0;
+	return -1;
 }
 
 
