@@ -4,23 +4,6 @@ using namespace std;
 const int MAXN=2e5+10,MAXM=5e5+10;
 using ll=long long;
 
-
-int cnt;
-array<int,MAXN>h;
-array<int,MAXM<<1>nxt,to,wei;
-
-void build(){
-    cnt=1;
-    h.fill(0);
-}
-
-void addEdge(int u,int v,int w=0){
-    nxt[cnt]=h[u];
-    to[cnt]=v;
-    wei[cnt]=w;
-    h[u]=cnt++;
-}
-
 template <typename T = int>
 class DSU{
 private:
@@ -70,19 +53,40 @@ public:
         return i*col+j;
     }
 };
+int cnt;
+array<int,MAXN>h;
+array<int,MAXM<<1>nxt,to,wei;
+DSU dsu(MAXN);
+
+
+
+
+void build(int n){
+    cnt=1;
+    h.fill(0);
+    dsu=DSU(n);
+}
+
+void addEdge(int u,int v,int w=0){
+    nxt[cnt]=h[u];
+    to[cnt]=v;
+    wei[cnt]=w;
+    h[u]=cnt++;
+}
+
+
 
 
 
 int KrusKal(vector<array<int,3>>edge,int n){
     int m=edge.size(),cnt=0;
-    DSU dsu(n);
     ll ans=0;
     sort(all(edge,0),[](const auto x,const auto y){
         return x[2]<y[2];
     });
     for(int i=0;i<m;i++){
         if(dsu.merge(edge[i][0],edge[i][1])){
-            ans+=edge[i][0];
+            ans+=edge[i][2];
             cnt++;
             addEdge(edge[i][1],edge[i][0],edge[i][2]);
             addEdge(edge[i][0],edge[i][1],edge[i][2]);
