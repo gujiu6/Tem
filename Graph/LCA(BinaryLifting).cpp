@@ -5,14 +5,6 @@ const int MAXN=5e5+10,MAXM=5e5+10,LIMIT=20;
 
 
 
-int log2(int n) {
-    int ans = 0;
-    while ((1 << ans) <= (n >> 1)) {
-        ans++;
-    }
-    return ans;
-}
-
 int cnt,lg2;
 array<int,MAXN>h,deep;
 array<int,MAXM<<1>nxt,to,wei;
@@ -20,7 +12,7 @@ array<array<int,LIMIT>,MAXN>stjump;
 
 void build(int n){
     cnt=1;
-    lg2=log2(n);
+    lg2=__lg(n);
     h.fill(0);
     deep.fill(0);
 }

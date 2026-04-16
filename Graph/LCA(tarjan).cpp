@@ -7,7 +7,7 @@ int cnt;
 array<int,MAXN>h,fa,vis;
 array<int,MAXM<<1>nxt,to,wei;
 vector<vector<pii>>Question(MAXN);
-vector<int>ans;
+vector<int>lca;
 
 void build(int n){
     cnt=1;
@@ -42,7 +42,7 @@ void tarjan(int u,int f){
     }
     for(auto [v,id]:Question[u]){
         if(vis[v]){
-            ans[id]=find(v);
+            lca[id]=find(v);
         }
     }
 }
