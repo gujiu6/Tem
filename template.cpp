@@ -1,17 +1,17 @@
 #include <bits/stdc++.h>
-#include <ranges>
+//#include <ranges>
 using namespace std;
-using ll = long long;
-using ld = long double;
-using ull = unsigned long long;
-using pii = array<int, 2>;
-#define endl '\n'
 //#define int long long
+#define endl '\n'
 #define all(A,i) A.begin()+i, A.end()
 #define rep(i,l,r) for(int i=l;i<=r;i++)
 #define per(i,l,r) for(int i=r;i>=l;i--)
 #define pb push_back
 #define dbg(x) cout<<#x<<"="<<x<<endl;
+using ll = long long;
+using ld = long double;
+using ull = unsigned long long;
+using pii = array<int, 2>;
 const int INF=1e9+7;
 const int MOD=1e9+7;
 const int MAXX=2e5+10,MAXN=5e5+10,MAXM=5e5+10,LIMIT=20;
