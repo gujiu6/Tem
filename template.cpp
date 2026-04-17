@@ -5,7 +5,7 @@ using namespace std;
 #define endl '\n'
 #define all(A,i) A.begin()+i, A.end()
 #define rep(i,l,r) for(int i=l;i<=r;i++)
-#define per(i,l,r) for(int i=r;i>=l;i--)
+#define per(i,r,l) for(int i=r;i>=l;i--)
 #define pb push_back
 #define dbg(x) cout<<#x<<"="<<x<<endl;
 using ll = long long;
