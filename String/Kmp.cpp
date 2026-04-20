@@ -40,11 +40,8 @@ int KMP(string s1,string s2){
     return y==n2?x-y:-1;
 }
 
-<<<<<<< HEAD
-=======
 
 
 
 
 
->>>>>>> Tem/main
