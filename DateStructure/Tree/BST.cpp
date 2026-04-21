@@ -4,10 +4,10 @@ using namespace std;
 
 
 struct TreeNode{
-    int data;
+    int key;
     TreeNode *left,*right;
     int size,count;
-    TreeNode(int value):data(value),size(1),count(1),left(nullptr),right(nullptr){}
+    TreeNode(int value):key(value),size(1),count(1),left(nullptr),right(nullptr){}
 };
 template <typename T=int>
 class BST{
@@ -17,10 +17,10 @@ public:
         if(root==nullptr){
             return new TreeNode(value);
         }
-        if(value<root->data){
+        if(value<root->key){
             root->left=insert(root->left,value);
         }
-        else if(value>root->data){
+        else if(value>root->key){
             root->right=insert(root->right,value);
         }
         else{
@@ -32,8 +32,8 @@ public:
     
     bool search(TreeNode* root,T value){
         if(root==nullptr) return false;
-        if(root->data==value) return true;
-        else if(value>root->data) return search(root->right,value);
+        if(root->key==value) return true;
+        else if(value>root->key) return search(root->right,value);
         else return search(root->left, value);
     }
 
@@ -54,10 +54,10 @@ public:
 
     TreeNode* remove(TreeNode* root,T value){
         if(root==nullptr) return root;
-        if(value<root->data){
+        if(value<root->key){
             root->left=remove(root->left,value);
         }
-        else if(value>root->data){
+        else if(value>root->key){
             root->right=remove(root->right,value);
         }
         else{
@@ -77,10 +77,10 @@ public:
                 }
                 else{
                     TreeNode* tmp=findMin(root->right);
-                    root->data=tmp->data;
+                    root->key=tmp->key;
                     root->count=tmp->count;
                     tmp->count=1;
-                    root->right=remove(root->right,tmp->data);
+                    root->right=remove(root->right,tmp->key);
                 }
             }
         }
@@ -90,18 +90,18 @@ public:
 
     int qryRank(TreeNode* root,T value){
         if(root==nullptr) return 0;
-        if(value==root->data) return (root->left?root->left->size:0)+1;
-        if(value>root->data) return qryRank(root->right,value)+(root->count)+(root->left?root->left->size:0);
+        if(value==root->key) return (root->left?root->left->size:0)+1;
+        if(value>root->key) return qryRank(root->right,value)+(root->count)+(root->left?root->left->size:0);
         else return qryRank(root->left,value);
     }
     T qryth(TreeNode* root,int k){
         if(root==nullptr) return -1;
         if(root->left){
             if(root->left->size>=k) return qryth(root->left,k);
-            if(root->left->size+root->count>=k) return root->data;
+            if(root->left->size+root->count>=k) return root->key;
         }
         else {
-            if(k<=root->count) return root->data;
+            if(k<=root->count) return root->key;
         }
         return qryth(root->right,k-(root->left?root->left->size:0)-root->count);
     }
