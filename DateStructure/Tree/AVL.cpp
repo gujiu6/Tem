@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <climits>
 using namespace std;
 
 
@@ -24,7 +23,6 @@ private:
     }
     int RightRotate(int i){
         int l=left[i];
-        
         left[i]=right[l];
         right[l]=i;
         up(i);
