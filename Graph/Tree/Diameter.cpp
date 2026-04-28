@@ -5,10 +5,10 @@ const int MAXN=5e5+10,MAXM=5e5+10,INF=1e9+10;
 
 array<int,MAXN>h,last,dist;
 array<int,MAXM<<1>to,nxt,wei;
-int n,cnt,ans;
+int n,cnt,diameter;
 void build(){
     cnt=1;
-    ans=0;
+    diameter=0;
     fill(h.begin(),h.begin()+n+1,0);
 }
 void addEdge(int u,int v,int w){
@@ -58,7 +58,7 @@ void dp(int u,int f){
     for(int ei=h[u],v;ei>0;ei=nxt[ei]){
         v=to[ei];
         if(v!=f){
-            ans=max(ans,dist[u]+dist[v]+wei[ei]);
+            diameter=max(diameter,dist[u]+dist[v]+wei[ei]);
             dist[u]=max(dist[u],dist[v]+wei[ei]);
         }
     }
