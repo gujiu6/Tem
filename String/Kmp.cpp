@@ -3,12 +3,12 @@ using namespace std;
 
 
 vector<int> nextArray(string s){
-    int m=s.size();
-    if(m==1) return {-1};
-    vector<int>next(m);
+    int n=s.size();
+    if(n==1) return {-1};
+    vector<int>next(n);
     next[0]=-1,next[1]=0;
     int i=2,cnt=0;
-    while(i<m){
+    while(i<n){
         if(s[i-1]==s[cnt]){
             next[i++]=++cnt;
         }
