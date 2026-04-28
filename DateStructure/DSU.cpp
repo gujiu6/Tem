@@ -11,27 +11,28 @@ class DSU{
 private:
     int n;
     int row,col;
-    vector<T>fa,sz;
+    vector<int>fa,sz;
+    vector<T>value;
 public:
-    DSU(int n):n(n),row(0),col(0),fa(n+1),sz(n+1,1){
+    DSU(int n):n(n),row(0),col(0),fa(n+1),sz(n+1,1),value(n+1,0){
         iota(fa.begin(),fa.end(),0);
     }
     DSU(int r,int c):n(r*c),row(r),col(c),fa(r*c+1),sz(r*c+1,1){
         iota(fa.begin(),fa.end(),0);
     }
 
-    T find(T i){
+    int find(int i){
         if(fa[i]!=i){
             fa[i]=find(fa[i]);
         }
         return fa[i];
     }
 
-    bool issame(T x,T y){
+    bool issame(int x,int y){
         return find(x)==find(y);
     }
 
-    bool merge(T x,T y){
+    bool merge(int x,int y){
         int fx=find(x);
         int fy=find(y);
         if(fx!=fy){
@@ -47,8 +48,10 @@ public:
         }
         return 0;
     }
-
-    T size(T x){
+    T findV(int x){
+        return value[find(x)];
+    }
+    int size(int x){
         return sz[find(x)];
     }
     int id(int i,int j){
