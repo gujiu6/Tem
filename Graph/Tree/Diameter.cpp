@@ -5,9 +5,10 @@ const int MAXN=5e5+10,MAXM=5e5+10,INF=1e9+10;
 
 array<int,MAXN>h,last,dist;
 array<int,MAXM<<1>to,nxt,wei;
-int n,cnt;
+int n,cnt,ans;
 void build(){
     cnt=1;
+    ans=0;
     fill(h.begin(),h.begin()+n+1,0);
 }
 void addEdge(int u,int v,int w){
@@ -44,4 +45,21 @@ array<int,3> road(){
     }
     dis=dist[ed];
     return {st,ed,dis};
+}
+
+//树上dp
+void dp(int u,int f){
+    for(int ei=h[u],v;ei>0;ei=nxt[ei]){
+        v=to[ei];
+        if(v!=f){
+            dp(v,u);
+        }
+    }
+    for(int ei=h[u],v;ei>0;ei=nxt[ei]){
+        v=to[ei];
+        if(v!=f){
+            ans=max(ans,dist[u]+dist[v]+wei[ei]);
+            dist[u]=max(dist[u],dist[v]+wei[ei]);
+        }
+    }
 }
