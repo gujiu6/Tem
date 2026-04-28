@@ -11,8 +11,8 @@ vector<int>lca;
 
 void build(int n){
     cnt=1;
-    h.fill(0);
-    vis.fill(0);
+    fill(h.begin(),h.begin()+n+1,0);
+    fill(vis.begin(),vis.begin()+n+1,0);
     for(int i=1;i<=n;i++) 
         fa[i]=i;
 }

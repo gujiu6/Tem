@@ -63,7 +63,7 @@ DSU dsu(MAXN);
 
 void build(int n){
     cnt=1;
-    h.fill(0);
+    fill(h.begin(),h.begin()+n+1,0);
     dsu=DSU(n);
 }
 

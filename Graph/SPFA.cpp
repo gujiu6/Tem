@@ -9,9 +9,9 @@ array<int,MAXN>h;
 array<int,MAXM<<1>nxt,to,wei;
 vector<int>dis(MAXN,INF),updateCnt(MAXN),enter(MAXN);
 
-void build(){
+void build(int n){
     cnt=1;
-    h.fill(0);
+    fill(h.begin(),h.begin()+n+1,0);
     enter.assign(MAXN,0);
     updateCnt.assign(MAXN,0);
     dis.assign(MAXN,INF);

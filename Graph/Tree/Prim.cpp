@@ -20,11 +20,11 @@ array<array<int,2>,MAXN>heap;
 array<int,MAXN>where;//-1:未进  -2:弹出  >=0:位置
 int heapSize;
 
-void build(){
+void build(int n){
     cnt=1;
     heapSize=0;
     nodeCnt=0;
-    h.fill(0);
+    fill(h.begin(),h.begin()+n+1,0);
     where.fill(-1);
 }
 

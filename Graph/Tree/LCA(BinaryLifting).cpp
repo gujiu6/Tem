@@ -13,8 +13,8 @@ array<array<int,LIMIT>,MAXN>stjump;
 void build(int n){
     cnt=1;
     lg2=__lg(n);
-    h.fill(0);
-    deep.fill(0);
+    fill(h.begin(),h.begin()+n+1,0);
+    fill(deep.begin(),deep.begin()+n+1,0);
 }
 
 void addEdge(int u,int v,int w=0){
