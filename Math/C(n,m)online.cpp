@@ -12,17 +12,16 @@ private:
     vector<ll>f,inv;
 public:
     ll power(ll a,ll b){
-            ll ans=1;
-            a%=MOD;
-            while(b>0){
-                if(b&1) ans=(ans*a)%MOD;
-                a=(a*a)%MOD;
-                b>>=1;
-            }
-            return ans;
+        ll ans=1;
+        a%=MOD;
+        while(b>0){
+            if(b&1) ans=(ans*a)%MOD;
+            a=(a*a)%MOD;
+            b>>=1;
         }
-    CC(int n):f(n+1,0),inv(n+1,0){
-        f[0]=1;
+        return ans;
+    }
+    CC(int n):f(n+1,1),inv(n+1,0){
         for(int i=1;i<=n;i++){
             f[i]=f[i-1]*i%MOD;
         }
