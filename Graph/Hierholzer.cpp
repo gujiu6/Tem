@@ -5,7 +5,7 @@ using namespace std;
 const int MAXN = 5e5 + 10, MAXM = 5e5 + 10;
 
 //有向图
-struct Euler1 {
+namespace Euler1 {
     array<int, MAXN> h, inDeg, outDeg, Deg, cur;
     array<int, MAXM> to, nxt;
     array<int, MAXM << 1> path;
@@ -56,7 +56,7 @@ struct Euler1 {
 };
 
 //无向图
-struct Euler2 {
+namespace Euler2 {
     array<int, MAXN> h, Deg, cur;
     array<int, MAXM> to, nxt;
     array<int, MAXM << 1> path, vis, eid;
