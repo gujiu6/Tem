@@ -76,16 +76,16 @@ namespace Euler2 {
         h[u] = cnt++;
     }
     //保证最小字典序
-    void init(vector<array<int,3>>& edge) {
+    void init(vector<array<int,3>>& edge, int n) {
         int m = edge.size();
         sort(all(edge, 0), [](auto x, auto y){
             if(x[0] == y[0]) return x[1] > y[1];
             return x[0] < y[0];
         });
-        for(int i = 0; i < m; i++) {
-            auto [u, v, id] = edge[i];
+        for(auto [u, v, id] : edge) {
             addEdge(u, v, id);
         }
+        for(int i = 1; i <= n; i++) cur[i] = h[i];
     }
 
     int undirectedStart(int n) {
