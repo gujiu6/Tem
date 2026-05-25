@@ -71,8 +71,8 @@ namespace Euler2 {
     void addEdge(int u, int v, int id) {
         nxt[cnt] = h[u];
         to[cnt] = v;
-        Deg[u]++;
         eid[cnt] = id;
+        Deg[u]++;
         h[u] = cnt++;
     }
     //保证最小字典序
