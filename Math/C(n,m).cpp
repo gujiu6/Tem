@@ -50,9 +50,9 @@ public:
 };
 
 
+
+//预处理11
 array<array<ll,MAXX+1>,MAXX+1>C,pre;
-
-
 void CC(){
 	for(int n=0;n<=MAXX;n++){
 		C[n][0]=C[n][n]=1;
