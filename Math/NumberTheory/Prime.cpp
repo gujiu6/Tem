@@ -8,9 +8,10 @@ typedef long long ll;
 
 
 
+namespace Prime{
 
 vector<ll>prime;
-
+//埃氏筛素数
 void Prime_Eratoasthenes(ll n){
     vector<bool>nums(n+1);
     for(int i=2;i<=n;i++){
@@ -21,7 +22,7 @@ void Prime_Eratoasthenes(ll n){
         }
     }
 }
-
+//欧拉筛素数
 void Prime_Euler(ll n){
     vector<bool>nums(n+1);
     for(int i=2;i<=n;i++){
@@ -32,4 +33,7 @@ void Prime_Euler(ll n){
         }
     }
 }
+
+}
+
 
