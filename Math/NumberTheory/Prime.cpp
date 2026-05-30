@@ -11,7 +11,7 @@ typedef long long ll;
 
 vector<ll>prime;
 
-void Prime(ll n){
+void Prime_Eratoasthenes(ll n){
     vector<bool>nums(n+1);
     for(int i=2;i<=n;i++){
         if(!nums[i]) prime.emplace_back(i);
@@ -22,5 +22,14 @@ void Prime(ll n){
     }
 }
 
-
+void Prime_Euler(ll n){
+    vector<bool>nums(n+1);
+    for(int i=2;i<=n;i++){
+        if(!nums[i]) prime.emplace_back(i);
+        for(int j=0;j<prime.size()&&i*prime[j]<=n;j++){
+            nums[i*prime[j]]=1;
+            if(i%prime[j]==0) break;
+        }
+    }
+}
 
