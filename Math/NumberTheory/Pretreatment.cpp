@@ -10,30 +10,33 @@ typedef long long ll;
 
 namespace Prime{
 
-vector<ll>prime;
+vector<ll> prime;
 //埃氏筛素数
 void Prime_Eratoasthenes(ll n){
-    vector<bool>nums(n+1);
-    for(int i=2;i<=n;i++){
+    vector<bool>nums(n + 1);
+    for(int i = 2;i <= n; i++){
         if(!nums[i]) prime.emplace_back(i);
-        for(int j=0;j<prime.size()&&i*prime[j]<=n;j++){
-            nums[i*prime[j]]=1;
-            if(i%prime[j]==0) break;
+        for(int j = 0;j < prime.size() && i * prime[j] <= n; j++){
+            nums[i * prime[j]]=1;
+            if(i % prime[j] == 0) break;
         }
     }
 }
 //欧拉筛素数
 void Prime_Euler(ll n){
-    vector<bool>nums(n+1);
-    for(int i=2;i<=n;i++){
+    vector<bool> nums(n + 1);
+    for(int i = 2; i <= n; i++){
         if(!nums[i]) prime.emplace_back(i);
-        for(int j=0;j<prime.size()&&i*prime[j]<=n;j++){
-            nums[i*prime[j]]=1;
-            if(i%prime[j]==0) break;
+        for(int j = 0;j < prime.size() && i * prime[j] <= n; j++){
+            nums[i * prime[j]]=1;
+            if(i % prime[j] == 0) break;
         }
     }
 }
-
+//区间筛素数[l, r]
+vector<ll> segment_sieve(ll l, ll r) {
+    int n = r - l + 1;
+} 
 }
 
 namespace Euler {
