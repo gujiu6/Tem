@@ -85,20 +85,20 @@ public:
         }
     }
 
-    T range_qry(int jobl, int jobr, int l, int r, int i) {
+    T range_qry_sum(int jobl, int jobr, int l, int r, int i) {
         if(jobl <= l && r <= jobr) {
             return sum[i];
         }
         T ans=0;
         int mid = (l + r) >> 1;
         down(i, mid - l + 1, r - mid);
-        if(jobl <= mid) ans += range_qry(jobl, jobr, l,mid, i << 1);
-        if(jobr > mid) ans += range_qry(jobl, jobr, mid + 1, r, i << 1 | 1);
+        if(jobl <= mid) ans += range_qry_sum(jobl, jobr, l,mid, i << 1);
+        if(jobr > mid) ans += range_qry_sum(jobl, jobr, mid + 1, r, i << 1 | 1);
         return ans;
     }
     void updates(int l, int r, T v) {range_update(l, r, v, 1, n, 1);}
     void adds(int l, int r, T v) {range_add(l, r, v, 1, n, 1);}
-    T qry(int l, int r) {return range_qry(l, r, 1, n, 1);}
+    T qry(int l, int r) {return range_qry_sum(l, r, 1, n, 1);}
 };
 
 
