@@ -35,8 +35,26 @@ void Prime_Euler(ll n){
 }
 //区间筛素数[l, r]
 vector<ll> segment_sieve(ll l, ll r) {
+    Prime_Euler(sqrt(r));
     int n = r - l + 1;
-} 
+    vector<bool> nums(n, 1);
+    if(l == 1) nums[0] = 0;
+    for(int i = 0; i < prime.size() && 1LL * prime[i] * prime[i] <= r; i++) {
+        ll p = prime[i];
+        ll start = max(p * p, (l + p - 1) / p * p);
+        for(int j = start; j <= r; j += p) {
+            nums[j] = 0;
+        }
+    }
+    vector<ll> ans;
+    for(int i = 0; i < n; i++) {
+        if(nums[i]) ans.push_back(l + i);
+    }
+    return ans;
+}
+
+
+
 }
 
 namespace Euler {
@@ -54,17 +72,17 @@ ll get_phi(ll n) {
     return ans;
 }
 //欧拉筛欧拉函数
-vector<int> prime, phi;
-void get_phi(int n) {
+vector<ll> prime, phi;
+void get_phis(ll n) {
     phi.assign(n + 1, 0);
     vector<bool> vis(n + 1);
     phi[1] = 1;
-    for(int i = 2; i <= n; i++) {
+    for(ll i = 2; i <= n; i++) {
         if(!vis[i]) {
             prime.push_back(i);
             phi[i] = i - 1;
         }
-        for(int j = 0; j < prime.size() && i * prime[j] <= n; j++) {
+        for(int j = 0; j < prime.size() && 1LL * i * prime[j] <= n; j++) {
             int p = prime[j];
             vis[i * p] = 1;
             if(i % p ==0) {
@@ -77,13 +95,49 @@ void get_phi(int n) {
         }
     }
 }
+//区间筛欧拉函数
+void get_segement_phi(ll l, ll r) {
+    int n = r - l + 1;
+    Prime::Prime_Euler(sqrt(r));
+    phi.assign(n, 0);
+    vector<ll> v(n);
+    for(int i = 0; i < n; i++) {
+        phi[i] = l + i;
+        v[i] = l + i;
+    }
+    for(int i = 0; i < prime.size() && 1LL * prime[i] * prime[i] <= r; i++) {
+        ll p = prime[i];
+        ll start = max(p * p, (p + l - 1) / p * p);
+        for(ll j = start; j <= r; j += p) {
+            int idx = j - l;
+            if(v[idx] % p == 0) {
+                phi[idx] = phi[idx] / p * (p - 1);
+                while(v[idx] % p == 0) 
+                    v[idx] /= p;
+            }
+        }
+    }
+    for(int i = 0; i < n; i++) {
+        if(v[i] > 1) {
+            phi[i] = phi[i] / v[i] * (v[i] - 1);
+        }
+    }
+}
+
+
+
+
+}
+
+namespace Mobius {
+
 //欧拉筛莫比乌斯函数
-vector<int> mu;
-void get_mu(int n) {
+vector<ll> mu, prime;
+void get_mu(ll n) {
     mu.assign(n + 1, 0);
     mu[1] = 1;
     vector<bool> vis(n + 1);
-    for(int i = 2; i <= n; i++) {
+    for(ll i = 2; i <= n; i++) {
         if(!vis[i]) {
             prime.push_back(i);
             mu[i] = -1;
