@@ -1,26 +1,21 @@
 #include <bits/stdc++.h>
 using namespace std;
+const int INF = 1e9+7;
 
 
 
 
-
-
+//普通DSU
 template <typename T = int>
 class DSU {
 private:
     int n;
-    int row, col;
     vector<int> fa,sz;
     vector<T> value;
 public:
-    DSU(int n) : n(n), row(0), col(0), fa(n + 1), sz(n + 1, 1), value(n + 1, 0) {
+    DSU(int n) : n(n), fa(n + 1), sz(n + 1, 1), value(n + 1, 0) {
         iota(fa.begin(), fa.end(), 0);
     }
-    DSU(int r, int c) : n(r * c), row(r), col(c), fa(r * c + 1), sz(r * c + 1, 1) {
-        iota(fa.begin(), fa.end(), 0);
-    }
-
     int find(int i){
         if(fa[i] != i){
             fa[i] = find(fa[i]);
@@ -33,8 +28,7 @@ public:
     }
 
     bool merge(int x, int y){
-        int fx = find(x);
-        int fy = find(y);
+        int fx = find(x), fy = find(y);
         if(fx != fy){
             if(sz[fx] >= sz[fy]){
                 sz[fx] += sz[fy];
@@ -54,11 +48,44 @@ public:
     int size(int x){
         return sz[find(x)];
     }
-    int id(int i, int j){
-        return i * col + j;
-    }
 };
 
-
+//带权DSU
+class DSU_Wei {
+private:
+    int n;
+    vector<int> fa, dist, sz;
+public:
+    DSU_Wei(int n) : fa(n + 1, 0), dist(n + 1, 0), sz(n + 1, 1) {
+        iota(fa.begin(), fa.begin() + n + 1, 0);
+    }
+    int find(int i) {
+        if(i != fa[i]) {
+            int tmp = fa[i];
+            fa[i] = find(fa[i]);
+            dist[i] += dist[tmp];
+        }
+        return fa[i];
+    }
+    bool merge(int l, int r, int v) {
+        int lf = find(l), rf = find(r);
+        if(lf != rf) {
+            fa[lf] = rf;
+            dist[lf] = v + dist[r] - dist[l];
+            sz[rf] += sz[lf]; 
+            return true;
+        }
+        return false;
+    }
+    bool is_same(int l, int r) {
+        return find(l) == find(r);
+    }
+    int query(int l, int r) {
+        if(is_same(l, r)) {
+            return dist[l] - dist[r];
+        } 
+        return INF;
+    }
+};
 
 
