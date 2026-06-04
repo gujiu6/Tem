@@ -23,7 +23,7 @@ public:
         return fa[i];
     }
 
-    bool issame(int x, int y){
+    bool is_same(int x, int y){
         return find(x) == find(y);
     }
 
