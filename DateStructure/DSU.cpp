@@ -56,7 +56,7 @@ private:
     int n;
     vector<int> fa, dist, sz;
 public:
-    DSU_Wei(int n) : fa(n + 1, 0), dist(n + 1, 0), sz(n + 1, 1) {
+    DSU_Wei(int n) : n(n), fa(n + 1, 0), dist(n + 1, 0), sz(n + 1, 1) {
         iota(fa.begin(), fa.begin() + n + 1, 0);
     }
     int find(int i) {
