@@ -26,6 +26,7 @@ ll getinv(int n, int MOD = 1e9+7){
 
 //矩阵快速幂
 vector<vector<ll>> mul(const vector<vector<ll>>& a,const vector<vector<ll>>& b) {
+    //a : n * k, b : n * m
     int n = a.size();
     int k = a[0].size();
     int m = b[0].size();
@@ -41,6 +42,7 @@ vector<vector<ll>> mul(const vector<vector<ll>>& a,const vector<vector<ll>>& b) 
     return ans;
 }
 vector<vector<ll>> power(vector<vector<ll>> a,int p,const vector<vector<ll>>& f) {
+    //f : 初始矩阵
     vector<vector<ll>>ans = f;
     while(p > 0) {
         if(p & 1) ans = mul(a, ans);
