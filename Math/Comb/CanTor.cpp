@@ -6,12 +6,14 @@ class CanTor{
 private:
     vector<int> fac;
 public:
-    int CanTorRK(vector<int>& a) {
-        int n = a.size();
+    CanTor(int n) {
         vector<int> fac(n + 1, 1);
         for(int i = 1; i <= n; i++){
             fac[i] = fac[i - 1] * i;
         }
+    }
+    int CanTorRK(vector<int>& a) {
+        int n = a.size();
         int ans = 0;
         for(int i = 0; i < n; i++){
             int cnt = 0;
