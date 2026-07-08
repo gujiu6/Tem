@@ -25,6 +25,7 @@ private:
     
     BitInt sub(const BitInt& a, const BitInt& b) {
         vector<int> x1 = rev(a.num), x2 = rev(b.num);
+        // len1 >= len2, x1 >= x2
         int len1 = x1.size(), len2 = x2.size();
         vector<int> x3(max(len1, len2), 0);
         for(int i = 0; i < len1; i++) {
@@ -41,6 +42,59 @@ private:
         return BitInt(res);
     }
 
+    BitInt mul(const BitInt& a, const BitInt& b) {
+        vector<int> x1 = rev(a.num), x2 = rev(b.num);
+        int len1 = x1.size(), len2 = x2.size();
+        if((len1 == 1 && x1[0] == 0) || (len2 == 1 && x2[0] == 0)) {
+            return BitInt();
+        }
+        vector<int> x3(len1 + len2, 0);
+        for(int i = 0; i < len1; i++) {
+            for(int j = 0; j < len2; j++) {
+                x3[i + j] += x1[i] * x2[j];
+            }
+        }
+        int carry = 0;
+        for(int i = 0; i < len1 + len2; i++) {
+            x3[i] += carry;
+            carry = x3[i] / 10;
+            x3[i] %= 10;
+        }
+        trim(x3);
+        vector<int> res = rev(x3);
+        return res;
+    }
+
+    pair<BitInt, BitInt> div(const BitInt& a, const BitInt& b) {
+        BitInt x1(a.num), x2(b.num);
+        int len1 = x1.num.size(), len2 = x2.num.size();
+        if(len2 == 1 && x2.num[0] == 0) {
+            throw runtime_error("div 0");
+        }
+        if(!BigMore(x1, x2)) {
+            return {BitInt(), a};
+        }
+        BitInt r = x1, res;
+        int shift = r.num.size() - x2.num.size();
+        vector<int> shifted_x2 = x2.num;
+        for(int i = 0; i < shift; i++) {
+            shifted_x2.push_back(0);
+        }
+        for(int i = shift; i >= 0; i--) {
+            int count = 0;
+            while(BigMore(r, shifted_x2)) {
+                r = sub(r, BitInt(shifted_x2));
+                count++;
+            }
+            if(count || !res.num.empty())
+                res.num.push_back(count);
+            if(!shifted_x2.empty() && shifted_x2.back() == 0) {
+                shifted_x2.pop_back();
+            }
+        }
+        
+        return {res, r};
+    }
 public:
     BitInt(vector<int>& a) : num(a), flag(false) {}
     
@@ -101,6 +155,23 @@ public:
         return (*this) + other_copy; 
     }
 
+    BitInt operator* (const BitInt& other) {
+        bool f1 = this->flag, f2 = other.flag;
+        BitInt ans = mul(*this, other);
+        if(f1 ^ f2) ans.flag = true;
+        return ans;
+    }
+    pair<BitInt, BitInt> operator/ (const BitInt& other) {
+        bool f1 = this->flag, f2 = other.flag;
+        auto [res, r] = div(*this, other);
+        if(f1 ^ f2) {
+            res.flag = true;
+        }
+        if(f1) {
+            r.flag = true;
+        }
+        return {res, r};
+    }
 private:
     vector<int> rev(const vector<int>& a)const {
         int n = a.size();
@@ -119,16 +190,11 @@ private:
 
     bool BigMore(const BitInt& a, const BitInt& b) {
         int len1 = a.num.size(), len2 = b.num.size();
-        if(len1 > len2) return true;
-        else if(len1 < len2) return false;
-        else {
-            for(int i = 0; i < len1; i++) { 
-                if(a.num[i] < b.num[i])
-                    return false;
-                else if(a.num[i] > b.num[i])
-                    return true;
-            }
-            return true; 
+        if(len1 != len2) return len1 > len2;
+        for(int i = 0; i < len1; i++) { 
+            if(a.num[i] != b.num[i]) 
+                return a.num[i] > b.num[i];
         }
+        return true;
     }
 };
