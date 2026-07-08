@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MAXN=1005,MAXM=2e5+10;
+const int MAXX=2e5+10;
 typedef long long ll;
 
 
@@ -10,8 +10,8 @@ typedef long long ll;
 
 
 int cnt;
-array<int,MAXN>h;
-array<int,MAXM<<1>nxt,to,wei;
+array<int,MAXX>h;
+array<int,MAXX<<1>nxt,to,wei;
 
 void build(){
     cnt=1;
