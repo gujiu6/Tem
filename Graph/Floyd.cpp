@@ -5,7 +5,7 @@ const int INF=1e9+7,MAXX=100;
 
 
 
-vector<vector<int>>dis(MAXX,vector<int>(MAXX,INF));
+vector<vector<int>> dis(MAXX, vector<int>(MAXX, INF));
 
 
 void Floyd(int n){
