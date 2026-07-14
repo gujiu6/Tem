@@ -10,19 +10,19 @@ typedef long long ll;
 
 
 int cnt;
-array<int,MAXX>h;
-array<int,MAXX<<1>nxt,to,wei;
+array<int, MAXX> h;
+array<int, MAXX << 1> nxt, to, wei;
 
 void build(){
-    cnt=1;
+    cnt = 1;
     h.fill(0);
 }
 
-void addEdge(int u,int v,int w=0){
-    nxt[cnt]=h[u];
-    to[cnt]=v;
-    wei[cnt]=w;
-    h[u]=cnt++;
+void addEdge(int u, int v, int w = 0){
+    nxt[cnt] = h[u];
+    to[cnt] = v;
+    wei[cnt] = w;
+    h[u] = cnt++;
 }
 
 
