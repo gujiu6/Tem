@@ -14,7 +14,7 @@ private:
     vector<vector<T>> st;
     F op;
 public:
-    ST(vector<T>&arr, int n, F f) : n(n), op(f) {
+    ST(vector<T>&arr, F f) : n(arr.size() - 1), op(f) {
         int LIMIT = log2(n) + 1;
         st.assign(n + 1, vector<T>(LIMIT + 1));
         lg2.assign(n + 1, 0);
