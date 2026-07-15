@@ -5,20 +5,20 @@ using ll = long long;
 //KMP
 namespace KMP {
 
-vector<int> nextArray(string s){
+vector<int> nextArray(string s) {
     int n = s.size();
-    if(n == 1) return {-1};
-    vector<int> nxt(n);
-    nxt[0] = -1,nxt[1] = 0;
+    if(n == 1) return {-1, 0};
+    vector<int> nxt(n + 1);
+    nxt[0] = -1; nxt[1] = 0;
     int i = 2, cnt = 0;
-    while(i < n){
-        if(s[i-1] == s[cnt]){
+    while(i <= n) {
+        if(s[i - 1] == s[cnt]) {
             nxt[i++] = ++cnt;
         }
-        else if(cnt > 0){
+        else if(cnt > 0) {
             cnt = nxt[cnt];
         }
-        else{
+        else {
             nxt[i++] = 0;
         }
     }
@@ -48,7 +48,7 @@ vector<int> KMP(string &s1, string &s2) {
     vector<int> nxt = nextArray(s2);
     vector<int> ans;
     int x = 0, y = 0;
-    while(x < n1) {
+    while(x < n1 ) {
         if(s1[x] == s2[y]) {
             x++;
             y++;
