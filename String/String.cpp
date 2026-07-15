@@ -33,14 +33,38 @@ int KMP(string s1, string s2){
             x++;
             y++;
         }
-        else if(y == 0){
-            x++;
+        else if(y > 0){
+            y = nxt[y];
         }
         else {
-            y = nxt[y];
+            x++;
         }
     }
     return y == n2 ? x - y : -1;
+}
+
+vector<int> KMP(string &s1, string &s2) {
+    int n1 = s1.size(), n2 = s2.size();
+    vector<int> nxt = nextArray(s2);
+    vector<int> ans;
+    int x = 0, y = 0;
+    while(x < n1) {
+        if(s1[x] == s2[y]) {
+            x++;
+            y++;
+        }
+        else if(y > 0) {
+            y = nxt[y];
+        }
+        else {
+            x++;
+        }
+        if(y == n2) {
+            ans.push_back(x - y);
+            y = nxt[y];
+        }
+    }
+    return ans;
 }
 
 }
