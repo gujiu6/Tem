@@ -2,6 +2,7 @@
 using namespace std;
 using ll = long long;
 
+//KMP
 namespace KMP {
 
 vector<int> nextArray(string s){
@@ -87,7 +88,7 @@ public:
 };
 
 
-
+//字符串哈希
 namespace Hash {
 
 class Hash{
