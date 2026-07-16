@@ -10,21 +10,25 @@ typedef long long ll;
 
 class Trie {
 private:
-    int cnt, path;
-    array<array<int,26>, MAXX> tree;
-    array<int,MAXX> pass1, end1;
+    int cnt, n;
+    vector<vector<int>> tree;
+    vector<int> pass1, end1;
 public:
-    Trie():cnt(1) {}
+    Trie(int n): cnt(1), n(n) {
+        tree.resize(MAXX, vector<int>(n));
+        pass1.resize(MAXX);
+        end1.resize(MAXX);
+    }
 
     int Path(char c) {
         return c-'a';
     }
 
-    void insert(string &word) {
+    void insert(string& s) {
         int cur = 1;
         pass1[cur]++;
-        for(int i = 0; i < word.size(); i++){
-            path = Path(word[i]);
+        for(int i = 0; i < s.size(); i++){
+            int path = Path(s[i]);
             if(tree[cur][path] == 0){
                 tree[cur][path] = ++cnt;
             }
@@ -34,10 +38,10 @@ public:
         end1[cur]++;
     }
 
-    int search(string &word) {
+    int search(string& s) {
         int cur = 1;
-        for(int i = 0; i < word.size(); i++){
-            path = Path(word[i]);
+        for(int i = 0; i < s.size(); i++){
+            int path = Path(s[i]);
             if(tree[cur][path] == 0){
                 return 0;
             }
@@ -46,10 +50,10 @@ public:
         return end1[cur];
     }
 
-    int prefixcount(string pre){
+    int prefixcount(string& pre){
         int cur = 1;
         for(int i = 0; i < pre.size(); i++){
-            path = Path(pre[i]);
+            int path = Path(pre[i]);
             if(tree[cur][path] == 0){
                 return 0;
             }
@@ -58,11 +62,11 @@ public:
         return pass1[cur];
     }
 
-    void del(string &word){
-        if(search(word) > 0){
+    void del(string& s){
+        if(search(s) > 0){
             int cur = 1;
-            for(int i = 0; i < word.size(); i++){
-                path = Path(word[i]);
+            for(int i = 0; i < s.size(); i++){
+                int path = Path(s[i]);
                 if(--pass1[tree[cur][path]] == 0){
                     tree[cur][path] = 0;
                     return;
@@ -75,7 +79,7 @@ public:
 
     void clear(){
         for(int i = 1; i <= cnt; i++){
-            tree[i].fill(0);
+            tree[i].assign(n, 0);
             end1[i] = 0;
             pass1[i] = 0;
         }
