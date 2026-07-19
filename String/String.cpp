@@ -25,6 +25,14 @@ vector<int> nextArray(string s) {
     return nxt;
 }
 
+string min_string(string s) {
+    int n = s.size();
+    vector<int> nxt = nextArray(s);
+    int len = n - nxt[n];
+    if(n % len == 0) return s.substr(0, len);
+    else return s;
+}
+
 int KMP(string s1, string s2){
     int n1 = s1.size(), n2 = s2.size(), x = 0, y = 0;
     vector<int> nxt = nextArray(s2);
