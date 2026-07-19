@@ -54,6 +54,7 @@ public:
 
 }
 
+//卢卡斯定理
 namespace CC2{
 
 class CC{
