@@ -24,7 +24,7 @@ vector<int> nextArray(string s) {
     }
     return nxt;
 }
-
+//最小循环元
 string min_string(string s) {
     int n = s.size();
     vector<int> nxt = nextArray(s);
