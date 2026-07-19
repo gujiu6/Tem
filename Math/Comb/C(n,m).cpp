@@ -86,7 +86,7 @@ public:
         return f[n] * inv[m] % mod * inv[n - m] % mod;
     }
     int lucas(int n, int m) {
-    if(m == 0) return 1;
+        if(m == 0) return 1;
         return lucas(n / mod, m / mod) * C(n % mod, m % mod) % mod;
     }
     ll prefix_sum_C(int n, int m) {
