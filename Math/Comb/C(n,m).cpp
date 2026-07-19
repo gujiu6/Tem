@@ -10,40 +10,41 @@ typedef long long ll;
 class CC{
 private:
     vector<ll>f, inv;
+    int mod;
 public:
-    ll power(ll a,ll b){
+    ll power(ll a, ll b){
         ll ans = 1;
-        a %= MOD;
+        a %= mod;
         while(b > 0){
-            if(b & 1) ans = (ans * a) % MOD;
-            a = (a * a) % MOD;
+            if(b & 1) ans = (ans * a) % mod;
+            a = (a * a) % mod;
             b >>= 1;
         }
         return ans;
     }
-    CC(int n) : f(n + 1, 1), inv(n + 1, 0){
+    CC(int n, int mod) : f(n + 1, 1), inv(n + 1, 0), mod(mod){
         for(int i = 1; i <= n; i++){
-            f[i] = f[i-1] * i % MOD;
+            f[i] = f[i-1] * i % mod;
         }
-        inv[n] = power(f[n], MOD - 2);
+        inv[n] = power(f[n], mod - 2);
         for(int i = n - 1; i >= 0; i--){
-            inv[i] = inv[i + 1] * (i + 1) % MOD;
+            inv[i] = inv[i + 1] * (i + 1) % mod;
         }
     }
     ll C(int n, int m){
         if(m < 0 || m > n) return 0;
-        return f[n] * inv[m] % MOD * inv[n-m] % MOD;
+        return f[n] * inv[m] % mod * inv[n-m] % mod;
     }
     ll P(int n, int m){
         if(m < 0 || m > n) return 0;
-        return f[n] * inv[n - m] % MOD;
+        return f[n] * inv[n - m] % mod;
     }
     ll prefix_sum_C(int n, int m) {
         if (m < 0) return 0;
         if (m >= n) return power(2,n);
         ll sum = 0;
         for (int k = 0; k <= m; k++) {
-            sum = (sum + C(n, k)) % MOD;
+            sum = (sum + C(n, k)) % mod;
         }
         return sum;
     }
