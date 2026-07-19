@@ -1,14 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MAXN=5e5+10,MAXM=5e5+10,LIMIT=20;
+const int MAXX=5e5+10 ,LIMIT=20;
 
 
 
 
 int cnt,lg2;
-array<int,MAXN>h,deep;
-array<int,MAXM<<1>nxt,to,wei;
-array<array<int,LIMIT>,MAXN>stjump;
+array<int,MAXX>h,deep;
+array<int,MAXX<<1>nxt,to,wei;
+array<array<int,LIMIT>,MAXX>stjump;
 
 void build(int n){
     cnt=1;
@@ -53,5 +53,7 @@ int lca(int a,int b){
     return stjump[a][0];
 }
 
-
+int dist(int u, int v) {
+    return deep[u] + deep[v] - 2 * deep[lca(u, v)];
+}
 
