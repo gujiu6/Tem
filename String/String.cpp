@@ -148,4 +148,33 @@ public:
 
 }
 
+namespace Manacher {
 
+string manacherss(string str) {
+    int n = str.size() * 2 + 1;
+    string s(n, ' ');    for(int i = 0, j = 0; i < n; i++) {
+        s[i] = (i & 1) == 0 ? '#' : str[j++];
+    }
+    return s;
+}
+
+int Manacher(string str) {
+    string s = manacherss(str);
+    int mx = 0, n = s.size();
+    vector<int> p(n + 1);
+    for(int i = 0, c = 0, r = 0, len; i < n; i++) {
+        len = r > i ? min(p[2 * c - i], r - i) : 1;
+        while(i + len < n && i - len >= 0 && s[i + len] == s[i - len]) {
+            len++;
+        }
+        if(i + len > r) {
+            r = i + len;
+            c = i;
+        }
+        mx = max(mx, len);
+        p[i] = len;
+    }
+    return mx - 1;
+}
+
+}
