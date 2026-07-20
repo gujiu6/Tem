@@ -148,6 +148,8 @@ public:
 
 }
 
+
+//Manacher
 namespace Manacher {
 
 string manacherss(string str) {
@@ -158,9 +160,9 @@ string manacherss(string str) {
     return s;
 }
 
-int Manacher(string str) {
+string Manacher(string str) {
     string s = manacherss(str);
-    int mx = 0, n = s.size();
+    int mx = 0, n = s.size(), bestLen = 0, bestCenter = 0;
     vector<int> p(n + 1);
     for(int i = 0, c = 0, r = 0, len; i < n; i++) {
         len = r > i ? min(p[2 * c - i], r - i) : 1;
@@ -171,10 +173,14 @@ int Manacher(string str) {
             r = i + len;
             c = i;
         }
-        mx = max(mx, len);
         p[i] = len;
+        if(len > bestLen) {
+            bestLen = len;
+            bestCenter = i;
+        }    
     }
-    return mx - 1;
+    int start = (bestCenter - bestLen + 1) / 2;
+    return str.substr(start, bestLen - 1);
 }
 
 }
