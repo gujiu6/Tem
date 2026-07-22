@@ -40,12 +40,12 @@ vector<vector<ll>> mul(const vector<vector<ll>>& a,const vector<vector<ll>>& b) 
     }
     return ans;
 }
-vector<vector<ll>> power(vector<vector<ll>> a,int p,const vector<vector<ll>>& f) {
+vector<vector<ll>> power(vector<vector<ll>> A,int p,const vector<vector<ll>>& f) {
     //f : 初始矩阵
     vector<vector<ll>>ans = f;
     while(p > 0) {
-        if(p & 1) ans = mul(a, ans);
-        a = mul(a, a);
+        if(p & 1) ans = mul(A, ans);
+        A = mul(A, A);
         p >>= 1;
     }
     return ans;
