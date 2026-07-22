@@ -34,9 +34,8 @@ vector<vector<ll>> mul(const vector<vector<ll>>& a,const vector<vector<ll>>& b) 
     for(int i = 0; i < n; i++){
         for(int j = 0; j < m; j++){
             for(int c = 0; c < k; c++){
-                ans[i][j] += a[i][c] * b[c][j];
+                ans[i][j] = (ans[i][j] + 1LL * a[i][c] * b[c][j]) % MOD;
             }
-            ans[i][j] %= MOD;
         }
     }
     return ans;
