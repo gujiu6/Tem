@@ -24,7 +24,7 @@ public:
         }
         return ans;
     }
-    CC(int n, int mod) : f(n + 1, 1), inv(n + 1, 0), mod(mod){
+    CC(int n, int mod = 1e9+7) : f(n + 1, 1), inv(n + 1, 0), mod(mod){
         for(int i = 1; i <= n; i++){
             f[i] = f[i-1] * i % mod;
         }
