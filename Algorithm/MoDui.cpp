@@ -1,12 +1,13 @@
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long;
-const int MAXN = 1e5+10, MAXM = 1e5+10;
+
 
 
 //普通莫队
 namespace Common {
 
+const int MAXN = 1e5+10, MAXM = 1e5+10;
 int n, m;
 array<int, MAXN> a;
 array<ll, MAXM> ans;
