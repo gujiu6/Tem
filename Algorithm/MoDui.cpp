@@ -25,11 +25,11 @@ struct Query {
 } q[MAXM];
 
 void add(int i) {
-	int x = a[i];
+	ll x = a[i];
 }
 
 void del(int i) {
-	int x = a[i];
+	ll x = a[i];
 }
 
 inline void solve() {
