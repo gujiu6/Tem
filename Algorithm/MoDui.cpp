@@ -3,6 +3,8 @@ using namespace std;
 using ll = long long;
 const int MAXN = 1e5+10, MAXM = 1e5+10;
 
+
+//普通莫队
 namespace Common {
 
 int n, m;
