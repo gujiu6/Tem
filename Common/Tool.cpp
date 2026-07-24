@@ -74,7 +74,7 @@ ll read(){
         if(c == '-') flag = true;
         c = getchar();
     }
-    while(isdigit(c)){
+    while(c >= '0' && c <= '9'){
         ans = ans * 10 + c - '0';
         c = getchar();
     }
