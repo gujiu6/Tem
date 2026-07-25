@@ -88,7 +88,7 @@ struct Query {
 
         int br1 = r / sz;
         int br2 = other.r / sz;
-        if (br1 != br2) return br1 < br2;
+        if (br1 != br2) return (bl1 & 1) ? (r < other.r) : (r > other.r);
 
         return t < other.t;
     }
