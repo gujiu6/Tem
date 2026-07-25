@@ -47,6 +47,7 @@ inline void solve() {
 	sort(q + 1, q + m + 1);
 
 	int l = 1, r = 0;
+	cur_ans = 0;
     for (int i = 1; i <= m; i++) {
 		int jobl = q[i].l, jobr = q[i].r;
         while (l > jobl) add(--l);
@@ -146,10 +147,10 @@ inline void solve(){
             cin >> update[ccnt].pos >> update[ccnt].val;
         }
     }
-    sort(q+1, q + qcnt + 1);
+    sort(q + 1, q + qcnt + 1);
 
-    int l=1, r=0, t=0;
-    cur_ans=0;
+    int l = 1, r = 0, t = 0;
+    cur_ans = 0;
     for(int i = 1; i <= qcnt; i++){
         int jobl = q[i].l, jobr = q[i].r, jobt = q[i].t;
         while(l > jobl) add(--l);
