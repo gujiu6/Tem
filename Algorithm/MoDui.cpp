@@ -48,10 +48,11 @@ inline void solve() {
 
 	int l = 1, r = 0;
     for (int i = 1; i <= m; i++) {
-        while (l > q[i].l) add(--l);
-        while (r < q[i].r) add(++r);
-        while (l < q[i].l) del(l++);
-        while (r > q[i].r) del(r--);
+		int jobl = q[i].l, jobr = q[i].r;
+        while (l > jobl) add(--l);
+        while (r < jobr) add(++r);
+        while (l < jobl) del(l++);
+        while (r > jobr) del(r--);
         ans[q[i].id] = cur_ans;
     }
 
