@@ -79,7 +79,7 @@ void addEdge(int u,int v,int w=0){
 
 
 int KrusKal(vector<array<int,3>>edge,int n){
-    int m=edge.size(),cnt=0;
+    int m = edge.size(),cnt=0;
     ll ans=0;
     sort(all(edge,0),[](const auto x,const auto y){
         return x[2]<y[2];
