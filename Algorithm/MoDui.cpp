@@ -137,7 +137,7 @@ inline void solve(){
             ++qcnt;
             cin >> q[qcnt].l >> q[qcnt].r;
             if(q[qcnt].l > q[qcnt].r)
-                swap(q[qcnt].l , q[qcnt].r);
+                swap(q[qcnt].l, q[qcnt].r);
             q[qcnt].t = ccnt;
             q[qcnt].id = qcnt;
         }
@@ -163,7 +163,7 @@ inline void solve(){
 
         while(t > jobt)
             moveTime(l, r, t--);
-        ans[q[i].id]=cur_ans;
+        ans[q[i].id] = cur_ans;
     }
 
     for(int i = 1; i <= qcnt; i++)
