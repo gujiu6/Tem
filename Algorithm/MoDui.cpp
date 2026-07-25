@@ -71,6 +71,7 @@ const int MAXN = 133340, MAXM = 133340;
 int n, m;
 array<int, MAXN> a;
 array<ll, MAXM> ans;
+
 int sz;
 ll cur_ans;
 
