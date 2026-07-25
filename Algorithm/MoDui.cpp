@@ -9,7 +9,7 @@ namespace Common {
 
 const int MAXN = 1e5+10, MAXM = 1e5+10;
 int n, m;
-array<int, MAXN> a;
+array<int, MAXN> arr;
 array<ll, MAXM> ans;
 
 int sz;
@@ -25,17 +25,17 @@ struct Query {
 } q[MAXM];
 
 void add(int i) {
-	ll x = a[i];
+	ll x = arr[i];
 }
 
 void del(int i) {
-	ll x = a[i];
+	ll x = arr[i];
 }
 
 inline void solve() {
 	cin >> n >> m;
 	for(int i = 1; i <= n; i++) {
-		cin >> a[i];
+		cin >> arr[i];
 	}
 
 	sz = max(1, (int)(n / sqrt(m)));
@@ -69,7 +69,7 @@ namespace Modify {
 const int MAXN = 133340, MAXM = 133340;
 
 int n, m;
-array<int, MAXN> a;
+array<int, MAXN> arr;
 array<ll, MAXM> ans;
 
 int sz;
@@ -102,11 +102,11 @@ int qcnt = 0;
 int ccnt = 0;
 
 void add(int i) {
-    int x = a[i];
+    int x = arr[i];
 }
 
 void del(int i) {
-    int x = a[i];
+    int x = arr[i];
 }
 
 void moveTime(int l, int r, int t){
@@ -114,10 +114,10 @@ void moveTime(int l, int r, int t){
     int v = update[t].val;
     if(l <= p && p <= r){
         del(p);
-        swap(a[p], update[t].val);
+        swap(arr[p], update[t].val);
         add(p);
     }else{
-        swap(a[p], update[t].val);
+        swap(arr[p], update[t].val);
     }
 }
 
@@ -125,7 +125,7 @@ void moveTime(int l, int r, int t){
 inline void solve(){
     cin >> n >> m;
     for(int i = 1; i <= n; i++)
-        cin >> a[i];
+        cin >> arr[i];
     sz = max(1, (int)pow(n, 2.0 / 3));
     qcnt = ccnt = 0;
     for(int i = 1; i <= m; i++){
