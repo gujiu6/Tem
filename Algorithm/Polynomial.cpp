@@ -2,6 +2,7 @@
 using namespace std;
 using cd = complex<double>;
 const double PI = acos(-1);
+using ll = long long;
 
 //FFT
 namespace FFT{
@@ -61,3 +62,72 @@ vector<int> mul(vector<int> A, vector<int> B) {
 
 }
 
+//NTT
+namespace NTT {
+
+const ll MOD = 998244353;
+const ll G = 3;
+
+ll power(ll a, ll b) {
+    ll ans = 1;
+    a %= MOD;
+    while (b) {
+        if (b & 1) ans = ans * a % MOD;
+        a = a * a % MOD;
+        b >>= 1;
+    }
+    return ans;
+}
+
+void ntt(vector<ll>& a, bool invert) {
+    int n = a.size();
+    for (int i = 1, j = 0; i < n; i++) {
+        int bit = n >> 1;
+        while (j & bit) {
+            j ^= bit;
+            bit >>= 1;
+        }
+        j ^= bit;
+        if (i < j)
+            swap(a[i], a[j]);
+    }
+    for (int len = 2; len <= n; len <<= 1) {
+        ll wn = power(G, (MOD - 1) / len);
+        if (invert)
+            wn = power(wn, MOD - 2);
+        for (int i = 0; i < n; i += len) {
+            ll w = 1;
+            for (int j = 0; j < len / 2; j++) {
+                ll u = a[i + j];
+                ll v = a[i + j + len / 2] * w % MOD;
+                a[i + j] = (u + v) % MOD;
+                a[i + j + len / 2] = (u - v + MOD) % MOD;
+                w = w * wn % MOD;
+            }
+        }
+    }
+    if (invert) {
+        ll inv_n = power(n, MOD - 2);
+        for (auto &x : a)
+            x = x * inv_n % MOD;
+    }
+}
+
+vector<ll> mul(vector<ll> A, vector<ll> B) {
+    int result_len = A.size() + B.size() - 1;
+    int n = 1;
+    while (n < result_len)
+        n <<= 1;
+    A.resize(n);
+    B.resize(n);
+    ntt(A, false);
+    ntt(B, false);
+    for (int i = 0; i < n; i++) {
+        A[i] = A[i] * B[i] % MOD;
+    }
+    ntt(A, true);
+    A.resize(result_len);
+    return A;
+}
+
+}
