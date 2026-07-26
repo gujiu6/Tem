@@ -1,8 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 using cd = complex<double>;
-const double PI = acos(-1);
 using ll = long long;
+const double PI = acos(-1);
+const ll MOD = 998244353;
+
 
 //FFT
 namespace FFT{
@@ -65,7 +67,7 @@ vector<int> mul(vector<int> A, vector<int> B) {
 //NTT
 namespace NTT {
 
-const ll MOD = 998244353;
+
 const ll G = 3;
 
 ll power(ll a, ll b) {
