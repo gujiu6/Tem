@@ -3,7 +3,7 @@ using namespace std;
 using cd = complex<double>;
 const double PI = acos(-1);
 
-
+//FFT
 namespace FFT{
 
 void fft(vector<cd>& a,bool invert){
