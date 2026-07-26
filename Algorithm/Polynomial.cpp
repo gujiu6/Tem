@@ -69,7 +69,6 @@ namespace NTT {
 
 
 const ll G = 3;
-
 ll power(ll a, ll b) {
     ll ans = 1;
     a %= MOD;
