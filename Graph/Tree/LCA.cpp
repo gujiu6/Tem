@@ -29,11 +29,13 @@ void dfs(int u, int f){
     deep[u] = deep[f] + 1;
     stjump[u][0] = f;
     for(int p = 1; p <= lg2; p++){
-        stjump[u][p] = stjump[stjump[u][p - 1]][p - 1];
+        int mid = stjump[u][p - 1];
+        stjump[u][p] = stjump[mid][p - 1];
     }
-    for(int ei = h[u];ei > 0; ei = nxt[ei]){
-        if(to[ei] != f)
-            dfs(to[ei], u);
+    for(int ei = h[u], v;ei > 0; ei = nxt[ei]){
+        v = to[ei];
+        if(v == f) continue;
+        dfs(v, u);
     }
 }
 
