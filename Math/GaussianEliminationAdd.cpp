@@ -47,13 +47,13 @@ void gaussAdd(int n){
 int pd(int n){
 	int ans = 1;
     for(int i = 1; i <= n; i++){
-    	if(fabs(mat[i][i]) < eps && fabs(mat[i][n+1]) >= eps){
-    		ans = -1;
-    		break;
-    	}
-    	if(fabs(mat[i][i]) < eps){
-    		ans = 0;
-    	}
+		if(fabs(mat[i][i]) < eps && fabs(mat[i][n+1]) >= eps){
+			ans = -1;
+			break;
+		}
+		if(fabs(mat[i][i]) < eps){
+			ans = 0;
+		}
     }	
     return ans;
 }
