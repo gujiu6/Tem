@@ -5,12 +5,12 @@ const int MAXX = 5e5+10, LIMIT = 20;
 
 
 
-int cnt, lg2;
+int cnt, lg2, n;
 array<int,MAXX> h, deep;
 array<int,MAXX << 1> nxt, to, wei;
 array<array<int, LIMIT>, MAXX> stjump;
 
-void build(int n){
+void build(){
     cnt = 1;
     lg2 = __lg(n);
     fill(h.begin(), h.begin() + n + 1, 0);
