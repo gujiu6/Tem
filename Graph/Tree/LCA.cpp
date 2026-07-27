@@ -7,8 +7,8 @@ const int MAXX = 5e5+10, LIMIT = 20;
 namespace BinaryLifting {
 
 int cnt, lg2, n;
-array<int,MAXX> h, deep;
-array<int,MAXX << 1> nxt, to, wei;
+array<int, MAXX> h, deep;
+array<int, MAXX << 1> nxt, to, wei;
 array<array<int, LIMIT>, MAXX> stjump;
 
 void build(){
