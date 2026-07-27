@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 const int MAXX = 5e5+10;
-using pii=array<int, 2>;
+using pii = array<int, 2>;
 
 int cnt;
 array<int, MAXX> h, fa, vis;
