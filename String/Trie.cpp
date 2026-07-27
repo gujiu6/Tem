@@ -83,6 +83,7 @@ public:
             end1[i] = 0;
             pass1[i] = 0;
         }
+        cnt = 1;
     }
 };
 
