@@ -3,16 +3,17 @@ using namespace std;
 const int MAXX = 5e5+10;
 using pii = array<int, 2>;
 
-int cnt;
+int cnt, n, m;
 array<int, MAXX> h, fa, vis;
 array<int, MAXX << 1> nxt, to, wei;
 vector<vector<pii>> Question(MAXX);
-vector<int>lca;
+vector<int> lca;
 
-void build(int n){
+void build(){
     cnt = 1;
     fill(h.begin(), h.begin() + n + 1, 0);
     fill(vis.begin(), vis.begin() + n + 1, 0);
+    fill(lca.begin(), lca.begin() + m + 1, 0);
     for(int i = 1; i <= n; i++) 
         fa[i] = i;
 }
