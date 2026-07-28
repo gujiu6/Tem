@@ -10,23 +10,23 @@ template <typename T=ll>
 class SegmentTree1 {
 private:
     int n;
-    vector<T> mx, change, add;
+    vector<T> sum, change, add;
     vector<bool> update;
 
     void updatelazy(int i, T v, int len) {
-        mx[i] = v * len;
+        sum[i] = v * len;
         add[i] = 0;
         change[i] = v;
         update[i] = 1;
     }
 
     void addlazy(int i, T v, int len) {
-        mx[i] += v * len;
+        sum[i] += v * len;
         add[i] += v;
     }
 
     void up(int i) {
-        mx[i] = mx[i << 1] + mx[i << 1 | 1];
+        sum[i] = sum[i << 1] + sum[i << 1 | 1];
     }
 
     void down(int i, int ln, int rn) {
@@ -44,7 +44,7 @@ private:
 
     void build(const vector<T>& arr, int l, int r, int i) {
         if(l == r) {
-            mx[i] = arr[l];
+            sum[i] = arr[l];
         }
         else {
             int mid = (l + r) >> 1;
@@ -82,7 +82,7 @@ private:
 
     T range_qry_sum(int jobl, int jobr, int l, int r, int i) {
         if(jobl <= l && r <= jobr) {
-            return mx[i];
+            return sum[i];
         }
         T ans=0;
         int mid = (l + r) >> 1;
@@ -93,7 +93,7 @@ private:
     }
 
 public:
-    SegmentTree1(int n) : n(n), mx(n << 2, 0), add(n << 2, 0), change(n << 2, 0), update(n << 2, 0) {}
+    SegmentTree1(int n) : n(n), sum(n << 2, 0), add(n << 2, 0), change(n << 2, 0), update(n << 2, 0) {}
     SegmentTree1(const vector<T>& arr, int n) : SegmentTree1(n) {
         build(arr, 1 , n, 1);
     }
