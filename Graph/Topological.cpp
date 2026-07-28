@@ -6,17 +6,17 @@ typedef long long ll;
 
 array<int, MAXX> h, inDeg, outDeg;
 array<int, MAXX << 1> nxt, to;
-int cnt;
+int cnt, n;
 priority_queue<int, vector<int>, greater<int>>q;
 
 void build(){
     cnt = 1;
-    h.fill(0);
-    inDeg.fill(0);
-    outDeg.fill(0);
+    fill(h.begin(), h.begin() + n + 1, 0);
+    fill(inDeg.begin(), inDeg.begin() + n + 1, 0);
+    fill(outDeg.begin(), outDeg.begin() + n + 1, 0);
 }
 
-void addedge(int u, int v){
+void addEdge(int u, int v){
     nxt[cnt] = h[u];
     to[cnt] = v;
     h[u] = cnt++;
