@@ -1,8 +1,11 @@
+//主席树
 #include <bits/stdc++.h>
 using namespace std;
 const int MAXX = 1e6+10;
 
 
+//区间第 k 小 / 静态区间排名问题
+namespace Rank_Min_k {
 //单点修改 单点查询
 class PersistentSegmentTree1 {
 private:
@@ -126,3 +129,83 @@ public:
         return sorted[qry(k, 1, n, root[l - 1], root[r])];
     }
 };
+
+}
+//区间不同值数量
+namespace Diff_cnt {
+class PersistentSegmentTreeDistinct {
+private:
+    vector<int> root, ls, rs, sz;
+    vector<int> last;
+    vector<int> a;
+    int cnt;
+    int n;
+    int build(int l, int r) {
+        int rt = ++cnt;
+        sz[rt] = 0;
+        if (l < r) {
+            int mid = (l + r) >> 1;
+            ls[rt] = build(l, mid);
+            rs[rt] = build(mid + 1, r);
+        }
+        return rt;
+    }
+    // 单点修改
+    int update(int pos, int val, int l, int r, int pre) {
+        int rt = ++cnt;
+        ls[rt] = ls[pre];
+        rs[rt] = rs[pre];
+        sz[rt] = sz[pre] + val;
+        if (l < r) {
+            int mid = (l + r) >> 1;
+            if (pos <= mid) {
+                ls[rt] = update(pos, val, l, mid, ls[pre]);
+            }
+            else {
+                rs[rt] = update(pos, val, mid + 1, r, rs[pre]);
+            }
+        }
+        return rt;
+    }
+    // 查询区间和
+    int query(int ql, int qr, int l, int r, int rt) {
+        if (ql <= l && r <= qr)
+            return sz[rt];
+        int mid = (l + r) >> 1;
+        int ans = 0;
+        if (ql <= mid)
+            ans += query(ql, qr, l, mid, ls[rt]);
+        if (qr > mid)
+            ans += query(ql, qr, mid + 1, r, rs[rt]);
+        return ans;
+    }
+public:
+    PersistentSegmentTreeDistinct(vector<int> arr): a(arr), cnt(0){
+        n = a.size() - 1;
+        int maxnode = n * 25 + 5;
+        root.resize(n + 1);
+        ls.assign(maxnode,0);
+        rs.assign(maxnode,0);
+        sz.assign(maxnode,0);
+        last.resize(1000005,0);
+        root[0] = build(1,n);
+        for(int i=1;i<=n;i++){
+            int x=a[i];
+            // 复制上一版本
+            root[i]=root[i-1];
+            // 如果之前出现过
+            if(last[x]){
+                // 删除旧贡献
+                root[i] = update(last[x], -1, 1, n, root[i]);
+            }
+            // 添加当前位置贡献
+            root[i] = update(i, 1, 1, n, root[i]);
+            last[x]=i;
+        }
+    }
+    int qry(int l,int r){
+        return query(l, r, 1, n,root[r]);
+    }
+};
+
+}
