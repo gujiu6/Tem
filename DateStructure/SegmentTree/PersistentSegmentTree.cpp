@@ -180,7 +180,7 @@ private:
 public:
     PersistentSegmentTreeDistinct(vector<int> arr): a(arr), cnt(0){
         n = a.size() - 1;
-        int maxnode = n * 25 + 5;
+        int maxnode = n * 40 + 10;
         root.resize(n + 1);
         ls.assign(maxnode, 0);
         rs.assign(maxnode, 0);
