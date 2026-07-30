@@ -150,7 +150,6 @@ private:
         }
         return rt;
     }
-    // 单点修改
     int update(int pos, int val, int l, int r, int pre) {
         int rt = ++cnt;
         ls[rt] = ls[pre];
@@ -167,7 +166,6 @@ private:
         }
         return rt;
     }
-    // 查询区间和
     int query(int ql, int qr, int l, int r, int rt) {
         if (ql <= l && r <= qr)
             return sz[rt];
@@ -184,23 +182,19 @@ public:
         n = a.size() - 1;
         int maxnode = n * 25 + 5;
         root.resize(n + 1);
-        ls.assign(maxnode,0);
-        rs.assign(maxnode,0);
-        sz.assign(maxnode,0);
-        last.resize(1000005,0);
-        root[0] = build(1,n);
-        for(int i=1;i<=n;i++){
-            int x=a[i];
-            // 复制上一版本
-            root[i]=root[i-1];
-            // 如果之前出现过
+        ls.assign(maxnode, 0);
+        rs.assign(maxnode, 0);
+        sz.assign(maxnode, 0);
+        last.resize(1000005, 0);
+        root[0] = build(1, n);
+        for(int i = 1;i <= n; i++){
+            int x = a[i];
+            root[i] = root[i - 1];
             if(last[x]){
-                // 删除旧贡献
                 root[i] = update(last[x], -1, 1, n, root[i]);
             }
-            // 添加当前位置贡献
             root[i] = update(i, 1, 1, n, root[i]);
-            last[x]=i;
+            last[x] = i;
         }
     }
     int qry(int l,int r){
