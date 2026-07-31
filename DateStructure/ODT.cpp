@@ -94,6 +94,10 @@ public:
             it->val += v;
         }
     }
+    T qry(int pos) {
+        auto it = prev(s.upper_bound(Node(pos, 0, 0)));
+        return it->val;
+    }
 
     T sum(int l, int r) {
         T ans = 0;
