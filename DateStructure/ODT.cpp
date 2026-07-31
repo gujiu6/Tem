@@ -65,7 +65,7 @@ private:
     }
 public:
     ODT(){}
-    ODT(int n,T v) {
+    ODT(int n, T v) {
         s.insert(Node(1, n, v));
     }
     ODT(vector<T>& arr) {
