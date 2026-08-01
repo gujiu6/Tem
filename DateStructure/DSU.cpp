@@ -11,9 +11,8 @@ class DSU {
 private:
     int n;
     vector<int> fa,sz;
-    vector<T> value;
 public:
-    DSU(int n) : n(n), fa(n + 1), sz(n + 1, 1), value(n + 1, 0) {
+    DSU(int n) : n(n), fa(n + 1), sz(n + 1, 1) {
         iota(fa.begin(), fa.end(), 0);
     }
     int find(int i){
@@ -28,22 +27,12 @@ public:
     }
 
     bool merge(int x, int y){
-        int fx = find(x), fy = find(y);
-        if(fx != fy){
-            if(sz[fx] >= sz[fy]){
-                sz[fx] += sz[fy];
-                fa[fy] = fx;
-            }
-            else{
-                sz[fy] += sz[fx];
-                fa[fx] = fy;
-            }
-            return 1;
-        }
-        return 0;
-    }
-    T findV(int x){
-        return value[find(x)];
+        x = find(x), y = find(y);
+        if(x == y) return false;
+        if(sz[x] < sz[y]) swap(x, y);
+        fa[y] = x;
+        sz[x] += sz[y];
+        return true;
     }
     int size(int x){
         return sz[find(x)];

@@ -6,9 +6,6 @@ typedef long long ll;
 
 
 
-
-
-
 int cnt;
 array<int, MAXX> h;
 array<int, MAXX << 1> nxt, to, wei;
