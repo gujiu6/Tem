@@ -1,12 +1,11 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int INF = 1e9+7;
-
+using ll = long long;
 
 
 
 //普通DSU
-template <typename T = int>
 class DSU {
 private:
     int n;
@@ -40,10 +39,12 @@ public:
 };
 
 //带权DSU
+template <typename T = ll>
 class WDSU {
 private:
     int n;
-    vector<int> fa, w, sz;
+    vector<int> fa, sz;
+    vector<T> w;
 public:
     WDSU(int n) : n(n), fa(n + 1, 0), w(n + 1, 0), sz(n + 1, 1) {
         iota(fa.begin(), fa.begin() + n + 1, 0);
@@ -56,24 +57,30 @@ public:
         }
         return fa[i];
     }
-    bool merge(int l, int r, int v) {
-        int lf = find(l), rf = find(r);
-        if(lf != rf) {
-            fa[lf] = rf;
-            w[lf] = v + w[r] - w[l];
-            sz[rf] += sz[lf]; 
-            return true;
+    bool merge(int x, int y, T d) {
+        int fx = find(x), fy = find(y);
+        T v = d + w[x] - w[y];
+        if(fx == fy) {
+            return v == T{};
         }
-        return false;
+        if(sz[fx] < sz[fy]) {
+            fa[fx] = fy;
+            w[fx] = -v;
+            sz[fy] += sz[fx];
+        }
+        else {
+            fa[fy] = fx;
+            w[fy] = v;
+            sz[fx] += sz[fy];
+        }
+        return true;
     }
-    bool same(int l, int r) {
-        return find(l) == find(r);
+    bool same(int x, int y) {
+        return find(x) == find(y);
     }
-    int query(int l, int r) {
-        if(same(l, r)) {
-            return w[l] - w[r];
-        } 
-        return INF;
+    int query(int x, int y) {
+        assert(same(x, y));
+        return w[y] - w[x];
     }
 };
 
