@@ -72,7 +72,7 @@ public:
         int n = arr.size() - 1;
         int l = 1;
         for(int i = 2; i <= n + 1; i++) {
-            if(i == n+1 || arr[i] != arr[l]) {
+            if(i == n + 1 || arr[i] != arr[l]) {
                 s.insert(Node(l, i-1, arr[l]));
                 l = i;
             }
@@ -136,7 +136,7 @@ public:
     }
 
     void debug() {
-        for(auto [l,r,v]:s) {
+        for(auto [l, r, v]:s) {
             cout << "[" << l << "," << r << "] " << v << endl;
         }
     }
