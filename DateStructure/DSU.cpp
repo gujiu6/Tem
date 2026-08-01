@@ -40,19 +40,19 @@ public:
 };
 
 //带权DSU
-class DSU_Wei {
+class WDSU {
 private:
     int n;
-    vector<int> fa, dist, sz;
+    vector<int> fa, w, sz;
 public:
-    DSU_Wei(int n) : n(n), fa(n + 1, 0), dist(n + 1, 0), sz(n + 1, 1) {
+    WDSU(int n) : n(n), fa(n + 1, 0), w(n + 1, 0), sz(n + 1, 1) {
         iota(fa.begin(), fa.begin() + n + 1, 0);
     }
     int find(int i) {
         if(i != fa[i]) {
-            int tmp = fa[i];
+            int f = fa[i];
             fa[i] = find(fa[i]);
-            dist[i] += dist[tmp];
+            w[i] += w[f];
         }
         return fa[i];
     }
@@ -60,7 +60,7 @@ public:
         int lf = find(l), rf = find(r);
         if(lf != rf) {
             fa[lf] = rf;
-            dist[lf] = v + dist[r] - dist[l];
+            w[lf] = v + w[r] - w[l];
             sz[rf] += sz[lf]; 
             return true;
         }
@@ -71,7 +71,7 @@ public:
     }
     int query(int l, int r) {
         if(is_same(l, r)) {
-            return dist[l] - dist[r];
+            return w[l] - w[r];
         } 
         return INF;
     }
