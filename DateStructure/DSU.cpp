@@ -22,7 +22,7 @@ public:
         return fa[i];
     }
 
-    bool is_same(int x, int y){
+    bool same(int x, int y){
         return find(x) == find(y);
     }
 
@@ -66,11 +66,11 @@ public:
         }
         return false;
     }
-    bool is_same(int l, int r) {
+    bool same(int l, int r) {
         return find(l) == find(r);
     }
     int query(int l, int r) {
-        if(is_same(l, r)) {
+        if(same(l, r)) {
             return w[l] - w[r];
         } 
         return INF;
