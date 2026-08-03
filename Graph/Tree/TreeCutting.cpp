@@ -7,7 +7,7 @@ namespace {
 
 class HLD {
 private:
-    int n, tim = 0;
+    int n, tim = 1;
     vector<int> fa, dep, sz, son, top, in, rev;
 public:
     HLD(const vector<vector<int>>& g, int root = 1): n(g.size() - 1), fa(n + 1), sz(n + 1, 1), son(n + 1), top(n + 1), in(n + 1), rev(n + 1) {
