@@ -1,7 +1,8 @@
+//树剖
 #include <bits/stdc++.h>
 using namespace std;
 
-
+//重链
 namespace {
 
 class HLD {
