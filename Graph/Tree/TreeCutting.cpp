@@ -52,24 +52,24 @@ public:
         }
         return dep[u] < dep[v] ? u : v;
     }
-    //op(l,r,rev)：区间为 [l,r), rev: 表示沿路径应逆序读取。
+    //op(l,r,rev)：区间为 [l,r], rev: 表示沿路径应逆序读取。
     template <typename F> void path(int u, int v, F op, bool edge = false) const {
         vector<pair<int, int>> right;
         while(top[u] != top[v]) {
             if(dep[top[u]] >= dep[top[v]]) {
-                op(in[top[u]], in[u] + 1, true);
+                op(in[top[u]], in[u], true);
                 u = fa[top[u]];
             }
             else {
-                right.push_back({in[top[v]], in[v] + 1});
+                right.push_back({in[top[v]], in[v]});
                 v = fa[top[v]];
             }
         }
         if(dep[u] >= dep[v]) {
-            op(in[v] + edge, in[u] + 1, true);
+            op(in[v] + edge, in[u], true);
         }
         else {
-            right.push_back({in[u] + edge, in[v] + 1});
+            right.push_back({in[u] + edge, in[v]});
         }
         reverse(right.begin(), right.end());
         for(auto [l, r] : right) {
