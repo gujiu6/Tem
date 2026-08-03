@@ -15,7 +15,7 @@ public:
         for(int i = 1; i < ord.size(); i++) {
             int u = ord[i];
             for(int v : g[u]) {
-                if(v == fa[n]) continue;
+                if(v == fa[u]) continue;
                 fa[v] = u;
                 dep[v] = dep[u] + 1;
                 ord.push_back(v);
