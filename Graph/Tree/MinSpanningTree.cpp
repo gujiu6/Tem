@@ -1,168 +1,96 @@
 #include <bits/stdc++.h>
 using namespace std;
+using i64 = long long;
 const int MAXX = 2e5+10;
-using ll=long long;
+constexpr i64 INF = 1e18;
 
-namespace KrusKal {
 
-int cnt, n;
-array<int, MAXX> h, fa, sz;
-array<int, MAXX << 1> nxt, to, wei;
-void build(){
-    cnt = 1;
-    fill(h.begin(), h.begin() + n + 1, 0);
-    iota(fa.begin(), fa.begin() + n + 1, 0);
-    fill(sz.begin(), sz.begin() + n + 1, 1);
-}
 
-int find(int i) {
-    if(i != fa[i]) {
-        fa[i] = find(fa[i]);
+//最小生成树
+namespace MinSpanningTree {
+class DSU {
+private:
+    int n;
+    vector<int> fa,sz;
+public:
+    DSU(int n) : n(n), fa(n + 1), sz(n + 1, 1) {
+        iota(fa.begin(), fa.end(), 0);
     }
-    return fa[i];
-}
-bool merge(int x, int y) {
-    int fx = find(x), fy = find(y);
-    if(fx != fy) {
-        if(sz[fx] >= sz[fy]) {
-            sz[fx] += sz[fy];
-            fa[fy] = fx;
+    int find(int i){
+        if(fa[i] != i){
+            fa[i] = find(fa[i]);
         }
-        else {
-            sz[fy] += sz[fx];
-            fa[fx] = fy;
-        }
+        return fa[i];
+    }
+
+    bool same(int x, int y){
+        return find(x) == find(y);
+    }
+
+    bool merge(int x, int y){
+        x = find(x), y = find(y);
+        if(x == y) return false;
+        if(sz[x] < sz[y]) swap(x, y);
+        fa[y] = x;
+        sz[x] += sz[y];
         return true;
     }
-    return false;
+    int size(int x){
+        return sz[find(x)];
+    }
+};
+struct MEdge {
+    int u, v;
+    i64 w;
+};
+optional<pair<i64, vector<MEdge>>> KrusKal(vector<MEdge> e, int n) {
+    sort(e.begin(), e.end(), [](const MEdge& a, const MEdge& b){
+        return a.w < b.w;
+    });
+    DSU d(n);
+    vector<MEdge> use;
+    i64 ans = 0;
+    for(auto [u, v, w] : e) {
+        if(!d.merge(u, v)) continue;
+        ans += w;
+        use.push_back({u, v, w});
+    }
+    if(use.size() + 1 != n && n) {
+        return nullopt;
+    }
+    return pair{ans, use};
 }
 
-void addEdge(int u, int v, int w=0){
-    nxt[cnt] = h[u];
-    to[cnt] = v;
-    wei[cnt] = w;
-    h[u] = cnt++;
-}
-int KrusKal(vector<array<int, 3>> edge, int n){
-    int m = edge.size(), cnt=0;
-    ll ans=0;
-    sort(edge.begin(), edge.end(), [](const auto x, const auto y){
-        return x[2] < y[2];
-    });
-    for(int i = 0; i < m; i++){
-        if(merge(edge[i][0], edge[i][1])){
-            ans += edge[i][2];
-            cnt++;
-            addEdge(edge[i][1], edge[i][0], edge[i][2]);
-            addEdge(edge[i][0], edge[i][1], edge[i][2]);
+optional<i64> Prim(vector<vector<pair<int, i64>>>&g) {
+    int n = g.size() - 1;
+    vector<i64> dis(n + 1, INF);
+    vector<bool> vis(n + 1);
+    priority_queue<pair<i64, int>, vector<pair<i64, int>>, greater<pair<i64, int>>> q;
+    dis[1] = 0;
+    q.push({0, 1});
+    i64 ans = 0;
+    int cnt = 0;
+    while(!q.empty()) {
+        auto [w, u] = q.top();
+        q.pop();
+        if(vis[u]) continue;
+        vis[u] = 1;
+        cnt++;
+        ans += w;
+        for(auto [v, ww] : g[u]) {
+            if(!vis[v] && ww < dis[v]) {
+                dis[v] = ww;
+                q.push({ww, v});
+            }
         }
     }
-    if(cnt == n-1) return ans;
-    return -1;
+    if(cnt != n) {
+        return nullopt;
+    }
+    return ans;
+}
 }
 
-}
-
-namespace Prim {
-
-int cnt, nodeCnt, n;
-array<int, MAXX> h;
-array<int, MAXX << 1> nxt, to, wei;
-
-array<array<int,2>,MAXX>heap;
-array<int,MAXX>where;//-1:未进  -2:弹出  >=0:位置
-int heapSize;
-
-void build(){
-    cnt = 1;
-    heapSize = 0;
-    nodeCnt = 0;
-    fill(h.begin(), h.begin() + n + 1, 0);
-    where.fill(-1);
-}
-
-void addEdge(int u, int v, int w = 0){
-    nxt[cnt] = h[u];
-    to[cnt] = v;
-    wei[cnt] = w;
-    h[u] = cnt++;
-}
-
-void swap1(int i, int j){
-	int a = heap[i][0];
-	int b = heap[j][0];
-	where[a] = j;
-	where[b] = i;
-	swap(heap[i], heap[j]);
-}
-
-void heapInsert(int i){
-	while(heap[i][1] < heap[(i - 1) / 2][1]){
-		swap1(i, (i - 1) / 2);
-		i = (i - 1) / 2;
-	}
-}
-
-void heapify(int i){
-	int l = i * 2 + 1;
-	while(l < heapSize){
-		int best = l + 1 < heapSize && heap[l + 1][1] < heap[l][1] ? l + 1 : l;
-		best = heap[best][1] < heap[i][1] ? best : i;
-		if(best == i) break;
-		swap1(best, i);
-		i = best;
-		l = i*2+1;
-	}
-}
-
-bool isEmpty(){
-	return heapSize == 0;
-}
-
-array<int,2> pop(){
-    int u,w;
-	u = heap[0][0];
-	w = heap[0][1];
-	swap1(0, --heapSize);
-	heapify(0);
-	where[u] = -2;
-	nodeCnt++;
-    return {u, w};
-}
-
-void addOrUpdateOrIgnore(int ei){
-	int v = to[ei];
-	int w = wei[ei];
-	if(where[v] == -1){
-		heap[heapSize][0] = v;
-		heap[heapSize][1] = w;
-		where[v] = heapSize++;
-		heapInsert(where[v]);
-	}
-	else if(where[v] >= 0){
-		heap[where[v]][1] = min(heap[where[v]][1], w);
-		heapInsert(where[v]);
-	}
-}
-
-int Prim(){
-	nodeCnt = 1;
-	where[1] = -2;
-	for(int ei = h[1]; ei > 0; ei = nxt[ei]){
-		addOrUpdateOrIgnore(ei);
-	}
-	int ans = 0;
-	while(!isEmpty()){
-		auto [u, w] = pop();
-		ans += w;
-		for(int ei = h[u]; ei > 0; ei = nxt[ei]){
-			addOrUpdateOrIgnore(ei);
-		}
-	}
-	return ans;
-}
-
-}
 
 
 
