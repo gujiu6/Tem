@@ -1,16 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int INF = 1e9+7;
-using ll = long long;
+using i64 = long long;
 
 
 
 //普通DSU
 class DSU {
-private:
     int n;
     vector<int> fa,sz;
-public:
     DSU(int n) : n(n), fa(n + 1), sz(n + 1, 1) {
         iota(fa.begin(), fa.end(), 0);
     }
@@ -20,11 +18,6 @@ public:
         }
         return fa[i];
     }
-
-    bool same(int x, int y){
-        return find(x) == find(y);
-    }
-
     bool merge(int x, int y){
         x = find(x), y = find(y);
         if(x == y) return false;
@@ -33,19 +26,20 @@ public:
         sz[x] += sz[y];
         return true;
     }
+    bool same(int x, int y){
+        return find(x) == find(y);
+    }
     int size(int x){
         return sz[find(x)];
     }
 };
 
 //带权DSU
-template <typename T = ll>
+template <typename T = i64>
 class WDSU {
-private:
     int n;
     vector<int> fa, sz;
     vector<T> w;
-public:
     WDSU(int n) : n(n), fa(n + 1, 0), w(n + 1, 0), sz(n + 1, 1) {
         iota(fa.begin(), fa.begin() + n + 1, 0);
     }
@@ -78,7 +72,7 @@ public:
     bool same(int x, int y) {
         return find(x) == find(y);
     }
-    int query(int x, int y) {
+    int qry(int x, int y) {
         assert(same(x, y));
         return w[y] - w[x];
     }
