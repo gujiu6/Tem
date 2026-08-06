@@ -36,7 +36,7 @@ public:
         vector<int> ans;
         for(int i = n; i > 0; i--){
             int idx = k / fac[i - 1];
-            k %= fac[i-1];
+            k %= fac[i - 1];
             ans.push_back(num[idx]);
             num.erase(num.begin() + idx);
         }
