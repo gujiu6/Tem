@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int MOD=1e9+7 ,MAXX=2e5;
-typedef long long ll;
+using i64 = long long;
 
 
 
@@ -11,11 +11,11 @@ namespace CC1{
 
 class CC{
 private:
-    vector<ll>f, inv;
+    vector<i64>f, inv;
     int mod;
 public:
-    ll power(ll a, ll b){
-        ll ans = 1;
+    i64 power(i64 a, i64 b){
+        i64 ans = 1;
         a %= mod;
         while(b > 0){
             if(b & 1) ans = (ans * a) % mod;
@@ -33,18 +33,18 @@ public:
             inv[i] = inv[i + 1] * (i + 1) % mod;
         }
     }
-    ll C(int n, int m){
+    i64 C(int n, int m){
         if(m < 0 || m > n) return 0;
         return f[n] * inv[m] % mod * inv[n - m] % mod;
     }
-    ll P(int n, int m){
+    i64 P(int n, int m){
         if(m < 0 || m > n) return 0;
         return f[n] * inv[n - m] % mod;
     }
-    ll prefix_sum_C(int n, int m) {
+    i64 prefix_sum_C(int n, int m) {
         if (m < 0) return 0;
         if (m >= n) return power(2,n);
-        ll sum = 0;
+        i64 sum = 0;
         for (int k = 0; k <= m; k++) {
             sum = (sum + C(n, k)) % mod;
         }
@@ -59,11 +59,11 @@ namespace CC2{
 
 class CC{
 private:
-    vector<ll>f, inv;
+    vector<i64>f, inv;
     int mod;
 public:
-    ll power(ll a, ll b){
-        ll ans = 1;
+    i64 power(i64 a, i64 b){
+        i64 ans = 1;
         a %= mod;
         while(b > 0){
             if(b & 1) ans = (ans * a) % mod;
@@ -81,7 +81,7 @@ public:
             inv[i] = inv[i + 1] * (i + 1) % mod;
         }
     }
-    ll C(int n, int m){
+    i64 C(int n, int m){
         if(m < 0 || m > n) return 0;
         return f[n] * inv[m] % mod * inv[n - m] % mod;
     }
@@ -89,10 +89,10 @@ public:
         if(m == 0) return 1;
         return lucas(n / mod, m / mod) * C(n % mod, m % mod) % mod;
     }
-    ll prefix_sum_C(int n, int m) {
+    i64 prefix_sum_C(int n, int m) {
         if (m < 0) return 0;
         if (m >= n) return power(2,n);
-        ll sum = 0;
+        i64 sum = 0;
         for (int k = 0; k <= m; k++) {
             sum = (sum + C(n, k)) % mod;
         }
@@ -105,7 +105,7 @@ public:
 
 
 //预处理11
-array<array<ll, MAXX+1>, MAXX+1> C, pre;
+array<array<i64, MAXX+1>, MAXX+1> C, pre;
 void init(){
 	for(int n = 0;n <= MAXX;n++){
 		C[n][0]=C[n][n]=1;
