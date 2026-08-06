@@ -43,17 +43,17 @@ struct MEdge {
     int u, v;
     i64 w;
 };
-optional<pair<i64, vector<MEdge>>> KrusKal(vector<MEdge> e, int n) {
-    sort(e.begin(), e.end(), [](const MEdge& a, const MEdge& b){
+optional<pair<i64, vector<MEdge>>> KrusKal(vector<MEdge> edge, int n) {
+    sort(edge.begin(), edge.end(), [](const MEdge& a, const MEdge& b){
         return a.w < b.w;
     });
     DSU d(n);
     vector<MEdge> use;
     i64 ans = 0;
-    for(auto [u, v, w] : e) {
-        if(!d.merge(u, v)) continue;
-        ans += w;
-        use.push_back({u, v, w});
+    for(auto e : edge) {
+        if(!d.merge(e.u, e.v)) continue;
+        ans += e.w;
+        use.push_back(e);
     }
     if(use.size() + 1 != n && n) {
         return nullopt;
