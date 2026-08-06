@@ -9,7 +9,7 @@ using i64 = long long;
 class DSU {
     int n;
     vector<int> fa,sz;
-    DSU(int n) : n(n), fa(n + 1), sz(n + 1, 1) {
+    DSU(int n): n(n), fa(n + 1), sz(n + 1, 1) {
         iota(fa.begin(), fa.end(), 0);
     }
     int find(int i){
@@ -40,7 +40,7 @@ class WDSU {
     int n;
     vector<int> fa, sz;
     vector<T> w;
-    WDSU(int n) : n(n), fa(n + 1, 0), w(n + 1, 0), sz(n + 1, 1) {
+    WDSU(int n): n(n), fa(n + 1, 0), w(n + 1, 0), sz(n + 1, 1) {
         iota(fa.begin(), fa.begin() + n + 1, 0);
     }
     int find(int i) {
