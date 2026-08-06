@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MAXX=2e5, MOD = 1e9+7;
-typedef long long ll;
+const int MAXX = 2e5, MOD = 1e9+7;
+using i64 = long long;
 
 
 
@@ -9,8 +9,8 @@ typedef long long ll;
 
 
 //快速幂
-ll power(ll a, ll b, ll MOD = 1e9+7) {
-	ll ans = 1;
+i64 power(i64 a, i64 b, i64 MOD = 1e9+7) {
+	i64 ans = 1;
 	a %= MOD;
 	while(b > 0) {
 		if(b & 1) ans = ans * a % MOD;
@@ -20,17 +20,17 @@ ll power(ll a, ll b, ll MOD = 1e9+7) {
 	return ans;
 }
 //费马小
-ll getinv(int n, int MOD = 1e9+7){
+i64 getinv(int n, int MOD = 1e9+7){
     return power(n, MOD - 2, MOD);
 }
 
 //矩阵快速幂
-vector<vector<ll>> mul(const vector<vector<ll>>& a,const vector<vector<ll>>& b) {
+vector<vector<i64>> mul(const vector<vector<i64>>& a,const vector<vector<i64>>& b) {
     //a : n * k, b : n * m
     int n = a.size();
     int k = a[0].size();
     int m = b[0].size();
-    vector<vector<ll>> ans(n, vector<ll>(m));
+    vector<vector<i64>> ans(n, vector<i64>(m));
     for(int i = 0; i < n; i++){
         for(int j = 0; j < m; j++){
             for(int c = 0; c < k; c++){
@@ -40,9 +40,9 @@ vector<vector<ll>> mul(const vector<vector<ll>>& a,const vector<vector<ll>>& b) 
     }
     return ans;
 }
-vector<vector<ll>> power(vector<vector<ll>> A,int p,const vector<vector<ll>>& f) {
+vector<vector<i64>> power(vector<vector<i64>> A,int p,const vector<vector<i64>>& f) {
     //f : 初始矩阵
-    vector<vector<ll>>ans = f;
+    vector<vector<i64>>ans = f;
     while(p > 0) {
         if(p & 1) ans = mul(A, ans);
         A = mul(A, A);
@@ -53,12 +53,12 @@ vector<vector<ll>> power(vector<vector<ll>> A,int p,const vector<vector<ll>>& f)
 
 
 //整数开方
-ll my_sqrt(ll a)
+i64 my_sqrt(i64 a)
 {
-    ll l = 0, r = 5e9+10;
+    i64 l = 0, r = 5e9+10;
     while(r - l > 1)
     {
-        ll mid = (l + r) / 2;
+        i64 mid = (l + r) / 2;
         if(1ll * mid * mid <= a)l = mid;
         else r = mid;
     }
@@ -66,9 +66,9 @@ ll my_sqrt(ll a)
 }
 
 //快读
-ll read(){
+i64 read(){
     bool flag = false;
-    ll ans = 0;
+    i64 ans = 0;
     char c = getchar();
     while(c < '0' || c > '9') {
         if(c == '-') flag = true;
@@ -81,7 +81,7 @@ ll read(){
     return flag ? -ans : ans;
 }
 //快写
-void write(ll x){
+void write(i64 x){
     if(x == 0){
         putchar('0');
         return;
