@@ -1,20 +1,20 @@
 //区间合并
 #include <bits/stdc++.h>
 using namespace std;
-const int MAXX=2e5;
-typedef long long ll;
+const int MAXX = 2e5;
+using i64 = long long;
 
 
 
 
 
 
-array<int,MAXX>arr;
-array<ll,MAXX<<2>sum,len0,pre0,sur0,len1,pre1,sur1,change;
-array<bool,MAXX>update,rev;
+array<int, MAXX> arr;
+array<i64, MAXX<<2> sum, len0, pre0, sur0, len1, pre1, sur1, change;
+array<bool, MAXX>update, rev;
 
 
-void updatelazy(int i,ll v,int n){
+void updatelazy(int i, i64 v,int n){
     sum[i]=v*n;
     len0[i]=pre0[i]=sur0[i]=v==0?n:0;
     len1[i]=pre1[i]=sur1[i]=v==1?n:0;
@@ -99,19 +99,19 @@ void reverses(int jobl,int jobr,int l,int r,int i){
     }
 }
 
-ll qrysum(int jobl,int jobr,int l,int r,int i){
+i64 qrysum(int jobl,int jobr,int l,int r,int i){
     if(jobl<=l&&r<=jobr){
         return sum[i];
     }
     int mid=(l+r)>>1;
-    ll ans=0;
+    i64 ans=0;
     down(i,mid-l+1,r-mid);
     if(jobl<=mid) ans+=qrysum(jobl,jobr,l,mid,i<<1);
     if(jobr>mid) ans+=qrysum(jobl,jobr,mid+1,r,i<<1|1);
     return ans;
 }
 
-vector<ll> qrylongest(int jobl,int jobr,int l,int r,int i){
+vector<i64> qrylongest(int jobl,int jobr,int l,int r,int i){
     if(jobl<=l&&r<=jobr){
         return {len1[i],pre1[i],sur1[i]};
     }
@@ -120,14 +120,14 @@ vector<ll> qrylongest(int jobl,int jobr,int l,int r,int i){
     down(i,ln,rn);
     if(jobr<=mid) return qrylongest(jobl,jobr,l,mid,i<<1);
     if(jobl>mid) return qrylongest(jobl,jobr,mid+1,r,i<<1|1);
-    vector<ll> l3=qrylongest(jobl,jobr,l,mid,i<<1);
-    vector<ll> r3=qrylongest(jobl,jobr,mid+1,r,i<<1|1);
-    ll llen=l3[0],lpre=l3[1],lsur=l3[2];
-    ll rlen=r3[0],rpre=r3[1],rsur=r3[2];
-    ll len=max({llen,rlen,lsur+rpre});
-    ll pre=llen<mid-max(jobl,l)+1?lpre:(lpre+rpre);
-    ll sur=rlen<min(r,jobr)-mid?rsur:(lsur+rsur);
-    return {len,pre,sur};
+    vector<i64> l3=qrylongest(jobl,jobr,l,mid,i<<1);
+    vector<i64> r3=qrylongest(jobl,jobr,mid+1,r,i<<1|1);
+    i64 llen=l3[0],lpre=l3[1],lsur=l3[2];
+    i64 rlen=r3[0],rpre=r3[1],rsur=r3[2];
+    i64 len=max({llen,rlen,lsur+rpre});
+    i64 pre=llen<mid-max(jobl,l)+1?lpre:(lpre+rpre);
+    i64 sur=rlen<min(r,jobr)-mid?rsur:(lsur+rsur);
+    return {len, pre, sur};
 }
 
 void clear(){

@@ -1,12 +1,12 @@
 //经典线段树
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
+using i64 = long long;
 
 
 
 
-template <typename T=ll>
+template <typename T = i64>
 class SegmentTree1 {
 private:
     int n;
