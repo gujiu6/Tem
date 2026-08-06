@@ -36,8 +36,8 @@ class BIT {
         }
         return ans;
     }
-    T range_qry(int left, int right) {
-        return qry(right) - qry(left - 1);
+    T range_qry(int l, int r) {
+        return qry(r) - qry(l - 1);
     }
     //查询第k小元素位置
     int kth(int k) {
