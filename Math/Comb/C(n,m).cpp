@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MOD=1e9+7 ,MAXX=2e5;
 using i64 = long long;
+const int MOD = 1e9+7 ,MAXX = 2e5;
 
 
 
