@@ -5,7 +5,7 @@ using i64 = long long;
 
 
 
-//普通DSU
+//1.普通DSU
 class DSU {
     int n;
     vector<int> fa,sz;
@@ -34,7 +34,7 @@ class DSU {
     }
 };
 
-//带权DSU
+//2.带权DSU
 template <typename T = i64>
 class WDSU {
     int n;
