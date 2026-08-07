@@ -6,7 +6,7 @@ using i64 = long long;
 
 
 //1.普通DSU
-class DSU {
+struct DSU {
     int n;
     vector<int> fa,sz;
     DSU(int n): n(n), fa(n + 1), sz(n + 1, 1) {
@@ -36,7 +36,7 @@ class DSU {
 
 //2.带权DSU
 template <typename T = i64>
-class WDSU {
+struct WDSU {
     int n;
     vector<int> fa, sz;
     vector<T> w;
@@ -78,4 +78,133 @@ class WDSU {
     }
 };
 
+//3.可撤销DSU
+struct RollbackDSU {
+    vector<int> p;
+    vector<pair<int, int>> st;
+    RollbackDSU(int n = 0): p(n + 1, -1){}
+    int find(int i) const {
+        while(p[i] >= 0) {
+            i = p[i];
+        }
+        return i;
+    }
+    int snap() const {
+        //返回当前回滚栈高度作为快照编号
+        return st.size();
+    }
+    bool merge(int x, int y) {
+        x = find(x), y = find(y);
+        if(x == y) {
+            st.push_back({-1, 0});
+            return false;
+        }
+        if(p[x] > p[y]) swap(x, y);
+        st.push_back({y, p[y]});
+        st.push_back({x, p[x]});
+        p[x] += p[y];
+        p[y] = x;
+        return true;
+    }
+    void rollback(int s) {
+        //s:此前由snap返回的回滚栈高度;撤销到快照s时的并查集状态,无返回值
+        while(st.size() > s) {
+            auto [u, x] = st.back();
+            st.pop_back();
+            if(u != -1) {
+                p[u] = x;
+            }
+        }
+    }
+    bool same(int x, int y) const {
+        return find(x) == find(y);
+    }
+    int size(int i) const {
+        return -p[find(i)];
+    }
+};
 
+//4.可持久化DSU
+struct PerDSU {
+    struct Node {
+        int l = 0, r = 0, p = 0, sz = 0;
+    };
+    int n;
+    vector<Node> t{{}};
+    PerDSU(int n = 0): n(n){}
+    int build(int l, int r) {
+        int i = t.size();
+        t.push_back({});
+        if(l == r) {
+            t[i].p = l;
+            t[i].sz = 1;
+        }
+        else {
+            int mid = (l + r) >> 1;
+            t[i].l = build(l, mid);
+            t[i].r = build(mid + 1, r);
+        }
+        return i;
+    }
+    //初始版本
+    int build() {
+        return build(1, n);
+    }
+    pair<int, int> qry(int i, int l, int r, int p) const {
+        //i:第一个元素编号;p:节点编号或当前位置;返回当前位置,节点或结构保存的查询值
+        if(l == r) {
+            return {t[i].p, t[i].sz};
+        }
+        int mid = (l + r) >> 1;
+        if(p <= mid) return qry(t[i].l, l, mid, p);
+        else return qry(t[i].r, mid + 1, r, p);
+    }
+    pair<int, int> qry(int root, int p) const{
+        //root:版本根编号;p:节点编号或当前位置;返回当前位置,节点或结构保存的查询值
+        return qry(root, 1, n, p);
+    }
+    //修改
+    int set(int i, int l, int r, int p, int f, int sz) {
+        //i:第一个元素编号;p:节点编号或当前位置;f:父节点数组;sz:子树或集合大小;把指定位置或节点改为给定值,无返回值
+        int y = t.size();
+        t.push_back(t[i]);
+        if(l == r) {
+            t[y].p = f;
+            t[y].sz = sz;
+            return y;
+        }
+        int mid = (l + r) >> 1;
+        if(p <= mid) t[y].l = set(t[y].l, l, mid, p, f, sz);
+        else t[y].r = set(t[y].r, mid + 1, r, p, f, sz);
+        return y;
+    }
+    int find(int root, int i) const {
+        //root:版本根编号;i:第一个元素编号;返回x所在连通块的代表元,并按当前实现压缩访问路径
+        while(true) {
+            int p = qry(root, i).first;
+            if(p == i) return i;
+            i = p;
+        }
+    }
+    int merge(int root, int x, int y) {
+        //root要从中继续合并的历史版本根;合并两个元素所在连通块,并返回是否实际发生合并或新的代表元。
+        x = find(root, x);
+        y = find(root, y);
+        if(x == y) return root;
+        auto [px, sx] = qry(root, x);
+        auto [py, sy] = qry(root, y);
+        if(sx < sy) {
+            swap(x, y);
+            swap(sx, sy);
+        }
+        root = set(root, 1, n, y, x, sy);
+        root = set(root, 1, n, x, x, sx + sy);
+        return root;
+    }
+    bool same(int root, int x, int y) const {
+        return find(root, x) == find(root, y);
+    }
+    int size(int root, int x) const {
+        return qry(root, find(root, x)).second;
+    }
+};

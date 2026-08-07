@@ -8,7 +8,7 @@ using i64 = long long;
 
 //1.单点修改/赋值,区间/前缀和
 template <typename T = i64>
-class BIT1 {
+struct BIT1 {
     int n;
     vector<T> bit, a;
     BIT1(int n): n(n), bit(n + 1, 0), a(n + 1, 0) {}
@@ -63,7 +63,7 @@ class BIT1 {
 
 //2.区间修改, 区间和
 template <class T = i64>
-class BIT2 {
+struct BIT2 {
     int n;
     vector<T> bit1, bit2;
     BIT2(int n): n(n), bit1(n + 2, 0), bit2(n + 2, 0) {}

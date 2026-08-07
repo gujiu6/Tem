@@ -5,7 +5,7 @@ using i64 = long long;
 
 //1.二维前缀和
 template <class T = i64>
-class Prefix {
+struct Prefix {
     int n, m;
     vector<vector<T>> s;
     Prefix(const vector<vector<T>>& a): n(a.size() - 1), m(a[0].size() - 1), s(n + 1, vector<T>(m + 1)) {
@@ -22,7 +22,7 @@ class Prefix {
 
 //2.二维差分
 template <class T = i64>
-class Diff {
+struct Diff {
     int n, m;
     vector<vector<T>> d;
     Diff(int n, int m): n(n), m(m), d(n + 2, vector<T>(m + 2)) {}
@@ -91,7 +91,7 @@ T maxSubMat(const vector<vector<T>>& a) {
 
 //5.所有区间 gcd
 template <class T = i64>
-class gcdRanges {
+struct gcdRanges {
     int n;
     vector<vector<pair<int, T>>> g;
     gcdRanges (const vector<T>& a): n(a.size() - 1), g(n + 1) {
