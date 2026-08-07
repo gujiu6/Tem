@@ -81,7 +81,12 @@ struct WDSU {
 //3.可撤销DSU
 struct RollbackDSU {
     vector<int> p;
-    vector<pair<int, int>> st;
+    struct History {
+        int x, px;
+        int y, py;
+        bool merged;
+    };
+    vector<History> st;
     RollbackDSU(int n = 0): p(n + 1, -1){}
     int find(int i) const {
         while(p[i] >= 0) {
@@ -96,12 +101,11 @@ struct RollbackDSU {
     bool merge(int x, int y) {
         x = find(x), y = find(y);
         if(x == y) {
-            st.push_back({-1, 0});
+            st.push_back({x, 0, y, 0, false});
             return false;
         }
         if(p[x] > p[y]) swap(x, y);
-        st.push_back({y, p[y]});
-        st.push_back({x, p[x]});
+        st.push_back({x, p[x], y, p[y], true});
         p[x] += p[y];
         p[y] = x;
         return true;
@@ -109,10 +113,11 @@ struct RollbackDSU {
     void rollback(int s) {
         //s:此前由snap返回的回滚栈高度;撤销到快照s时的并查集状态,无返回值
         while(st.size() > s) {
-            auto [u, x] = st.back();
+            auto &[x, px, y, py, merged] = st.back();
             st.pop_back();
-            if(u != -1) {
-                p[u] = x;
+            if(merged) {
+                p[x] = px;
+                p[y] = py;
             }
         }
     }
