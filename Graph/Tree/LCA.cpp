@@ -1,39 +1,33 @@
 #include <bits/stdc++.h>
 using namespace std;
+using i64 = long long;
 const int MAXX = 5e5+10, LIMIT = 20;
 
 
 
 namespace BinaryLifting {
 
-int cnt, lg2, n;
-array<int, MAXX> h, deep;
-array<int, MAXX << 1> nxt, to, wei;
-array<array<int, LIMIT>, MAXX> stjump;
-
+struct MEdge {
+    int v;
+    i64 w = 0;
+};
+int lg2, n;
+array<int, MAXX> deep;
+array<array<int, MAXX>, LIMIT> stjump;
+vector<vector<MEdge>> g(MAXX);
 void build(){
-    cnt = 1;
     lg2 = __lg(n);
-    fill(h.begin(), h.begin() + n + 1, 0);
     fill(deep.begin(), deep.begin() + n + 1, 0);
-}
-
-void addEdge(int u, int v, int w = 0){
-    nxt[cnt] = h[u];
-    to[cnt] = v;
-    wei[cnt] = w;
-    h[u] = cnt++;
 }
 
 void dfs(int u, int f){
     deep[u] = deep[f] + 1;
     stjump[u][0] = f;
     for(int p = 1; p <= lg2; p++){
-        int mid = stjump[u][p - 1];
-        stjump[u][p] = stjump[mid][p - 1];
+        int mid = stjump[p - 1][u];
+        stjump[p][u] = stjump[p - 1][mid - 1];
     }
-    for(int ei = h[u], v;ei > 0; ei = nxt[ei]){
-        v = to[ei];
+    for(auto &[v, w] : g[u]){
         if(v == f) continue;
         dfs(v, u);
     }
@@ -64,49 +58,37 @@ int dist(int u, int v) {
 
 namespace Tarjan {
 
-int cnt, n, m;
-array<int, MAXX> h, fa, vis;
-array<int, MAXX << 1> nxt, to, wei;
-vector<vector<array<int, 2>>> Question(MAXX);
-vector<int> lca;
-
-void build(){
-    cnt = 1;
-    fill(h.begin(), h.begin() + n + 1, 0);
-    fill(vis.begin(), vis.begin() + n + 1, 0);
-    fill(lca.begin(), lca.begin() + m + 1, 0);
-    for(int i = 1; i <= n; i++) 
-        fa[i] = i;
-}
-
-void addEdge(int u, int v, int w=0){
-    nxt[cnt] = h[u];
-    to[cnt] = v;
-    wei[cnt] = w;
-    h[u] = cnt++;
-}
-
-int find(int i){
-    if(i != fa[i]){
-        fa[i] = find(fa[i]);
-    }
-    return fa[i];
-}
-
-void tarjan(int u, int f){
-    vis[u] = 1;
-    for(int ei = h[u], v; ei > 0; ei = nxt[ei]){
-        v = to[ei];
-        if(v != f){
-            tarjan(v, u);
-            fa[v] = u;
+struct MEdge {
+    int v;
+    i64 w;
+};
+vector<int> Tarjan(const vector<vector<MEdge>>& g, const vector<vector<pair<int, int>>> &q) {
+    int n = g.size() - 1, m = q.size() - 1;
+    vector<int> lca(m + 1);
+    vector<bool> vis(n + 1);
+    vector<int> fa(n + 1);
+    iota(fa.begin(), fa.end(), 0);
+    auto find = [&](auto && self, int i)->int {
+        if(i != fa[i]) {
+            fa[i] = self(self, fa[i]);
         }
-    }
-    for(auto [v, id] : Question[u]){
-        if(vis[v]){
-            lca[id] = find(v);
+        return fa[i];
+    };
+    auto tarjan = [&](auto &&self, int u, int f)->void {
+        vis[u] = 1;
+        for(auto &[v, w] : g[u]){
+            if(v != f){
+                self(self, v, u);
+                fa[v] = u;
+            }
         }
-    }
+        for(auto [v, id] : q[u]){
+            if(vis[v]){
+                lca[id] = find(find, v);
+            }
+        }
+    };
+    tarjan(tarjan, 1, 0);
 }
 
 }
