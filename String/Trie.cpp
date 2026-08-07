@@ -8,80 +8,78 @@ typedef long long ll;
 
 
 
-class Trie {
-private:
+struct Trie {
     int cnt, n;
-    vector<vector<int>> tree;
-    vector<int> pass1, end1;
-public:
+    vector<vector<int>> tr;
+    vector<int> pas, ed;
     Trie(int n): cnt(1), n(n) {
-        tree.resize(MAXX, vector<int>(n));
-        pass1.resize(MAXX);
-        end1.resize(MAXX);
+        tr.resize(MAXX, vector<int>(n));
+        pas.resize(MAXX);
+        ed.resize(MAXX);
     }
 
-    int Path(char c) {
-        return c-'a';
+    int Path(char c) const {
+        return c - 'a';
     }
 
     void insert(string& s) {
         int cur = 1;
-        pass1[cur]++;
+        pas[cur]++;
         for(int i = 0; i < s.size(); i++){
             int path = Path(s[i]);
-            if(tree[cur][path] == 0){
-                tree[cur][path] = ++cnt;
+            if(tr[cur][path] == 0){
+                tr[cur][path] = ++cnt;
             }
-            cur = tree[cur][path];
-            pass1[cur]++;
+            cur = tr[cur][path];
+            pas[cur]++;
         }
-        end1[cur]++;
+        ed[cur]++;
     }
 
-    int search(string& s) {
+    int search(string& s) const {
         int cur = 1;
         for(int i = 0; i < s.size(); i++){
             int path = Path(s[i]);
-            if(tree[cur][path] == 0){
+            if(tr[cur][path] == 0){
                 return 0;
             }
-            cur = tree[cur][path];
+            cur = tr[cur][path];
         }
-        return end1[cur];
+        return ed[cur];
     }
 
-    int prefixcount(string& pre){
+    int prefixcount(string& pre) const {
         int cur = 1;
         for(int i = 0; i < pre.size(); i++){
             int path = Path(pre[i]);
-            if(tree[cur][path] == 0){
+            if(tr[cur][path] == 0){
                 return 0;
             }
-            cur = tree[cur][path];
+            cur = tr[cur][path];
         }
-        return pass1[cur];
+        return pas[cur];
     }
 
-    void del(string& s){
+    void del(string& s) {
         if(search(s) > 0){
             int cur = 1;
             for(int i = 0; i < s.size(); i++){
                 int path = Path(s[i]);
-                if(--pass1[tree[cur][path]] == 0){
-                    tree[cur][path] = 0;
+                if(--pas[tr[cur][path]] == 0){
+                    tr[cur][path] = 0;
                     return;
                 }
-                cur = tree[cur][path];
+                cur = tr[cur][path];
             }
-            end1[cur]--;
+            ed[cur]--;
         }
     }
 
-    void clear(){
+    void clear() {
         for(int i = 1; i <= cnt; i++){
-            tree[i].assign(n, 0);
-            end1[i] = 0;
-            pass1[i] = 0;
+            tr[i].assign(n, 0);
+            ed[i] = 0;
+            pas[i] = 0;
         }
         cnt = 1;
     }
