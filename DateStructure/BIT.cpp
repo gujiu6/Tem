@@ -6,17 +6,17 @@ using i64 = long long;
 
 
 
-
+//1.单点修改/赋值,区间/前缀和
 template <typename T = i64>
-class BIT {
+class BIT1 {
     int n;
-    vector<T> tree, a;
-    BIT(int n): n(n), tree(n + 1, 0) {}
-    BIT(const vector<T>& a):a(a), n(a.size() - 1), tree(n + 1, 0) {
+    vector<T> bit, a;
+    BIT1(int n): n(n), bit(n + 1, 0), a(n + 1, 0) {}
+    BIT1(const vector<T>& a):a(a), n(a.size() - 1), bit(n + 1, 0) {
         for(int i = 1; i <= n; i++) {
-            tree[i] += a[i];
+            bit[i] += a[i];
             int j = i + lowbit(i);
-            if(j <= n) tree[j] += tree[i];
+            if(j <= n) bit[j] += bit[i];
         }
     }
     inline int lowbit(int i) {
@@ -24,7 +24,7 @@ class BIT {
     }
     void add(int i, T v) {
         while(i <= n){
-            tree[i] += v;
+            bit[i] += v;
             i += lowbit(i);
         }
     }
@@ -35,7 +35,7 @@ class BIT {
     T sum(int i) const{
         T ans = 0;
         while(i > 0) {
-            ans += tree[i];
+            ans += bit[i];
             i -= lowbit(i);
         }
         return ans;
@@ -48,18 +48,62 @@ class BIT {
         int pos = 0;
         for(int p = bit_floor(unsigned(n)); p > 0; p >>= 1) {
             int nxt = pos + p;
-            if(nxt <= n && tree[nxt] < k) {
+            if(nxt <= n && bit[nxt] < k) {
                 pos = nxt;
-                k -= tree[nxt];
+                k -= bit[nxt];
             }
         }
         return pos + 1;
     }
     void clear() {
-        fill(tree.begin(), tree.end(), 0);
+        fill(bit.begin(), bit.end(), 0);
+        fill(a.begin(), a.end(), 0);
     }
 };
 
-
-
+//2.区间修改, 区间和
+template <class T = i64>
+class BIT2 {
+    int n;
+    vector<T> bit1, bit2;
+    BIT2(int n): n(n), bit1(n + 2, 0), bit2(n + 2, 0) {}
+    BIT2(const vector<T>& a): n(a.size() - 1), bit1(n + 2, 0), bit2(n + 2, 0){
+        for(int i = 1; i <= n; i++) {
+            range_add(i, i, a[i]);
+        }
+    }
+    inline int lowbit(int i) {
+        return i & -i;
+    }
+    void add(vector<T>& bit, int i, T v) {
+        while(i <= n){
+            bit[i] += v;
+            i += lowbit(i);
+        }
+    }
+    T sum(const vector<T>& bit, int i) const {
+        T ans = 0;
+        while(i > 0) {
+            ans += bit[i];
+            i -= lowbit(i);
+        }
+        return ans;
+    }
+    void range_add(int l, int r, T v) {
+        add(bit1, l, v);
+        add(bit1, r + 1, -v);
+        add(bit2, l, v * (l - 1));
+        add(bit2, r + 1, -v * r);
+    }
+    T sum(int i) const {
+        return sum(bit1, i) * i - sum(bit2, i);
+    }
+    T sum(int l, int r) {
+        return sum(r) - sum(l - 1);
+    }
+    void clear() {
+        fill(bit1.begin(), bit1.end(), 0);
+        fill(bit2.begin(), bit2.end(), 0);
+    }
+};
 
