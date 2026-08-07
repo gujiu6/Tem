@@ -9,18 +9,18 @@ using i64 = long long;
 
 template <typename T = i64>
 class BIT {
-    int n, lg2;
-    vector<T> tree;
-    inline int lowbit(int i) {
-        return i & -i;
-    }
-    BIT(int n): n(n), tree(n + 1, 0), lg2(__lg(n)) {}
-    BIT(vector<T>& a): n(a.size() - 1), BIT(n) {
+    int n;
+    vector<T> tree, a;
+    BIT(int n): n(n), tree(n + 1, 0) {}
+    BIT(const vector<T>& a):a(a), n(a.size() - 1), tree(n + 1, 0) {
         for(int i = 1; i <= n; i++) {
             tree[i] += a[i];
             int j = i + lowbit(i);
             if(j <= n) tree[j] += tree[i];
         }
+    }
+    inline int lowbit(int i) {
+        return i & -i;
     }
     void add(int i, T v) {
         while(i <= n){
@@ -28,7 +28,11 @@ class BIT {
             i += lowbit(i);
         }
     }
-    T qry(int i) {
+    void set(int i, T v) {
+        add(i, v - a[i]);
+        a[i] = v;
+    }
+    T sum(int i) const{
         T ans = 0;
         while(i > 0) {
             ans += tree[i];
@@ -36,14 +40,13 @@ class BIT {
         }
         return ans;
     }
-    T range_qry(int l, int r) {
-        return qry(r) - qry(l - 1);
+    T sum(int l, int r) const{
+        return sum(r) - sum(l - 1);
     }
-    //查询第k小元素位置
-    int kth(int k) {
+    //查询第k小元素位置(权值BIT)
+    int kth(int k) const{
         int pos = 0;
-        int pw = 1 << lg2;
-        for(int p = pw; p > 0; p >>= 1) {
+        for(int p = bit_floor(unsigned(n)); p > 0; p >>= 1) {
             int nxt = pos + p;
             if(nxt <= n && tree[nxt] < k) {
                 pos = nxt;
