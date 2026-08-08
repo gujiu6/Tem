@@ -25,8 +25,8 @@ struct ST1 {
 
     T qry(int l, int r) const {
         assert(1 <= l && l <= r && r <= n);
-        int p = bit_width(unsigned(r - l));
-        int ans = op(st[p][l], st[p][r - (1LL << p) + 1]);
+        int p = bit_width(unsigned(r - l + 1)) - 1;
+        T ans = op(st[p][l], st[p][r - (1LL << p) + 1]);
         return ans;
     }
 };

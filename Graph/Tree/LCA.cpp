@@ -1,94 +1,185 @@
 #include <bits/stdc++.h>
+#include <cassert>
 using namespace std;
 using i64 = long long;
 const int MAXX = 5e5+10, LIMIT = 20;
 
 
-
-namespace BinaryLifting {
-
 struct MEdge {
     int v;
     i64 w = 0;
 };
-int lg2, n;
-array<int, MAXX> deep;
-array<array<int, MAXX>, LIMIT> stjump;
-vector<vector<MEdge>> g(MAXX);
-void build(){
-    lg2 = __lg(n);
-    fill(deep.begin(), deep.begin() + n + 1, 0);
-}
-
-void dfs(int u, int f){
-    deep[u] = deep[f] + 1;
-    stjump[u][0] = f;
-    for(int p = 1; p <= lg2; p++){
-        int mid = stjump[p - 1][u];
-        stjump[p][u] = stjump[p - 1][mid - 1];
+//1.倍增LCA
+struct LCA {
+    int n, lg2, tim = 0;
+    vector<int> dep, in, out;
+    vector<vector<int>> up;
+    LCA(const vector<vector<MEdge>>& g, int root = 1)
+    : n(g.size() - 1), lg2(bit_width((unsigned)max(1, n))), dep(n + 1), in(n + 1), out(n + 1), up(lg2, vector<int>(n + 1)) {
+        auto dfs = [&](auto &&self, int u, int f)->void {
+            in[u] = ++tim;
+            dep[u] = dep[f] + 1;
+            up[0][u] = f;
+            for(int p = 1; p < lg2; p++) {
+                up[p][u] = up[p - 1][up[p - 1][u]];
+            }
+            for(auto &[v, w] : g[u]) {
+                if(v == f) continue;
+                self(self, v, u);
+            }
+            out[u] = tim;
+        };
+        if(n) dfs(dfs, root, 0);
     }
-    for(auto &[v, w] : g[u]){
-        if(v == f) continue;
-        dfs(v, u);
+    //u是否为v的祖先
+    bool ancestor(int u, int v) const {
+        return in[u] <= in[v] && out[v] <= out[u];
     }
-}
-
-int lca(int a, int b){
-    if(deep[a] < deep[b]) swap(a, b);
-    for(int p = lg2; p >= 0; p--){
-        if(deep[stjump[a][p]] >= deep[b]){
-            a = stjump[a][p];
+    //u向上跳k层
+    int jump(int u, int k) const {
+        if(k >= dep[u]) return -1;
+        for(int p = 0; k; p++, k >>= 1) {
+            if(k & 1) {
+                u = up[p][u];
+            }
         }
+        return u;
     }
-    if(a == b) return a;
-    for(int p = lg2; p >= 0; p--){
-        if(stjump[a][p] != stjump[b][p]){
-            a = stjump[a][p];
-            b = stjump[b][p];
+    //lca
+    int lca(int u, int v) const {
+        if(ancestor(u, v)) return u;
+        if(ancestor(v, u)) return v;
+        for(int p = lg2 - 1; p >= 0; p--) {
+            if(!ancestor(up[p][u], v)) {
+                u = up[p][u];
+            }
         }
+        return up[0][u];
     }
-    return stjump[a][0];
-}
-
-int dist(int u, int v) {
-    return deep[u] + deep[v] - 2 * deep[lca(u, v)];
-}
-
-}
-
-namespace Tarjan {
-
-struct MEdge {
-    int v;
-    i64 w;
+    //u到v的距离(边数)
+    int dist(int u, int v) const {
+        int f = lca(u, v);
+        return dep[u] + dep[v] - 2 * dep[f];
+    }
+    // 路径u->v上的第k(0-base)个节点
+    int pathKth(int u, int v, int k) const {
+        int p = lca(u, v);
+        int a = dep[u] - dep[p];
+        int b = dep[v] - dep[p];
+        if(k < 0 || k > a + b) return -1;
+        if(k <= a) return jump(u, k);
+        return jump(v, a + b - k);
+    }
 };
-vector<int> Tarjan(const vector<vector<MEdge>>& g, const vector<vector<pair<int, int>>> &q) {
-    int n = g.size() - 1, m = q.size() - 1;
-    vector<int> lca(m + 1);
-    vector<bool> vis(n + 1);
-    vector<int> fa(n + 1);
+
+//2.ST表/RMQ 求LCA
+template <class T , class F>
+struct ST1 {
+    int n, lg2;
+    vector<vector<T>> st;
+    F op;
+    ST1(const vector<T>& a, F f = {}): n(a.size() - 1), op(f) {
+        lg2 = n ? bit_width(unsigned(n)) : 0;
+        st.assign(lg2 + 1, vector<T>(n + 1));
+        if(!n) return;
+        st[0] = a;
+        for(int p = 1; p <= lg2; p++) {
+            for(int i = 1; i + (1LL << p) - 1 <= n; i++) {
+                st[p][i] = op(st[p - 1][i], st[p - 1][i + (1LL << (p - 1))]);
+            }
+        }
+    }
+
+    T qry(int l, int r) const {
+        assert(1 <= l && l <= r && r <= n);
+        int p = bit_width(unsigned(r - l + 1)) - 1;
+        T ans = op(st[p][l], st[p][r - (1LL << p) + 1]);
+        return ans;
+    }
+};
+struct LCARMQ {
+    using pii = pair<int, int>;
+    struct MinDepth {
+        pii operator() (pii a, pii b) const {
+            return min(a, b);
+        }
+    };
+    vector<int> first;
+    ST1 <pii, MinDepth> st;
+    static pair<vector<int>, vector<pii>> tour(const vector<vector<MEdge>>& g, int root) {
+        vector<int> first(g.size(), -1);
+        vector<pii> euler(1);
+        auto dfs = [&](auto &&self, int u, int f, int dep)->void {
+            if(first[u] == -1) {
+                first[u] = euler.size();
+            }
+            euler.push_back({dep, u});
+            for(auto &[v, w] : g[u]) {
+                if(v == f) continue;
+                self(self, v, u, dep + 1);
+                euler.push_back({dep, u});
+            }
+        };
+        dfs(dfs, root, 0, 0);
+        return {first, euler};
+    }
+    LCARMQ(const vector<vector<MEdge>>& g, int root = 1): LCARMQ(tour(g, root)){}
+    int lca(int u, int v) const {
+        int l = first[u], r = first[v];
+        if(l > r) swap(l, r);
+        return st.qry(l, r).second;
+    } 
+private:
+    LCARMQ(pair<vector<int>, vector<pii>> p): first(move(p.first)), st(move(p.second), MinDepth{}){}
+};
+
+
+//3.Tarjan离线LCA
+vector<int> TarjanLCA(const vector<vector<MEdge>>& g, const vector<pair<int, int>> &q, int root = 1) {
+    //q:按输入顺序给出的节点对询问;按输入询问顺序返回每对节点的最近公共祖先
+    int n = g.size() - 1, m = q.size();
+    vector<vector<pair<int, int>>> ask(n + 1);
+    for(int i = 0; i < m; i++) {
+        auto &[u, v] = q[i];
+        ask[u].push_back({v, i});
+        ask[v].push_back({u, i});
+    }
+    vector<int> fa(n + 1), sz(n + 1, 1);
+    vector<int> ans(m, -1);
+    vector<int> anc(n + 1);
+    //0:未访问;1:正在DFS;2:子树处理完成
+    vector<int> col(n + 1);
     iota(fa.begin(), fa.end(), 0);
-    auto find = [&](auto && self, int i)->int {
+    auto find = [&](auto &&self, int i)->int {
         if(i != fa[i]) {
             fa[i] = self(self, fa[i]);
         }
         return fa[i];
     };
-    auto tarjan = [&](auto &&self, int u, int f)->void {
-        vis[u] = 1;
-        for(auto &[v, w] : g[u]){
-            if(v != f){
-                self(self, v, u);
-                fa[v] = u;
-            }
+    auto merge = [&](int x, int y)->bool {
+        x = find(find, x), y = find(find, y);
+        if(x == y) return false;
+        if(sz[x] < sz[y]) swap(x, y);
+        fa[y] = x;
+        sz[x] += sz[y];
+        return true;
+    };
+    auto dfs = [&](auto &&self, int u, int f)->void {
+        anc[u] = u;
+        col[u] = 1;
+        for(auto &[v, w] : g[u]) {
+            if(v == f) continue;
+            self(self, v, u);
+            merge(u, v);
+            anc[find(find, u)] = u;
         }
-        for(auto [v, id] : q[u]){
-            if(vis[v]){
-                lca[id] = find(find, v);
+        col[u] = 2;
+        for(auto &[v, id] : ask[u]) {
+            if(col[v] == 2) {
+                ans[id] = anc[find(find, v)];
             }
         }
     };
-    tarjan(tarjan, 1, 0);
-}
-
+    dfs(dfs, root, 0);
+    return ans;
 }

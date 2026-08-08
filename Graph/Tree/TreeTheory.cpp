@@ -11,7 +11,7 @@ struct Dia {
 };
 struct MEdge {
     int v;
-    i64 w;
+    i64 w = 0;
 };
 //1.1直径:树上最远的两个点
 Dia treeDiameter(const vector<vector<MEdge>>& g) {
