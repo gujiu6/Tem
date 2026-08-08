@@ -10,7 +10,7 @@ using i64 = long long;
 const int MAXX = 5e5+10, LIMIT = 20;
 
 
-struct MEdge {
+struct Edge {
     int v;
     i64 w = 0;
 };
@@ -19,7 +19,7 @@ struct LCA {
     int n, lg2, tim = 0;
     vector<int> dep, in, out;
     vector<vector<int>> up;
-    LCA(const vector<vector<MEdge>>& g, int root = 1)
+    LCA(const vector<vector<Edge>>& g, int root = 1)
     : n(g.size() - 1), lg2(bit_width((unsigned)max(1, n))), dep(n + 1), in(n + 1), out(n + 1), up(lg2, vector<int>(n + 1)) {
         auto dfs = [&](auto &&self, int u, int f)->void {
             in[u] = ++tim;
@@ -111,7 +111,7 @@ struct LCARMQ {
     };
     vector<int> first;
     ST1 <pii, MinDepth> st;
-    static pair<vector<int>, vector<pii>> tour(const vector<vector<MEdge>>& g, int root) {
+    static pair<vector<int>, vector<pii>> tour(const vector<vector<Edge>>& g, int root) {
         vector<int> first(g.size(), -1);
         vector<pii> euler(1);
         auto dfs = [&](auto &&self, int u, int f, int dep)->void {
@@ -128,7 +128,7 @@ struct LCARMQ {
         dfs(dfs, root, 0, 0);
         return {first, euler};
     }
-    LCARMQ(const vector<vector<MEdge>>& g, int root = 1): LCARMQ(tour(g, root)){}
+    LCARMQ(const vector<vector<Edge>>& g, int root = 1): LCARMQ(tour(g, root)){}
     int lca(int u, int v) const {
         int l = first[u], r = first[v];
         if(l > r) swap(l, r);
@@ -140,7 +140,7 @@ private:
 
 
 //3.Tarjan离线LCA
-vector<int> TarjanLCA(const vector<vector<MEdge>>& g, const vector<pair<int, int>> &q, int root = 1) {
+vector<int> TarjanLCA(const vector<vector<Edge>>& g, const vector<pair<int, int>> &q, int root = 1) {
     //q:按输入顺序给出的节点对询问;按输入询问顺序返回每对节点的最近公共祖先
     int n = g.size() - 1, m = q.size();
     vector<vector<pair<int, int>>> ask(n + 1);

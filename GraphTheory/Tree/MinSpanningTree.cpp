@@ -42,16 +42,16 @@ public:
         return sz[find(x)];
     }
 };
-struct MEdge {
+struct Edge {
     int u, v;
     i64 w;
 };
-optional<pair<i64, vector<MEdge>>> KrusKal(vector<MEdge> edge, int n) {
-    sort(edge.begin(), edge.end(), [](const MEdge& a, const MEdge& b){
+optional<pair<i64, vector<Edge>>> KrusKal(vector<Edge> edge, int n) {
+    sort(edge.begin(), edge.end(), [](const Edge& a, const Edge& b){
         return a.w < b.w;
     });
     DSU d(n);
-    vector<MEdge> use;
+    vector<Edge> use;
     i64 ans = 0;
     for(auto &e : edge) {
         if(!d.merge(e.u, e.v)) continue;

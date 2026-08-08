@@ -12,12 +12,12 @@ struct Dia {
     i64 dist;
     vector<int> path;
 };
-struct MEdge {
+struct Edge {
     int v;
     i64 w = 0;
 };
 //1.1直径:树上最远的两个点
-Dia treeDiameter(const vector<vector<MEdge>>& g) {
+Dia treeDiameter(const vector<vector<Edge>>& g) {
     //返回树直径长度及路径
     int n = g.size() - 1;
     if(n <= 0) {
@@ -50,7 +50,7 @@ Dia treeDiameter(const vector<vector<MEdge>>& g) {
     return {d[t], path};
 }
 //1.2重心:删除后最大块最小
-vector<int> treeCentroids(const vector<vector<MEdge>>& g) {
+vector<int> treeCentroids(const vector<vector<Edge>>& g) {
     //返回树的一个或两个重心编号
     int n = g.size() - 1;
     vector<int> sz(n + 1), ans;
@@ -72,7 +72,7 @@ vector<int> treeCentroids(const vector<vector<MEdge>>& g) {
     return ans;
 }
 //1.3中心:离所有点距离最均衡
-vector<int> treeCenters(const vector<vector<MEdge>>& g) {
+vector<int> treeCenters(const vector<vector<Edge>>& g) {
     int n = g.size() - 1;
     if(n <= 2) {
         vector<int> ans;
