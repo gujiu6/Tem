@@ -3,6 +3,7 @@
 2.Bellman‑Ford:允许负边权求单源最短路    O(nm)           O(n+m)
 3.SPFA,SLF优化与负环判定/输出           O(m)            O(n+m)
 4.Floyd与最小环                       O(n^3)          O(n^2)
+5.Johnson全源最短路                   O(nmlogn)       O(n^2+m)
 */
 #include <bits/stdc++.h>
 #include <cassert>
@@ -117,7 +118,7 @@ void Floyd(vector<vector<i64>>& d) {
         }
     }
 }
-//4.111非负无向最小环
+//4.1 非负无向最小环
 i64 minCycle(const vector<vector<i64>> &dis, bool f = 1) {
     //f: 0:有向图, 1: 无向图
     int n = dis.size() - 1;
@@ -146,6 +147,52 @@ i64 minCycle(const vector<vector<i64>> &dis, bool f = 1) {
                 if(d[i][k] != INF && d[k][j] != INF) {
                     d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
                 }
+            }
+        }
+    }
+    return ans;
+}
+
+//5.Johnson全源最短路
+optional<vector<vector<i64>>> Johnson(int n, const vector<DEdge>& edge) {
+    //ans[i][j]:i到j的最短路,不可达为 INF;存在可达负环返回空
+    vector<i64> h(n + 1);
+    for(int i = 1; i <= n; i++) {
+        bool update = false;
+        for(const auto &[u, v, w] : edge) {
+            if(h[v] > h[u] + w) {
+                h[v] = h[u] + w;
+                update = true;
+            }
+        }
+        if(!update) break;
+        //第n轮仍更新,存在负环
+        if(i == n) return nullopt;
+    }
+    //重构边权
+    vector<vector<pair<int, i64>>> g(n + 1);
+    for(const auto &[u, v, w] : edge) {
+        //新边权一定非负
+        g[u].push_back({v, w + h[u] - h[v]});
+    }
+    vector<vector<i64>> ans(n + 1, vector<i64>(n + 1, INF));
+    priority_queue<pair<i64, int>, vector<pair<i64, int>>, greater<>> q;
+    for(int s = 1; s <= n; s++) {
+        ans[s][s] = 0;
+        q.push({0, s});
+        while(!q.empty()) {
+            auto [d, u] = q.top(); q.pop();
+            if(d != ans[s][u]) continue;
+            for(const auto &[v, w] : g[u]) {
+                if(ans[s][v] > d + w) {
+                    ans[s][v] = d + w;
+                    q.push({ans[s][v], v});
+                }
+            }
+        }
+        for(int v = 1; v <= n; v++) {
+            if(ans[s][v] != INF) {
+                ans[s][v] += h[v] - h[s];
             }
         }
     }
