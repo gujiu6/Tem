@@ -1,7 +1,8 @@
-/*
-1.Dijkstra:非负边权图的单源最短路
-2.Bellman‑Ford:允许负边权求单源最短路
-3.SPFA,SLF优化与负环判定/输出
+/*                                    时间复杂度       空间复杂度
+1.Dijkstra:非负边权图的单源最短路        O((n+m)logn)    O(n+m)      
+2.Bellman‑Ford:允许负边权求单源最短路    O(nm)           O(n+m)
+3.SPFA,SLF优化与负环判定/输出           O(m)            O(n+m)
+4.Floyd与最小环                       O(n^3)          O(n^2)
 */
 #include <bits/stdc++.h>
 #include <cassert>
@@ -100,4 +101,53 @@ optional<vector<i64>> SPFA(const vector<vector<WEdge>>& g, int s) {
         }
     }
     return d;
+}
+
+//4.Floyd与最小环
+void Floyd(vector<vector<i64>>& d) {
+    //不可达位置为INF
+    int n = d.size() - 1;
+    for(int k = 1;k <= n; k++){
+        for(int i = 1;i <= n; i++){
+            if(d[i][k] == INF) continue;
+            for(int j = 1; j <= n; j++){
+                if(d[k][j] == INF) continue;
+                d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
+            }
+        }
+    }
+}
+//非负无向最小环
+i64 minCycle(const vector<vector<i64>> &dis, bool f = 1) {
+    //f: 0:有向图, 1: 无向图
+    int n = dis.size() - 1;
+    i64 ans = INF;
+    auto d = dis;
+    for(int k = 1; k <= n; k++) {
+        for(int i = 1; i < k; i++) {
+            if(f) {
+                for(int j = i + 1; j < k; j++) {
+                    if(d[i][j] != INF && dis[i][k] != INF && dis[k][j] != INF) {
+                        ans = min(ans, d[i][j] + dis[i][k] + dis[k][j]);
+                    }
+                }
+            }
+            else {
+                for(int j = 1; j < k; j++) {
+                    if(i == j) continue;
+                    if(d[i][j] != INF && dis[j][k] != INF && dis[k][i] != INF) {
+                        ans = min(ans, d[i][j] + dis[j][k] + dis[k][i]);
+                    }
+                }
+            }
+        }
+        for(int i = 1; i <= n; i++) {
+            for(int j = 1; j <= n; j++) {
+                if(d[i][k] != INF && d[k][j] != INF) {
+                    d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
+                }
+            }
+        }
+    }
+    return ans;
 }

@@ -1,5 +1,9 @@
-/*树剖
-1.重链
+/*树剖                       时间复杂度        空间复杂度
+1.重链  
+        预处理               O(n)             O(n)
+        LCA                 O(logn)
+        路径查询path         O(logn)          O(logn)
+        子树查询subtree      O(1)
 */
 #include <bits/stdc++.h>
 using namespace std;

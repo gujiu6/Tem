@@ -1,5 +1,7 @@
-/*
-1.最小生成树
+/*                                时间复杂度           空间复杂度
+1.最小生成树  
+    KrusKal                       O(mlogm)           O(n+m)
+    Prim                          O((n+m)logn)       O(n+m)  
 */
 #include <bits/stdc++.h>
 using namespace std;

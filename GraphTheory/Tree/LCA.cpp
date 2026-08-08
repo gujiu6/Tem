@@ -1,7 +1,7 @@
-/*
-1.倍增LCA
-2.ST表/RMQ 求LCA
-3.Tarjan离线LCA
+/*                  预处理复杂度       LCA复杂度       空间复杂度
+1.倍增LCA            O(nlogn)         O(logn)        O(nlogn)
+2.ST表/RMQ 求LCA     O(nlogn)         O(1)           O(nlogn)
+3.Tarjan离线LCA      O(n+qα(n))                      O(n+q)
 */
 #include <bits/stdc++.h>
 #include <cassert>

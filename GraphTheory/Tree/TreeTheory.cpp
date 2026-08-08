@@ -1,5 +1,5 @@
-/*
-1.树的直径、重心、中心
+/*                         时间复杂度       空间复杂度
+1.树的直径、重心、中心        O(n)             O(n)
 */
 #include <bits/stdc++.h>
 using namespace std;
