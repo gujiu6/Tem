@@ -1,3 +1,6 @@
+/*RMQ与静态区间结构
+1.普通ST
+*/
 #include <bits/stdc++.h>
 #include <cassert>
 #include <bit>
@@ -5,7 +8,7 @@ using namespace std;
 const int INF = 1e9+7;
 
 
-//普通ST
+//1.普通ST
 template <class T , class F>
 struct ST1 {
     int n, lg2;

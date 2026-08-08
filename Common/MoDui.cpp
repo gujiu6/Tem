@@ -1,10 +1,14 @@
+/*莫队
+1.普通莫队
+2.带修莫队
+*/
 #include <bits/stdc++.h>
 using namespace std;
 using i64 = long long;
 
 
 
-//普通莫队
+//1.普通莫队
 namespace Common {
 
 struct Query {
@@ -33,7 +37,7 @@ vector<Ans> mo(int n, vector<Query> q, AddL addL, AddR addR, DelL delL, DelR del
 
 }
 
-//带修莫队
+//2.带修莫队
 namespace Modify {
 
 struct Query {

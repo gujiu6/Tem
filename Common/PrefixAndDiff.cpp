@@ -1,3 +1,10 @@
+/*
+1.二维前缀和
+2.二维差分
+3.k阶差分
+4.Kadane求非空最大子 段/矩阵 和
+5.所有区间 gcd
+*/
 #include <bits/stdc++.h>
 #include <cassert>
 using namespace std;
@@ -60,7 +67,7 @@ vector<T> kthDiff(vector<T> a, int k) {
     return a;
 }
 
-//4.Kadane求非空最大子段和, 
+//4.Kadane求非空最大子段和
 template <class T = i64>
 T maxSub(const vector<T>& a) {
     assert(!a.empty());

@@ -1,3 +1,9 @@
+/*
+1.普通DSU
+2.带权DSU
+3.可撤销DSU
+4.可持久化DSU
+*/
 #include <bits/stdc++.h>
 using namespace std;
 const int INF = 1e9+7;

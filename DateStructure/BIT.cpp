@@ -1,3 +1,7 @@
+/*
+1.单点修改/赋值,区间/前缀和
+2.区间修改, 区间和
+*/
 #include <bits/stdc++.h>
 using namespace std;
 const int MAXX=2e5;
