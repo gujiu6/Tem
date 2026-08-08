@@ -50,7 +50,7 @@ optional<pair<i64, vector<MEdge>>> KrusKal(vector<MEdge> edge, int n) {
     DSU d(n);
     vector<MEdge> use;
     i64 ans = 0;
-    for(auto e : edge) {
+    for(auto &e : edge) {
         if(!d.merge(e.u, e.v)) continue;
         ans += e.w;
         use.push_back(e);

@@ -1,21 +1,27 @@
 //树剖
 #include <bits/stdc++.h>
 using namespace std;
+using i64 = long long;
+
+struct MEdge {
+    int v;
+    i64 w;
+};
 
 //1.重链
 struct HLD {
     int n, tim = 1;
     vector<int> fa, dep, sz, son, top, in, rev;
-    HLD(const vector<vector<int>>& g, int root = 1): n(g.size() - 1), fa(n + 1), sz(n + 1, 1), son(n + 1), top(n + 1), in(n + 1), rev(n + 1), dep(n + 1) {
+    HLD(const vector<vector<MEdge>>& g, int root = 1): n(g.size() - 1), fa(n + 1), sz(n + 1, 1), son(n + 1), top(n + 1), in(n + 1), rev(n + 1), dep(n + 1) {
         sz[0] = 0;
         vector<int> ord{0, root};
         for(int i = 1; i < ord.size(); i++) {
             int u = ord[i];
-            for(int v : g[u]) {
-                if(v == fa[u]) continue;
-                fa[v] = u;
-                dep[v] = dep[u] + 1;
-                ord.push_back(v);
+            for(auto &e : g[u]) {
+                if(e.v == fa[u]) continue;
+                fa[e.v] = u;
+                dep[e.v] = dep[u] + 1;
+                ord.push_back(e.v);
             }
         }
         for(int i = n; i >= 1; i--) {
@@ -32,9 +38,9 @@ struct HLD {
             if(son[u] > 0) {
                 self(self, son[u], h);
             }
-            for(int v : g[u]) {
-                if(v != fa[u] && v != son[u]) {
-                    self(self, v, v);
+            for(auto &e : g[u]) {
+                if(e.v != fa[u] && e.v != son[u]) {
+                    self(self, e.v, e.v);
                 }
             }
         };

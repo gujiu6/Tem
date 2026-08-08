@@ -27,11 +27,11 @@ Dia treeDiameter(const vector<vector<MEdge>>& g) {
         while(!st.empty()) {
             int u = st.back();
             st.pop_back();
-            for(auto &[v, w] : g[u]) {
-                if(v == p[u]) continue;
-                p[v] = u;
-                d[v] = d[u] + w;
-                st.push_back(v);
+            for(auto &e : g[u]) {
+                if(e.v == p[u]) continue;
+                p[e.v] = u;
+                d[e.v] = d[u] + e.w;
+                st.push_back(e.v);
             }
         }
         int u = max_element(d.begin() + 1, d.end()) - d.begin();
@@ -54,11 +54,11 @@ vector<int> treeCentroids(const vector<vector<MEdge>>& g) {
     auto dfs = [&](auto &&self, int u, int f)->void {
         sz[u] = 1;
         int mx = 0;
-        for(auto &[v, w]: g[u]) {
-            if(v == f) continue;
-            self(self, v, u);
-            sz[u] += sz[v];
-            mx = max(mx, sz[v]);
+        for(auto &e: g[u]) {
+            if(e.v == f) continue;
+            self(self, e.v, u);
+            sz[u] += sz[e.v];
+            mx = max(mx, sz[e.v]);
         }
         mx = max(mx, n - sz[u]);
         if(2 * mx <= n) {
@@ -92,9 +92,9 @@ vector<int> treeCenters(const vector<vector<MEdge>>& g) {
         left -= sz;
         while(sz--) {
             int u = q.front(); q.pop();
-            for(auto &[v, w] : g[u]) {
-                if(--deg[v] == 1) {
-                    q.push(v);
+            for(auto &e : g[u]) {
+                if(--deg[e.v] == 1) {
+                    q.push(e.v);
                 }
             }
         }

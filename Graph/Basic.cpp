@@ -1,0 +1,200 @@
+/*
+1.拓扑排序(字典序)
+2.判定二分图
+3.DAG(有向无环图)最长路
+4.DAG(有向无环图)删点最长路:删除某个点后剩下图的最长路
+*/
+#include <bits/stdc++.h>
+#include <cassert>
+using namespace std;
+using i64 = long long;
+constexpr int MAXX = 1000;
+constexpr i64 INF = 1e18;
+
+struct MEdge {
+    int v;
+    i64 w = 0;
+};
+//1.拓扑排序(字典序)
+optional<vector<int>> TopSort(vector<vector<MEdge>>& g, vector<int> inDeg) {
+    int n = g.size() - 1;
+    vector<int> ord{0};
+    priority_queue<int, vector<int>, greater<int>> q;
+    for(int i = 1; i <= n; i++) {
+        if(inDeg[i] == 0) {
+            q.push(i);
+        }
+    }
+    while(!q.empty()) {
+        auto u = q.top();q.pop();
+        ord.push_back(u);
+        for(auto &e : g[u]) {
+            if(--inDeg[e.v] == 0) {
+                q.push(e.v);
+            }
+        }
+    }
+    if(ord.size() - 1 != n) return nullopt;
+    return ord;
+}
+//2.判定二分图
+optional<vector<int>> bipartite(const vector<vector<MEdge>>& g) {
+    //返回每个点的 0/1 颜色,存在奇环时返回空
+    int n = g.size() - 1;
+    vector<int> col(n + 1, -1);
+    for(int s = 1; s <= n; s++) {
+        if(col[s] != -1) continue;
+        queue<int> q;
+        col[s] = 0;
+        q.push(s);
+        while(!q.empty()) {
+            int u = q.front(); q.pop();
+            for(auto &e : g[u]) {
+                if(col[e.v] == -1) {
+                    col[e.v] = col[u] ^ 1;
+                    q.push(e.v);
+                }
+                else if(col[e.v] == col[u]) {
+                    return nullopt;
+                }
+            }
+        }
+    }
+    return col;
+}
+
+//3.DAG(有向无环图)最长路
+optional<vector<i64>> DAGLongest(const vector<vector<MEdge>>& g, vector<int> inDeg, int s = -1) {
+    //g[u]:终点和边权;s:起点,s=-1时允许从任意点开始;图有环时返回空
+    int n = g.size() - 1;
+    vector<int> ord{0};
+    queue<int> q;
+    for(int i = 1; i <= n; i++) {
+        if(inDeg[i] == 0) {
+            q.push(i);
+        }
+    }
+    while(!q.empty()) {
+        int u = q.front(); q.pop();
+        ord.push_back(u);
+        for(auto &e : g[u]) {
+            if(--inDeg[e.v] == 0) {
+                q.push(e.v);
+            }
+        }
+    }
+    if(ord.size() - 1 != n) return nullopt;
+    vector<i64> d(n + 1, s == -1 ? 0 : -INF);
+    if(s != -1) d[s] = 0;
+    for(int i = 1; i <= n; i++) {
+        int u = ord[i];
+        if(d[u] == -INF) continue;
+        for(auto &e : g[u]) {
+            d[e.v] = max(d[e.v], d[u] + e.w);
+        }
+    }
+    return d;
+}
+
+//4.DAG(有向无环图)删点最长路:删除某个点后剩下图的最长路
+vector<i64> DelDAG(const vector<vector<MEdge>>& g, vector<int> inDeg) {
+    int n = g.size() - 1;
+    queue<int> q;
+    for(int i = 1; i <= n; i++) {
+        if(inDeg[i] == 0) {
+            q.push(i);
+        }
+    }
+    vector<int> ord{0};
+    while(!q.empty()) {
+        int u = q.front();q.pop();
+        ord.push_back(u);
+        for(auto &e : g[u]) {
+            if(--inDeg[e.v] == 0) {
+                q.push(e.v);
+            }
+        }
+    }
+    assert(ord.size() - 1 == n);
+    //pos[u]:u在拓扑序中的位置
+    vector<int> pos(n + 1);
+    for(int i = 1; i <= n; i++) {
+        pos[ord[i]] = i;
+    }
+    //以u结尾的最长路径长度
+    vector<i64> left(n + 1);
+    for(int i = 1; i <= n; i++) {
+        int u = ord[i];
+        for(auto &e : g[u]) {
+            left[e.v] = max(left[e.v], left[u] + e.w);
+        }
+    }
+    //以u开头的最长路径长度
+    vector<i64> right(n + 1);
+    for(int i = n; i >= 1; i--) {
+        int u = ord[i];
+        for(auto &e : g[u]) {
+            right[u] = max(right[u], right[e.v] + e.w);
+        }
+    }
+    //删除拓扑位置i的点时,哪些跨越边开始生效
+    vector<vector<pair<i64, int>>> starts(n + 1);
+    for(int u = 1; u <= n; u++) {
+        for(auto &e : g[u]) {
+            int l = pos[u] + 1;
+            int r = pos[e.v] - 1;
+            //区间[l, r]
+            if(l <= r) {
+                i64 value = left[u] + e.w + right[e.v];
+                starts[l].push_back({value, r});
+            }
+        }
+    }
+    vector<i64> pre(n + 2), suf(n + 2);
+    for(int i = 1; i <= n; i++) {
+        pre[i] = max(pre[i - 1], left[ord[i]]);
+    }
+    for(int i = n; i >= 1; i--) {
+        suf[i] = max(suf[i + 1], right[ord[i]]);
+    }
+    //first=跨越边贡献;second=该边最后有效的删除位置
+    priority_queue<pair<i64, int>> active;
+    vector<i64> ans(n + 1);
+    for(int i = 1; i <= n; i++) {
+        //从i开始生效的跨越边
+        for(auto &[value, r] : starts[i]) {
+            active.push({value, r});
+        }
+        //闭区间[l,r],r<i时失效
+        while(!active.empty() && active.top().second < i) {
+            active.pop();
+        }
+        //完全在左边:pre[i-1];完全在右边:suf[i+1]
+        ans[ord[i]] = max(pre[i - 1], suf[i + 1]);
+        //左->右跨越
+        if(!active.empty()) {
+            ans[ord[i]] = max(ans[ord[i]], active.top().first);
+        }
+    }
+    return ans;
+}
+
+//5.差分约束:多组不等式Xv - Xu <= w
+optional<vector<int>> diffConstraints(int n, const vector<tuple<int, int, int>>& a) {
+    vector<int> x(n + 1);
+    for(int k = 1; k <= n; k++) {
+        bool ok = true;
+        for(int i = 1; i < a.size(); i++) {
+            auto &[u, v, w] = a[i];
+            assert(1 <= u && u <= n && 1 <= v && v <= n);
+            if(x[v] > x[u] + w) {
+                x[v] = x[u] + w;
+                ok = false;
+            }
+            if(ok) {
+                return x;
+            }
+        }
+    }
+    return nullopt;
+}
