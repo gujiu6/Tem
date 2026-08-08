@@ -1,134 +1,108 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int MAXX=5e5+10, INF=1e9+7;
+using i64 = long long;
+const int MAXX = 5e5+10, INF = 1e9+7;
 
-
-namespace Centre {
-
-int n, cnt, best;
-array<int,MAXX> h, sz, maxsub;
-array<int,MAXX> to, nxt;
-vector<int> ans;
-void build(){
-    cnt = 1;
-    best = INF;
-    fill(h.begin(), h.begin() + n + 1, 0);
-}
-
-void addEdge(int u,int v){
-    nxt[cnt] = h[u];
-    to[cnt] = v;
-    h[u] = cnt++;
-}
-
-//第一种求法
-void dfs1(int u, int f){
-    sz[u] = 1;
-    maxsub[u] = 0;
-    for(int ei = h[u], v; ei > 0; ei = nxt[ei]){
-        v = to[ei];
-        if(v != f){
-            dfs1(v, u);
-            sz[u] += sz[v];
-            maxsub[u] = max(maxsub[u], sz[v]);
-        }
+//1.树的直径、重心、中心
+struct Dia {
+    //dist:最短距离或当前路径长度,path:当前首选路径的聚合和
+    i64 dist;
+    vector<int> path;
+};
+struct MEdge {
+    int v;
+    i64 w;
+};
+//1.1直径:树上最远的两个点
+Dia treeDiameter(const vector<vector<MEdge>>& g) {
+    //返回树直径长度及路径
+    int n = g.size() - 1;
+    if(n <= 0) {
+        return {0, {}};
     }
-    maxsub[u] = max(maxsub[u], n - sz[u]);
+    auto far = [&](int s) {
+        vector<int> p(n + 1, -1), st{s};
+        vector<i64> d(n + 1, -1);
+        d[s] = 0;
+        while(!st.empty()) {
+            int u = st.back();
+            st.pop_back();
+            for(auto &[v, w] : g[u]) {
+                if(v == p[u]) continue;
+                p[v] = u;
+                d[v] = d[u] + w;
+                st.push_back(v);
+            }
+        }
+        int u = max_element(d.begin() + 1, d.end()) - d.begin();
+        return tuple{u, move(p), move(d)};
+    };
+    auto [s, p0, d0] = far(1);
+    auto [t, p, d] = far(s);
+    vector<int> path;
+    for(int u = t; u != -1; u = p[u]) {
+        path.push_back(u);
+    }
+    reverse(path.begin(), path.end());
+    return {d[t], path};
 }
-void calc(){
-    for(int i = 1; i <= n; i++){
-        if(maxsub[i] <= n / 2){
+//1.2重心:删除后最大块最小
+vector<int> treeCentroids(const vector<vector<MEdge>>& g) {
+    //返回树的一个或两个重心编号
+    int n = g.size() - 1;
+    vector<int> sz(n + 1), ans;
+    auto dfs = [&](auto &&self, int u, int f)->void {
+        sz[u] = 1;
+        int mx = 0;
+        for(auto &[v, w]: g[u]) {
+            if(v == f) continue;
+            self(self, v, u);
+            sz[u] += sz[v];
+            mx = max(mx, sz[v]);
+        }
+        mx = max(mx, n - sz[u]);
+        if(2 * mx <= n) {
+            ans.push_back(u);
+        }
+    };
+    if(n) dfs(dfs, 1, 0);
+    return ans;
+}
+//1.3中心:离所有点距离最均衡
+vector<int> treeCenters(const vector<vector<MEdge>>& g) {
+    int n = g.size() - 1;
+    if(n <= 2) {
+        vector<int> ans;
+        for(int i = 1; i <= n; i++) {
             ans.push_back(i);
         }
+        return ans;
     }
-}
-
-//第二种求法
-void dfs2(int u, int f){
-    sz[u] = 1;
-    int maxsub = 0;
-    for(int ei = h[u], v; ei > 0; ei = nxt[ei]){
-        v = to[ei];
-        if(v != f){
-            dfs2(v, u);
-            sz[u] += sz[v];
-            maxsub=max(maxsub, sz[v]);
+    vector<int> deg(n + 1);
+    queue<int> q;
+    for(int i = 1; i <= n; i++) {
+        deg[i] = g[i].size();
+        if(deg[i] == 1) {
+            q.push(i);
         }
     }
-    maxsub = max(maxsub, n - sz[u]);
-    if(maxsub < best){
-        ans.resize(1, u);
-    }
-    else if(maxsub == best){
-        ans.push_back(u);
-    }
-}
-
-}
-
-namespace Diameter {
-
-array<int, MAXX> h, last, dist;
-array<int, MAXX << 1> to, nxt, wei;
-int n, cnt, diameter;
-void build(){
-    cnt = 1;
-    diameter = 0;
-    fill(h.begin(), h.begin() + n + 1, 0);
-}
-void addEdge(int u, int v, int w){
-    nxt[cnt] = h[u];
-    to[cnt] = v;
-    wei[cnt] = w;
-    h[u] = cnt++;
-}
-
-//两遍dfs版本
-void dfs(int u,int f,int w){
-    last[u] = f;
-    dist[u] = dist[f] + w;
-    for(int ei = h[u], v ; ei > 0; ei = nxt[ei]){
-        v = to[ei];
-        if(v != f){
-            dfs(v, u, wei[ei]);
+    int left = n;
+    while(left > 2) {
+        int sz = q.size();
+        left -= sz;
+        while(sz--) {
+            int u = q.front(); q.pop();
+            for(auto &[v, w] : g[u]) {
+                if(--deg[v] == 1) {
+                    q.push(v);
+                }
+            }
         }
     }
-}
-array<int,3> road(){
-    dfs(1, 0, 0);
-    int st = 1, ed = 1, dis;
-    for(int i = 2; i <= n; i++){
-        if(dist[i] > dist[st]){
-            st = i;
-        }
+    vector<int> ans;
+    while(!q.empty()) {
+        ans.push_back(q.front());
+        q.pop();
     }
-    dfs(st, 0, 0);
-    for(int i = 2; i <= n; i++){
-        if(dist[i] > dist[ed]){
-            ed = i;
-        }
-    }
-    dis = dist[ed];
-    return {st, ed, dis};
+    return ans;
 }
-
-//树上dp
-void dp(int u,int f){
-    for(int ei = h[u], v; ei > 0; ei = nxt[ei]){
-        v = to[ei];
-        if(v != f){
-            dp(v, u);
-        }
-    }
-    for(int ei = h[u], v; ei > 0; ei = nxt[ei]){
-        v = to[ei];
-        if(v != f){
-            diameter = max(diameter, dist[u] + dist[v] + wei[ei]);
-            dist[u] = max(dist[u], dist[v] + wei[ei]);
-        }
-    }
-}
-
-}
-
-

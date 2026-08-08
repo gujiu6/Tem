@@ -2,14 +2,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-//重链
-namespace {
-
-class HLD {
-private:
+//1.重链
+struct HLD {
     int n, tim = 1;
     vector<int> fa, dep, sz, son, top, in, rev;
-public:
     HLD(const vector<vector<int>>& g, int root = 1): n(g.size() - 1), fa(n + 1), sz(n + 1, 1), son(n + 1), top(n + 1), in(n + 1), rev(n + 1), dep(n + 1) {
         sz[0] = 0;
         vector<int> ord{0, root};
@@ -81,7 +77,4 @@ public:
     pair<int, int> subtree(int u) const {
         return {in[u], in[u] + sz[u]};
     }
-
 };
-
-}

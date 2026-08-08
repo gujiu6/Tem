@@ -6,7 +6,7 @@ constexpr i64 INF = 1e18;
 
 
 
-//最小生成树
+//1.最小生成树
 namespace MinSpanningTree {
 class DSU {
 private:
