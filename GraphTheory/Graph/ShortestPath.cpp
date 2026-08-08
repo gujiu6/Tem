@@ -66,18 +66,18 @@ pair<vector<i64>, vector<int>>BellmanFord(int n, const vector<DEdge>& edge, int 
     return {d, cycle};
 }
 
-//3.SPFA,SLF优化与负环判定/输出
+//3.SPFA+SLF优化与负环判定/输出
 optional<vector<i64>> SPFA(const vector<vector<WEdge>>& g, int s) {
     int n = g.size() - 1;
     vector<i64> d(n + 1, INF);
     //in:是否在队列里面,len:当前最短路经过的边数
     vector<int> in(n + 1), len(n + 1);
-    queue<int> q;
+    deque<int> q;
     d[s] = 0;
-    q.push(s);
+    q.push_back(s);
     in[s] = 1;
     while(!q.empty()) {
-        auto u = q.front(); q.pop();
+        auto u = q.front(); q.pop_front();
         in[u] = 0;
         for(const auto &e : g[u]) {
             i64 nd = e.w + d[u];
@@ -87,7 +87,13 @@ optional<vector<i64>> SPFA(const vector<vector<WEdge>>& g, int s) {
             //超过n-1条边,一定有负环
             if(len[e.v] >= n) return nullopt;
             if(!in[e.v]) {
-                q.push(e.v);
+                //SLF优化
+                if(!q.empty() && d[e.v] < d[q.front()]) {
+                    q.push_front(e.v);
+                }
+                else {
+                    q.push_back(e.v);
+                }
                 in[e.v] = 1;
             }
         }
