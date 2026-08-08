@@ -49,7 +49,7 @@ optional<pair<i64, vector<DEdge>>> KrusKal(vector<DEdge> edge, int n) {
     DSU d(n);
     vector<DEdge> use;
     i64 ans = 0;
-    for(auto &e : edge) {
+    for(const auto &e : edge) {
         if(!d.merge(e.u, e.v)) continue;
         ans += e.w;
         use.push_back(e);
@@ -76,7 +76,7 @@ optional<i64> Prim(vector<vector<WEdge>>&g) {
         vis[u] = 1;
         cnt++;
         ans += w;
-        for(auto &e : g[u]) {
+        for(const auto &e : g[u]) {
             if(!vis[e.v] && e.w < d[e.v]) {
                 d[e.v] = e.w;
                 q.push({e.w, e.v});

@@ -10,11 +10,8 @@ using namespace std;
 using i64 = long long;
 constexpr int MAXX = 1000;
 constexpr i64 INF = 1e18;
+struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
 
-struct WEdge {
-    int v;
-    i64 w = 0;
-};
 //1.拓扑排序(字典序)
 optional<vector<int>> TopSort(vector<vector<WEdge>>& g, vector<int> inDeg) {
     int n = g.size() - 1;
@@ -28,7 +25,7 @@ optional<vector<int>> TopSort(vector<vector<WEdge>>& g, vector<int> inDeg) {
     while(!q.empty()) {
         auto u = q.top();q.pop();
         ord.push_back(u);
-        for(auto &e : g[u]) {
+        for(const auto &e : g[u]) {
             if(--inDeg[e.v] == 0) {
                 q.push(e.v);
             }
@@ -49,7 +46,7 @@ optional<vector<int>> bipartite(const vector<vector<WEdge>>& g) {
         q.push(s);
         while(!q.empty()) {
             int u = q.front(); q.pop();
-            for(auto &e : g[u]) {
+            for(const auto &e : g[u]) {
                 if(col[e.v] == -1) {
                     col[e.v] = col[u] ^ 1;
                     q.push(e.v);
@@ -77,7 +74,7 @@ optional<vector<i64>> DAGLongest(const vector<vector<WEdge>>& g, vector<int> inD
     while(!q.empty()) {
         int u = q.front(); q.pop();
         ord.push_back(u);
-        for(auto &e : g[u]) {
+        for(const auto &e : g[u]) {
             if(--inDeg[e.v] == 0) {
                 q.push(e.v);
             }
@@ -89,7 +86,7 @@ optional<vector<i64>> DAGLongest(const vector<vector<WEdge>>& g, vector<int> inD
     for(int i = 1; i <= n; i++) {
         int u = ord[i];
         if(d[u] == -INF) continue;
-        for(auto &e : g[u]) {
+        for(const auto &e : g[u]) {
             d[e.v] = max(d[e.v], d[u] + e.w);
         }
     }
@@ -109,7 +106,7 @@ vector<i64> DelDAG(const vector<vector<WEdge>>& g, vector<int> inDeg) {
     while(!q.empty()) {
         int u = q.front();q.pop();
         ord.push_back(u);
-        for(auto &e : g[u]) {
+        for(const auto &e : g[u]) {
             if(--inDeg[e.v] == 0) {
                 q.push(e.v);
             }
@@ -125,7 +122,7 @@ vector<i64> DelDAG(const vector<vector<WEdge>>& g, vector<int> inDeg) {
     vector<i64> left(n + 1);
     for(int i = 1; i <= n; i++) {
         int u = ord[i];
-        for(auto &e : g[u]) {
+        for(const auto &e : g[u]) {
             left[e.v] = max(left[e.v], left[u] + e.w);
         }
     }
@@ -162,7 +159,7 @@ vector<i64> DelDAG(const vector<vector<WEdge>>& g, vector<int> inDeg) {
     vector<i64> ans(n + 1);
     for(int i = 1; i <= n; i++) {
         //从i开始生效的跨越边
-        for(auto &[value, r] : starts[i]) {
+        for(const auto &[value, r] : starts[i]) {
             active.push({value, r});
         }
         //闭区间[l,r],r<i时失效

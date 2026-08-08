@@ -36,7 +36,7 @@ struct HLD {
             if(son[u] > 0) {
                 self(self, son[u], h);
             }
-            for(auto &e : g[u]) {
+            for(const auto &e : g[u]) {
                 if(e.v != fa[u] && e.v != son[u]) {
                     self(self, e.v, e.v);
                 }

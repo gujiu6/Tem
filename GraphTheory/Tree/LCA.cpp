@@ -24,7 +24,7 @@ struct LCA {
             for(int p = 1; p < lg2; p++) {
                 up[p][u] = up[p - 1][up[p - 1][u]];
             }
-            for(auto &e : g[u]) {
+            for(const auto &e : g[u]) {
                 if(e.v == f) continue;
                 self(self, e.v, u);
             }
@@ -115,7 +115,7 @@ struct LCARMQ {
                 first[u] = euler.size();
             }
             euler.push_back({dep, u});
-            for(auto &e : g[u]) {
+            for(const auto &e : g[u]) {
                 if(e.v == f) continue;
                 self(self, e.v, u, dep + 1);
                 euler.push_back({dep, u});
@@ -168,14 +168,14 @@ vector<int> TarjanLCA(const vector<vector<Edge>>& g, const vector<pair<int, int>
     auto dfs = [&](auto &&self, int u, int f)->void {
         anc[u] = u;
         col[u] = 1;
-        for(auto &e : g[u]) {
+        for(const auto &e : g[u]) {
             if(e.v == f) continue;
             self(self, e.v, u);
             merge(u, e.v);
             anc[find(find, u)] = u;
         }
         col[u] = 2;
-        for(auto &[v, id] : ask[u]) {
+        for(const auto &[v, id] : ask[u]) {
             if(col[v] == 2) {
                 ans[id] = anc[find(find, v)];
             }

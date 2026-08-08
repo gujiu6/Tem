@@ -5,8 +5,8 @@
 using namespace std;
 using i64 = long long;
 const int MAXX = 5e5+10, INF = 1e9+7;
-
 struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
+
 //1.树的直径、重心、中心
 struct Dia {
     //dist:最短距离或当前路径长度,path:当前首选路径的聚合和
@@ -27,7 +27,7 @@ Dia treeDiameter(const vector<vector<WEdge>>& g) {
         while(!st.empty()) {
             int u = st.back();
             st.pop_back();
-            for(auto &e : g[u]) {
+            for(const auto &e : g[u]) {
                 if(e.v == p[u]) continue;
                 p[e.v] = u;
                 d[e.v] = d[u] + e.w;
@@ -54,7 +54,7 @@ vector<int> treeCentroids(const vector<vector<Edge>>& g) {
     auto dfs = [&](auto &&self, int u, int f)->void {
         sz[u] = 1;
         int mx = 0;
-        for(auto &e: g[u]) {
+        for(const auto &e: g[u]) {
             if(e.v == f) continue;
             self(self, e.v, u);
             sz[u] += sz[e.v];
