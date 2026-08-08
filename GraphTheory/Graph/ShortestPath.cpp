@@ -68,6 +68,7 @@ pair<vector<i64>, vector<int>>BellmanFord(int n, const vector<DEdge>& edge, int 
 
 //3.SPFA+SLF优化与负环判定/输出
 optional<vector<i64>> SPFA(const vector<vector<WEdge>>& g, int s) {
+    //存在在源点可达负环时返回空
     int n = g.size() - 1;
     vector<i64> d(n + 1, INF);
     //in:是否在队列里面,len:当前最短路经过的边数
