@@ -6,7 +6,7 @@ using namespace std;
 using i64 = long long;
 const int MAXX = 2e5+10;
 constexpr i64 INF = 1e18;
-
+struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
 
 
 //1.最小生成树
@@ -42,16 +42,12 @@ public:
         return sz[find(x)];
     }
 };
-struct Edge {
-    int u, v;
-    i64 w;
-};
-optional<pair<i64, vector<Edge>>> KrusKal(vector<Edge> edge, int n) {
-    sort(edge.begin(), edge.end(), [](const Edge& a, const Edge& b){
+optional<pair<i64, vector<DEdge>>> KrusKal(vector<DEdge> edge, int n) {
+    sort(edge.begin(), edge.end(), [](const DEdge& a, const DEdge& b){
         return a.w < b.w;
     });
     DSU d(n);
-    vector<Edge> use;
+    vector<DEdge> use;
     i64 ans = 0;
     for(auto &e : edge) {
         if(!d.merge(e.u, e.v)) continue;
@@ -64,12 +60,12 @@ optional<pair<i64, vector<Edge>>> KrusKal(vector<Edge> edge, int n) {
     return pair{ans, use};
 }
 
-optional<i64> Prim(vector<vector<pair<int, i64>>>&g) {
+optional<i64> Prim(vector<vector<WEdge>>&g) {
     int n = g.size() - 1;
-    vector<i64> dis(n + 1, INF);
+    vector<i64> d(n + 1, INF);
     vector<bool> vis(n + 1);
     priority_queue<pair<i64, int>, vector<pair<i64, int>>, greater<pair<i64, int>>> q;
-    dis[1] = 0;
+    d[1] = 0;
     q.push({0, 1});
     i64 ans = 0;
     int cnt = 0;
@@ -80,10 +76,10 @@ optional<i64> Prim(vector<vector<pair<int, i64>>>&g) {
         vis[u] = 1;
         cnt++;
         ans += w;
-        for(auto [v, ww] : g[u]) {
-            if(!vis[v] && ww < dis[v]) {
-                dis[v] = ww;
-                q.push({ww, v});
+        for(auto &e : g[u]) {
+            if(!vis[e.v] && e.w < d[e.v]) {
+                d[e.v] = e.w;
+                q.push({e.w, e.v});
             }
         }
     }

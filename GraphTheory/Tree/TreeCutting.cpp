@@ -4,11 +4,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 using i64 = long long;
-
-struct Edge {
-    int v;
-    i64 w;
-};
+struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
 
 //1.重链
 struct HLD {

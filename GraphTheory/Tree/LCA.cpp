@@ -8,12 +8,8 @@
 using namespace std;
 using i64 = long long;
 const int MAXX = 5e5+10, LIMIT = 20;
+struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
 
-
-struct Edge {
-    int v;
-    i64 w = 0;
-};
 //1.倍增LCA
 struct LCA {
     int n, lg2, tim = 0;

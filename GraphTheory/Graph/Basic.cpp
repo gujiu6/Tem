@@ -11,12 +11,12 @@ using i64 = long long;
 constexpr int MAXX = 1000;
 constexpr i64 INF = 1e18;
 
-struct Edge {
+struct WEdge {
     int v;
     i64 w = 0;
 };
 //1.拓扑排序(字典序)
-optional<vector<int>> TopSort(vector<vector<Edge>>& g, vector<int> inDeg) {
+optional<vector<int>> TopSort(vector<vector<WEdge>>& g, vector<int> inDeg) {
     int n = g.size() - 1;
     vector<int> ord{0};
     priority_queue<int, vector<int>, greater<int>> q;
@@ -38,7 +38,7 @@ optional<vector<int>> TopSort(vector<vector<Edge>>& g, vector<int> inDeg) {
     return ord;
 }
 //2.判定二分图
-optional<vector<int>> bipartite(const vector<vector<Edge>>& g) {
+optional<vector<int>> bipartite(const vector<vector<WEdge>>& g) {
     //返回每个点的 0/1 颜色,存在奇环时返回空
     int n = g.size() - 1;
     vector<int> col(n + 1, -1);
@@ -64,7 +64,7 @@ optional<vector<int>> bipartite(const vector<vector<Edge>>& g) {
 }
 
 //3.DAG(有向无环图)最长路
-optional<vector<i64>> DAGLongest(const vector<vector<Edge>>& g, vector<int> inDeg, int s = -1) {
+optional<vector<i64>> DAGLongest(const vector<vector<WEdge>>& g, vector<int> inDeg, int s = -1) {
     //g[u]:终点和边权;s:起点,s=-1时允许从任意点开始;图有环时返回空
     int n = g.size() - 1;
     vector<int> ord{0};
@@ -97,7 +97,7 @@ optional<vector<i64>> DAGLongest(const vector<vector<Edge>>& g, vector<int> inDe
 }
 
 //4.DAG(有向无环图)删点最长路:删除某个点后剩下图的最长路
-vector<i64> DelDAG(const vector<vector<Edge>>& g, vector<int> inDeg) {
+vector<i64> DelDAG(const vector<vector<WEdge>>& g, vector<int> inDeg) {
     int n = g.size() - 1;
     queue<int> q;
     for(int i = 1; i <= n; i++) {

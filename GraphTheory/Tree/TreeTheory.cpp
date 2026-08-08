@@ -6,18 +6,15 @@ using namespace std;
 using i64 = long long;
 const int MAXX = 5e5+10, INF = 1e9+7;
 
+struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
 //1.树的直径、重心、中心
 struct Dia {
     //dist:最短距离或当前路径长度,path:当前首选路径的聚合和
     i64 dist;
     vector<int> path;
 };
-struct Edge {
-    int v;
-    i64 w = 0;
-};
 //1.1直径:树上最远的两个点
-Dia treeDiameter(const vector<vector<Edge>>& g) {
+Dia treeDiameter(const vector<vector<WEdge>>& g) {
     //返回树直径长度及路径
     int n = g.size() - 1;
     if(n <= 0) {
