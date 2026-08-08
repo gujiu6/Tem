@@ -1,3 +1,8 @@
+/*
+1.倍增LCA
+2.ST表/RMQ 求LCA
+3.Tarjan离线LCA
+*/
 #include <bits/stdc++.h>
 #include <cassert>
 using namespace std;
