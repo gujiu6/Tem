@@ -44,6 +44,7 @@ public:
         return sz[find(x)];
     }
 };
+//1.1 KrusKal
 optional<pair<i64, vector<DEdge>>> KrusKal(vector<DEdge> edge, int n) {
     sort(edge.begin(), edge.end(), [](const DEdge& a, const DEdge& b){
         return a.w < b.w;
@@ -61,7 +62,7 @@ optional<pair<i64, vector<DEdge>>> KrusKal(vector<DEdge> edge, int n) {
     }
     return pair{ans, use};
 }
-
+//1.2 Prim
 optional<i64> Prim(vector<vector<WEdge>>&g) {
     int n = g.size() - 1;
     vector<i64> d(n + 1, INF);
