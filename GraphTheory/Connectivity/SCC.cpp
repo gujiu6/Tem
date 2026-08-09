@@ -10,7 +10,7 @@ using ui64 = unsigned long long;
 struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
 
 //1.Tarjan 强连通分量
-vector<int> TarjanSCC(const vector<vector<Edge>>& g) {
+pair<int, vector<int>> TarjanSCC(const vector<vector<Edge>>& g) {
     int n = g.size() - 1;
     int tim = 0, cc = 0;//时间戳,SCC编号
     vector<int> dfn(n + 1), st;
@@ -44,11 +44,11 @@ vector<int> TarjanSCC(const vector<vector<Edge>>& g) {
             dfs(dfs, u);
         }
     }
-    return bel;
+    return {cc, bel};
 }
 
 //2.Kosaraju 强连通分量
-vector<int> KosarajuSCC(const vector<vector<Edge>>& g) {
+pair<int, vector<int>> KosarajuSCC(const vector<vector<Edge>>& g) {
     int n = g.size() - 1;
     int cc = 0;
     vector<vector<Edge>> rg(n + 1);//建反图
@@ -93,11 +93,11 @@ vector<int> KosarajuSCC(const vector<vector<Edge>>& g) {
             dfs2(dfs2, u);
         }
     }
-    return bel;
+    return {cc, bel};
 }
 
 //3.Bitset 优化 Kosaraju
-vector<int> BitsetSCC(const vector<vector<Edge>>& g) {
+pair<int, vector<int>> BitsetSCC(const vector<vector<Edge>>& g) {
     int n = g.size() - 1;
     int w = (n + 64 - 1) / 64;//w表示需要多少个64位整数保存一行bitset(向上取整)
     vector<vector<ui64>> reach(n + 1, vector<ui64>(w));
@@ -119,15 +119,15 @@ vector<int> BitsetSCC(const vector<vector<Edge>>& g) {
         }
     }
     vector<int> bel(n + 1, -1);
-    int cc = 1;
+    int cc = 0;
     for(int u = 1; u <= n; u++) {
         if(bel[u] != -1) continue;
+        cc++;
         for(int v = u; v <= n; v++) {
             bool uv = (reach[u][(v - 1) / 64] >> ((v - 1) % 64) & 1ULL);//u是否可以到v
             bool vu = (reach[v][(u - 1) / 64] >> ((u - 1) % 64) & 1ULL);//v是否可以到u
             if(uv && vu) bel[v] = cc;
         }
-        cc++;
     }
-    return bel;
+    return {cc, bel};
 }
