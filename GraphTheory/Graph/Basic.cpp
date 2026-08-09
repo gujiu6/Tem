@@ -4,6 +4,7 @@
 3.DAG(有向无环图)最长路                              O(n+m)          O(n)
 4.DAG(有向无环图)删点最长路:删除某个点后剩下图的最长路    O(n+m+nlogn)    O(n+m)
 5.差分约束:多组不等式Xv - Xu <= w                    O(nm)           O(n)
+6.DAG判断是否半连通(是否任意两点间都有可达路径)         O(n+m)           O(n)
 */
 #include <bits/stdc++.h>
 #include <cassert>
@@ -35,6 +36,7 @@ optional<vector<int>> TopSort(vector<vector<WEdge>>& g, vector<int> inDeg) {
     if(ord.size() - 1 != n) return nullopt;
     return ord;
 }
+
 //2.判定二分图
 optional<vector<int>> bipartite(const vector<vector<WEdge>>& g) {
     //返回每个点的 0/1 颜色,存在奇环时返回空
@@ -189,4 +191,25 @@ optional<vector<int>> diffConstraints(int n, const vector<tuple<int, int, int>>&
         }
     }
     return nullopt;
+}
+
+//6.DAG判断是否半连通(是否任意两点间都有可达路径)
+bool pd(const vector<vector<Edge>>& g, vector<int> inDeg) {
+    int n = g.size() - 1;
+    queue<int> q;
+    for(int i = 1; i <= n; i++) {
+        if(inDeg[i] == 0) {
+            q.push(i);
+        }
+    }
+    while(!q.empty()) {
+        if(q.size() > 1) return false;
+        auto u = q.front();q.pop();
+        for(const auto &e : g[u]) {
+            if(--inDeg[e.v] == 0) {
+                q.push(e.v);
+            }
+        }
+    }
+    return true;
 }
