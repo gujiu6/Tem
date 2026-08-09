@@ -86,17 +86,19 @@ struct WDSU {
 
 //3.可撤销DSU
 struct RollbackDSU {
-    vector<int> p;
+    vector<int> fa, sz;
     struct History {
-        int x, px;
-        int y, py;
+        int x, px, sx;
+        int y, py, sy;
         bool merged;
     };
     vector<History> st;
-    RollbackDSU(int n = 0): p(n + 1, -1){}
+    RollbackDSU(int n = 0): fa(n + 1), sz(n + 1, 1){
+        iota(fa.begin(), fa.end(), 0);
+    }
     int find(int i) const {
-        while(p[i] >= 0) {
-            i = p[i];
+        while(fa[i] != i) {
+            i = fa[i];
         }
         return i;
     }
@@ -107,23 +109,25 @@ struct RollbackDSU {
     bool merge(int x, int y) {
         x = find(x), y = find(y);
         if(x == y) {
-            st.push_back({x, 0, y, 0, false});
+            st.push_back({x, fa[x], sz[x], y, fa[y], sz[y], false});
             return false;
         }
-        if(p[x] > p[y]) swap(x, y);
-        st.push_back({x, p[x], y, p[y], true});
-        p[x] += p[y];
-        p[y] = x;
+        if(sz[x] < sz[y]) swap(x, y);
+        st.push_back({x, fa[x], sz[x], y, fa[y], sz[y], true});
+        sz[x] += sz[y];
+        fa[y] = x;
         return true;
     }
     void rollback(int s) {
         //s:此前由snap返回的回滚栈高度;撤销到快照s时的并查集状态,无返回值
         while(st.size() > s) {
-            auto &[x, px, y, py, merged] = st.back();
+            auto [x, px, sx, y, py, sy, merged] = st.back();
             st.pop_back();
             if(merged) {
-                p[x] = px;
-                p[y] = py;
+                fa[x] = px;
+                sz[x] = sx;
+                fa[y] = py;
+                sz[y] = sy;
             }
         }
     }
@@ -131,7 +135,7 @@ struct RollbackDSU {
         return find(x) == find(y);
     }
     int size(int i) const {
-        return -p[find(i)];
+        return sz[find(i)];
     }
 };
 
