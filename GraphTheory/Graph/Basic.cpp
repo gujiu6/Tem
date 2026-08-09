@@ -114,35 +114,30 @@ vector<i64> DelDAG(const vector<vector<WEdge>>& g, vector<int> inDeg) {
         }
     }
     assert(ord.size() - 1 == n);
-    //pos[u]:u在拓扑序中的位置
-    vector<int> pos(n + 1);
+    vector<int> pos(n + 1);//pos[u]:u在拓扑序中的位置
     for(int i = 1; i <= n; i++) {
         pos[ord[i]] = i;
     }
-    //以u结尾的最长路径长度
-    vector<i64> left(n + 1);
+    vector<i64> left(n + 1);//以u结尾的最长路径长度
     for(int i = 1; i <= n; i++) {
         int u = ord[i];
         for(const auto &e : g[u]) {
             left[e.v] = max(left[e.v], left[u] + e.w);
         }
     }
-    //以u开头的最长路径长度
-    vector<i64> right(n + 1);
+    vector<i64> right(n + 1);//以u开头的最长路径长度
     for(int i = n; i >= 1; i--) {
         int u = ord[i];
         for(auto &e : g[u]) {
             right[u] = max(right[u], right[e.v] + e.w);
         }
     }
-    //删除拓扑位置i的点时,哪些跨越边开始生效
-    vector<vector<pair<i64, int>>> starts(n + 1);
+    vector<vector<pair<i64, int>>> starts(n + 1);//删除拓扑位置i的点时,哪些跨越边开始生效
     for(int u = 1; u <= n; u++) {
         for(auto &e : g[u]) {
             int l = pos[u] + 1;
             int r = pos[e.v] - 1;
-            //区间[l, r]
-            if(l <= r) {
+            if(l <= r) {//区间[l, r]
                 i64 value = left[u] + e.w + right[e.v];
                 starts[l].push_back({value, r});
             }
@@ -155,8 +150,7 @@ vector<i64> DelDAG(const vector<vector<WEdge>>& g, vector<int> inDeg) {
     for(int i = n; i >= 1; i--) {
         suf[i] = max(suf[i + 1], right[ord[i]]);
     }
-    //first=跨越边贡献;second=该边最后有效的删除位置
-    priority_queue<pair<i64, int>> active;
+    priority_queue<pair<i64, int>> active;//first:跨越边贡献;second:该边最后有效的删除位置
     vector<i64> ans(n + 1);
     for(int i = 1; i <= n; i++) {
         //从i开始生效的跨越边

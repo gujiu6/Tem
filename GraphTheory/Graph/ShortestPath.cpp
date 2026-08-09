@@ -73,8 +73,7 @@ optional<vector<i64>> SPFA(const vector<vector<WEdge>>& g, int s) {
     //存在在源点可达负环时返回空
     int n = g.size() - 1;
     vector<i64> d(n + 1, INF);
-    //in:是否在队列里面,len:当前最短路经过的边数
-    vector<int> in(n + 1), len(n + 1);
+    vector<int> in(n + 1), len(n + 1);//in:是否在队列里面,len:当前最短路经过的边数
     deque<int> q;
     d[s] = 0;
     q.push_back(s);
@@ -169,11 +168,9 @@ optional<vector<vector<i64>>> Johnson(int n, const vector<DEdge>& edge) {
         //第n轮仍更新,存在负环
         if(i == n) return nullopt;
     }
-    //重构边权
-    vector<vector<pair<int, i64>>> g(n + 1);
+    vector<vector<pair<int, i64>>> g(n + 1);//重构边权
     for(const auto &[u, v, w] : edge) {
-        //新边权一定非负
-        g[u].push_back({v, w + h[u] - h[v]});
+        g[u].push_back({v, w + h[u] - h[v]});//新边权一定非负
     }
     vector<vector<i64>> ans(n + 1, vector<i64>(n + 1, INF));
     priority_queue<pair<i64, int>, vector<pair<i64, int>>, greater<>> q;
