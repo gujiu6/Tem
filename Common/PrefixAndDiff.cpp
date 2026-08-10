@@ -2,8 +2,9 @@
 1.二维前缀和
 2.二维差分
 3.k阶差分
-4.Kadane求非空最大子 段/矩阵 和
-5.所有区间 gcd
+4.等差数列差分
+5.Kadane求非空最大子 段/矩阵 和
+6.所有区间 gcd
 */
 #include <bits/stdc++.h>
 #include <cassert>
@@ -67,7 +68,34 @@ vector<T> kthDiff(vector<T> a, int k) {
     return a;
 }
 
-//4.Kadane求非空最大子段和
+//4.等差数列差分
+template <class T = i64>
+struct ArithmeticDiff {
+    int n;
+    vector<T> dd;//二阶差分
+    ArithmeticDiff (int n): n(n), dd(n + 2) {}
+    //[l,r]加等差数列初始s,公差d
+    void add(int l, int r, T s, T d) {
+        int len = (r - l + 1);
+        T t = s + (len - 1) * d;
+        dd[l] += s;
+        dd[l + 1] += d - s;
+        dd[r + 1] -= t + d;
+        dd[r + 2] += t;
+    }
+    vector<T> build() {
+        vector<T> a(n + 1);
+        for(int i = 1; i <= n; i++) {
+            dd[i] += dd[i - 1];
+        }
+        for(int i = 1; i <= n; i++) {
+            a[i] = a[i - 1] + dd[i];
+        }
+        return a;
+    }
+};
+
+//5.Kadane求非空最大子段和
 template <class T = i64>
 T maxSub(const vector<T>& a) {
     assert(!a.empty());
@@ -96,7 +124,7 @@ T maxSubMat(const vector<vector<T>>& a) {
     return ans;
 }
 
-//5.所有区间 gcd
+//6.所有区间 gcd
 template <class T = i64>
 struct gcdRanges {
     int n;

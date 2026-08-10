@@ -63,7 +63,7 @@ optional<pair<i64, vector<DEdge>>> KrusKal(vector<DEdge> edge, int n) {
     return pair{ans, use};
 }
 //1.2 Prim
-optional<i64> Prim(vector<vector<WEdge>>&g) {
+optional<i64> Prim(const vector<vector<WEdge>>& g) {
     int n = g.size() - 1;
     vector<i64> d(n + 1, INF);
     vector<bool> vis(n + 1);
