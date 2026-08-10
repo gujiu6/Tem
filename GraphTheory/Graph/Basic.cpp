@@ -194,6 +194,7 @@ optional<vector<int>> DiffConstraints(int n, const vector<tuple<int, int, int>>&
     return nullopt;
 }
 //5.2 SPFA+SLF Xv - Xu <= w: v->u(w)
+//连通超级源点: 0, 限制超级源点: n + 1, 
 optional<vector<i64>> DiffConstraints(const vector<vector<WEdge>>& g, int s) {
     int n = g.size() - 1;
     vector<i64> d(n + 1, INF);
