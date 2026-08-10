@@ -194,15 +194,14 @@ optional<vector<int>> DiffConstraints(int n, const vector<tuple<int, int, int>>&
     return nullopt;
 }
 //5.2 SPFA+SLF Xv - Xu <= w: v->u(w)
-optional<vector<i64>> DiffConstraints(const vector<vector<WEdge>>& g) {
+optional<vector<i64>> DiffConstraints(const vector<vector<WEdge>>& g, int s) {
     int n = g.size() - 1;
-    vector<i64> d(n + 1, 0);
+    vector<i64> d(n + 1, INF);
     vector<int> in(n + 1), len(n + 1);//in:是否在队列里面,len:当前最短路经过的边数
     deque<int> q;
-    for(int i = 1; i <= n; i++) {
-        q.push_back(i);
-        in[i] = 1;
-    }
+    d[s] = 0;
+    q.push_back(s);
+    in[s] = 1;
     while(!q.empty()) {
         auto u = q.front(); q.pop_front();
         in[u] = 0;
