@@ -174,7 +174,8 @@ vector<i64> DelDAG(const vector<vector<WEdge>>& g, vector<int> inDeg) {
 }
 
 //5.差分约束:多组不等式Xv - Xu <= w
-optional<vector<int>> diffConstraints(int n, const vector<tuple<int, int, int>>& a) {
+//5.1 Bellman-Ford
+optional<vector<int>> DiffConstraints(int n, const vector<tuple<int, int, int>>& a) {
     vector<int> x(n + 1);
     for(int k = 1; k <= n; k++) {
         bool ok = true;
@@ -191,6 +192,40 @@ optional<vector<int>> diffConstraints(int n, const vector<tuple<int, int, int>>&
         }
     }
     return nullopt;
+}
+//5.2 SPFA+SLF
+optional<vector<i64>> DiffConstraints(const vector<vector<WEdge>>& g) {
+    int n = g.size() - 1;
+    vector<i64> d(n + 1, 0);
+    vector<int> in(n + 1), len(n + 1);//in:是否在队列里面,len:当前最短路经过的边数
+    deque<int> q;
+    for(int i = 1; i <= n; i++) {
+        q.push_back(i);
+        in[i] = 1;
+    }
+    while(!q.empty()) {
+        auto u = q.front(); q.pop_front();
+        in[u] = 0;
+        for(const auto &e : g[u]) {
+            i64 nd = e.w + d[u];
+            if(d[e.v] <= nd) continue;
+            d[e.v] = nd;
+            len[e.v] = len[u] + 1;
+            //超过n-1条边,一定有负环
+            if(len[e.v] >= n) return nullopt;
+            if(!in[e.v]) {
+                //SLF优化
+                if(!q.empty() && d[e.v] < d[q.front()]) {
+                    q.push_front(e.v);
+                }
+                else {
+                    q.push_back(e.v);
+                }
+                in[e.v] = 1;
+            }
+        }
+    }
+    return d;
 }
 
 //6.DAG判断是否半连通(是否任意两点间都有可达路径)
