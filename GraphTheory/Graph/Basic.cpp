@@ -193,7 +193,7 @@ optional<vector<int>> DiffConstraints(int n, const vector<tuple<int, int, int>>&
     }
     return nullopt;
 }
-//5.2 SPFA+SLF
+//5.2 SPFA+SLF Xv - Xu <= w: v->u(w)
 optional<vector<i64>> DiffConstraints(const vector<vector<WEdge>>& g) {
     int n = g.size() - 1;
     vector<i64> d(n + 1, 0);
