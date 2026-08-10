@@ -13,11 +13,12 @@ const i64 INF = 1e18;
 struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
 
 //1.Dijkstra:非负边权图的单源最短路
-vector<i64> Dijkstra(const vector<vector<WEdge>>& g, int s = 1) {
+template <class T = i64>
+vector<T> Dijkstra(const vector<vector<WEdge>>& g, int s = 1) {
     //s:源点;返回源点到各点最短距离,不可达点为INF
     int n = g.size() - 1;
-    vector<i64> d(n + 1, INF);
-    priority_queue<pair<i64, int>, vector<pair<i64, int>>, greater<>> q;
+    vector<T> d(n + 1, INF);
+    priority_queue<pair<T, int>, vector<pair<T, int>>, greater<>> q;
     d[s] = 0;
     q.push({0, s});
     while(!q.empty()) {
@@ -35,9 +36,10 @@ vector<i64> Dijkstra(const vector<vector<WEdge>>& g, int s = 1) {
 }
 
 //2.Bellman‑Ford:允许负边权求单源最短路
-pair<vector<i64>, vector<int>>BellmanFord(int n, const vector<DEdge>& edge, int s) {
+template <class T = i64>
+pair<vector<T>, vector<int>>BellmanFord(int n, const vector<DEdge>& edge, int s) {
     //返回源点最短路;cycle非空表示存在从s可达的负环,返回其中一组环上顶点
-    vector<i64> d(n + 1, INF);
+    vector<T> d(n + 1, INF);
     vector<int> p(n + 1, -1);
     d[s] = 0;
     int x = -1;
@@ -45,7 +47,7 @@ pair<vector<i64>, vector<int>>BellmanFord(int n, const vector<DEdge>& edge, int 
         x = -1;
         for(const auto &[u, v, w] : edge) {
             if(d[u] == INF) continue;
-            i64 nd = d[u] + w;
+            T nd = d[u] + w;
             if(nd < d[v]) {
                 d[v] = nd;
                 p[v] = u;
@@ -69,10 +71,11 @@ pair<vector<i64>, vector<int>>BellmanFord(int n, const vector<DEdge>& edge, int 
 }
 
 //3.SPFA+SLF优化与负环判定/输出
-optional<vector<i64>> SPFA(const vector<vector<WEdge>>& g, int s) {
+template <class T = i64>
+optional<vector<T>> SPFA(const vector<vector<WEdge>>& g, int s) {
     //存在在源点可达负环时返回空
     int n = g.size() - 1;
-    vector<i64> d(n + 1, INF);
+    vector<T> d(n + 1, INF);
     vector<int> in(n + 1), len(n + 1);//in:是否在队列里面,len:当前最短路经过的边数
     deque<int> q;
     d[s] = 0;
@@ -82,7 +85,7 @@ optional<vector<i64>> SPFA(const vector<vector<WEdge>>& g, int s) {
         auto u = q.front(); q.pop_front();
         in[u] = 0;
         for(const auto &e : g[u]) {
-            i64 nd = e.w + d[u];
+            T nd = e.w + d[u];
             if(d[e.v] <= nd) continue;
             d[e.v] = nd;
             len[e.v] = len[u] + 1;
@@ -104,7 +107,8 @@ optional<vector<i64>> SPFA(const vector<vector<WEdge>>& g, int s) {
 }
 
 //4.Floyd与最小环
-void Floyd(vector<vector<i64>>& d) {
+template <class T = i64>
+void Floyd(vector<vector<T>>& d) {
     //不可达位置为INF
     int n = d.size() - 1;
     for(int k = 1;k <= n; k++){
@@ -119,10 +123,11 @@ void Floyd(vector<vector<i64>>& d) {
 }
 
 //4.1 非负无向最小环
-i64 minCycle(const vector<vector<i64>> &dis, bool f = 1) {
+template <class T = i64>
+T minCycle(const vector<vector<T>> &dis, bool f = 1) {
     //f: 0:有向图, 1: 无向图
     int n = dis.size() - 1;
-    i64 ans = INF;
+    T ans = INF;
     auto d = dis;
     for(int k = 1; k <= n; k++) {
         for(int i = 1; i < k; i++) {
@@ -154,9 +159,10 @@ i64 minCycle(const vector<vector<i64>> &dis, bool f = 1) {
 }
 
 //5.Johnson全源最短路
-optional<vector<vector<i64>>> Johnson(int n, const vector<DEdge>& edge) {
+template <class T = i64>
+optional<vector<vector<T>>> Johnson(int n, const vector<DEdge>& edge) {
     //ans[i][j]:i到j的最短路,不可达为 INF;存在可达负环返回空
-    vector<i64> h(n + 1);
+    vector<T> h(n + 1);
     for(int i = 1; i <= n; i++) {
         bool update = false;
         for(const auto &[u, v, w] : edge) {
@@ -169,12 +175,12 @@ optional<vector<vector<i64>>> Johnson(int n, const vector<DEdge>& edge) {
         //第n轮仍更新,存在负环
         if(i == n) return nullopt;
     }
-    vector<vector<pair<int, i64>>> g(n + 1);//重构边权
+    vector<vector<pair<int, T>>> g(n + 1);//重构边权
     for(const auto &[u, v, w] : edge) {
         g[u].push_back({v, w + h[u] - h[v]});//新边权一定非负
     }
-    vector<vector<i64>> ans(n + 1, vector<i64>(n + 1, INF));
-    priority_queue<pair<i64, int>, vector<pair<i64, int>>, greater<>> q;
+    vector<vector<T>> ans(n + 1, vector<T>(n + 1, INF));
+    priority_queue<pair<T, int>, vector<pair<T, int>>, greater<>> q;
     for(int s = 1; s <= n; s++) {
         ans[s][s] = 0;
         q.push({0, s});

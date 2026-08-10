@@ -45,13 +45,14 @@ public:
     }
 };
 //1.1 KrusKal
-optional<pair<i64, vector<DEdge>>> KrusKal(vector<DEdge> edge, int n) {
+template <class T = i64>
+optional<pair<T, vector<DEdge>>> KrusKal(vector<DEdge> edge, int n) {
     sort(edge.begin(), edge.end(), [](const DEdge& a, const DEdge& b){
         return a.w < b.w;
     });
     DSU d(n);
     vector<DEdge> use;
-    i64 ans = 0;
+    T ans = 0;
     for(const auto &e : edge) {
         if(!d.merge(e.u, e.v)) continue;
         ans += e.w;
@@ -63,11 +64,12 @@ optional<pair<i64, vector<DEdge>>> KrusKal(vector<DEdge> edge, int n) {
     return pair{ans, use};
 }
 //1.2 Prim
-optional<i64> Prim(const vector<vector<WEdge>>& g) {
+template <class T = i64>
+optional<T> Prim(const vector<vector<WEdge>>& g) {
     int n = g.size() - 1;
-    vector<i64> d(n + 1, INF);
+    vector<T> d(n + 1, INF);
     vector<bool> vis(n + 1);
-    priority_queue<pair<i64, int>, vector<pair<i64, int>>, greater<pair<i64, int>>> q;
+    priority_queue<pair<T, int>, vector<pair<T, int>>, greater<pair<T, int>>> q;
     d[1] = 0;
     q.push({0, 1});
     i64 ans = 0;

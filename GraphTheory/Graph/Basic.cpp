@@ -15,7 +15,7 @@ constexpr i64 INF = 1e18;
 struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
 
 //1.拓扑排序(字典序)
-optional<vector<int>> TopSort(vector<vector<WEdge>>& g, vector<int> inDeg) {
+optional<vector<int>> TopSort(vector<vector<Edge>>& g, vector<int> inDeg) {
     int n = g.size() - 1;
     vector<int> ord{0};
     priority_queue<int, vector<int>, greater<int>> q;
@@ -38,7 +38,7 @@ optional<vector<int>> TopSort(vector<vector<WEdge>>& g, vector<int> inDeg) {
 }
 
 //2.判定二分图
-optional<vector<int>> bipartite(const vector<vector<WEdge>>& g) {
+optional<vector<int>> bipartite(const vector<vector<Edge>>& g) {
     //返回每个点的 0/1 颜色,存在奇环时返回空
     int n = g.size() - 1;
     vector<int> col(n + 1, -1);
@@ -64,7 +64,8 @@ optional<vector<int>> bipartite(const vector<vector<WEdge>>& g) {
 }
 
 //3.DAG(有向无环图)最长路
-optional<vector<i64>> DAGLongest(const vector<vector<WEdge>>& g, vector<int> inDeg, int s = -1) {
+template <class T = i64>
+optional<vector<T>> DAGLongest(const vector<vector<WEdge>>& g, vector<int> inDeg, int s = -1) {
     //g[u]:终点和边权;s:起点,s=-1时允许从任意点开始;图有环时返回空
     int n = g.size() - 1;
     vector<int> ord{0};
@@ -84,7 +85,7 @@ optional<vector<i64>> DAGLongest(const vector<vector<WEdge>>& g, vector<int> inD
         }
     }
     if(ord.size() - 1 != n) return nullopt;
-    vector<i64> d(n + 1, s == -1 ? 0 : -INF);
+    vector<T> d(n + 1, s == -1 ? 0 : -INF);
     if(s != -1) d[s] = 0;
     for(int i = 1; i <= n; i++) {
         int u = ord[i];
@@ -97,7 +98,8 @@ optional<vector<i64>> DAGLongest(const vector<vector<WEdge>>& g, vector<int> inD
 }
 
 //4.DAG(有向无环图)删点最长路:删除某个点后剩下图的最长路
-vector<i64> DelDAG(const vector<vector<WEdge>>& g, vector<int> inDeg) {
+template <class T = i64>
+vector<T> DelDAG(const vector<vector<WEdge>>& g, vector<int> inDeg) {
     int n = g.size() - 1;
     queue<int> q;
     for(int i = 1; i <= n; i++) {
@@ -120,40 +122,40 @@ vector<i64> DelDAG(const vector<vector<WEdge>>& g, vector<int> inDeg) {
     for(int i = 1; i <= n; i++) {
         pos[ord[i]] = i;
     }
-    vector<i64> left(n + 1);//以u结尾的最长路径长度
+    vector<T> left(n + 1);//以u结尾的最长路径长度
     for(int i = 1; i <= n; i++) {
         int u = ord[i];
         for(const auto &e : g[u]) {
             left[e.v] = max(left[e.v], left[u] + e.w);
         }
     }
-    vector<i64> right(n + 1);//以u开头的最长路径长度
+    vector<T> right(n + 1);//以u开头的最长路径长度
     for(int i = n; i >= 1; i--) {
         int u = ord[i];
         for(auto &e : g[u]) {
             right[u] = max(right[u], right[e.v] + e.w);
         }
     }
-    vector<vector<pair<i64, int>>> starts(n + 1);//删除拓扑位置i的点时,哪些跨越边开始生效
+    vector<vector<pair<T, int>>> starts(n + 1);//删除拓扑位置i的点时,哪些跨越边开始生效
     for(int u = 1; u <= n; u++) {
         for(auto &e : g[u]) {
             int l = pos[u] + 1;
             int r = pos[e.v] - 1;
             if(l <= r) {//区间[l, r]
-                i64 value = left[u] + e.w + right[e.v];
+                T value = left[u] + e.w + right[e.v];
                 starts[l].push_back({value, r});
             }
         }
     }
-    vector<i64> pre(n + 2), suf(n + 2);
+    vector<T> pre(n + 2), suf(n + 2);
     for(int i = 1; i <= n; i++) {
         pre[i] = max(pre[i - 1], left[ord[i]]);
     }
     for(int i = n; i >= 1; i--) {
         suf[i] = max(suf[i + 1], right[ord[i]]);
     }
-    priority_queue<pair<i64, int>> active;//first:跨越边贡献;second:该边最后有效的删除位置
-    vector<i64> ans(n + 1);
+    priority_queue<pair<T, int>> active;//first:跨越边贡献;second:该边最后有效的删除位置
+    vector<T> ans(n + 1);
     for(int i = 1; i <= n; i++) {
         //从i开始生效的跨越边
         for(const auto &[value, r] : starts[i]) {
@@ -175,12 +177,13 @@ vector<i64> DelDAG(const vector<vector<WEdge>>& g, vector<int> inDeg) {
 
 //5.差分约束:多组不等式Xv - Xu <= w
 //5.1 Bellman-Ford
-optional<vector<int>> DiffConstraints(int n, const vector<tuple<int, int, int>>& a) {
-    vector<int> x(n + 1);
+template<class T = i64>
+optional<vector<T>> DiffConstraints(int n, const vector<tuple<int, int, T>>& a) {
+    vector<T> x(n + 1);
     for(int k = 1; k <= n; k++) {
         bool ok = true;
         for(int i = 1; i < a.size(); i++) {
-            auto &[u, v, w] = a[i];
+            const auto &[u, v, w] = a[i];
             assert(1 <= u && u <= n && 1 <= v && v <= n);
             if(x[v] > x[u] + w) {
                 x[v] = x[u] + w;
@@ -193,11 +196,13 @@ optional<vector<int>> DiffConstraints(int n, const vector<tuple<int, int, int>>&
     }
     return nullopt;
 }
-//5.2 SPFA+SLF Xv - Xu <= w: v->u(w)
-//连通超级源点: 0, 限制超级源点: n + 1, 
-optional<vector<i64>> DiffConstraints(const vector<vector<WEdge>>& g, int s) {
+//5.2 SPFA+SLF Xv - Xu <= w: v->u[w]
+//连通超级源点: 0, 0->(1~n)[0]
+//限制超级源点: n + 1[0], {已知的点权点} <-> (n + 1)[点权]
+template <class T = i64>
+optional<vector<T>> DiffConstraints(const vector<vector<WEdge>>& g, int s) {
     int n = g.size() - 1;
-    vector<i64> d(n + 1, INF);
+    vector<T> d(n + 1, INF);
     vector<int> in(n + 1), len(n + 1);//in:是否在队列里面,len:当前最短路经过的边数
     deque<int> q;
     d[s] = 0;
@@ -207,7 +212,7 @@ optional<vector<i64>> DiffConstraints(const vector<vector<WEdge>>& g, int s) {
         auto u = q.front(); q.pop_front();
         in[u] = 0;
         for(const auto &e : g[u]) {
-            i64 nd = e.w + d[u];
+            T nd = e.w + d[u];
             if(d[e.v] <= nd) continue;
             d[e.v] = nd;
             len[e.v] = len[u] + 1;
