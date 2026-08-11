@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
+using i64 = long long;
 const int MAXX=2e5;
-typedef long long ll;
+
 
 
 
@@ -10,9 +11,9 @@ typedef long long ll;
 
 namespace Prime{
 
-vector<ll> prime;
+vector<i64> prime;
 //埃氏筛素数
-void Prime_Eratoasthenes(ll n){
+void Prime_Eratoasthenes(i64 n){
     vector<bool>nums(n + 1);
     for(int i = 2;i <= n; i++){
         if(!nums[i]) prime.emplace_back(i);
@@ -23,7 +24,7 @@ void Prime_Eratoasthenes(ll n){
     }
 }
 //欧拉筛素数
-void Prime_Euler(ll n){
+void Prime_Euler(i64 n){
     vector<bool> nums(n + 1);
     for(int i = 2; i <= n; i++){
         if(!nums[i]) prime.emplace_back(i);
@@ -34,19 +35,19 @@ void Prime_Euler(ll n){
     }
 }
 //区间筛素数[l, r]
-vector<ll> segment_sieve(ll l, ll r) {
+vector<i64> segment_sieve(i64 l, i64 r) {
     Prime_Euler(sqrt(r));
     int n = r - l + 1;
     vector<bool> nums(n, 1);
     if(l == 1) nums[0] = 0;
     for(int i = 0; i < prime.size() && 1LL * prime[i] * prime[i] <= r; i++) {
-        ll p = prime[i];
-        ll start = max(p * p, (l + p - 1) / p * p);
+        i64 p = prime[i];
+        i64 start = max(p * p, (l + p - 1) / p * p);
         for(int j = start; j <= r; j += p) {
             nums[j] = 0;
         }
     }
-    vector<ll> ans;
+    vector<i64> ans;
     for(int i = 0; i < n; i++) {
         if(nums[i]) ans.push_back(l + i);
     }
@@ -60,9 +61,9 @@ vector<ll> segment_sieve(ll l, ll r) {
 namespace Euler {
 
 //求n的欧拉函数
-ll get_phi(ll n) {
-    ll ans = n;
-    for(ll i = 2; i * i <= n; i++){
+i64 get_phi(i64 n) {
+    i64 ans = n;
+    for(i64 i = 2; i * i <= n; i++){
         if(n % i == 0) {
             ans = ans / i * (i - 1);
             while(n % i == 0) n /= i;
@@ -72,12 +73,12 @@ ll get_phi(ll n) {
     return ans;
 }
 //欧拉筛欧拉函数
-vector<ll> prime, phi;
-void get_phis(ll n) {
+vector<i64> prime, phi;
+void get_phis(i64 n) {
     phi.assign(n + 1, 0);
     vector<bool> vis(n + 1);
     phi[1] = 1;
-    for(ll i = 2; i <= n; i++) {
+    for(i64 i = 2; i <= n; i++) {
         if(!vis[i]) {
             prime.push_back(i);
             phi[i] = i - 1;
@@ -96,19 +97,19 @@ void get_phis(ll n) {
     }
 }
 //区间筛欧拉函数
-void get_segement_phi(ll l, ll r) {
+void get_segement_phi(i64 l, i64 r) {
     int n = r - l + 1;
     Prime::Prime_Euler(sqrt(r));
     phi.assign(n, 0);
-    vector<ll> v(n);
+    vector<i64> v(n);
     for(int i = 0; i < n; i++) {
         phi[i] = l + i;
         v[i] = l + i;
     }
     for(int i = 0; i < prime.size() && 1LL * prime[i] * prime[i] <= r; i++) {
-        ll p = prime[i];
-        ll start = max(p * p, (p + l - 1) / p * p);
-        for(ll j = start; j <= r; j += p) {
+        i64 p = prime[i];
+        i64 start = max(p * p, (p + l - 1) / p * p);
+        for(i64 j = start; j <= r; j += p) {
             int idx = j - l;
             if(v[idx] % p == 0) {
                 phi[idx] = phi[idx] / p * (p - 1);
@@ -132,12 +133,12 @@ void get_segement_phi(ll l, ll r) {
 namespace Mobius {
 
 //欧拉筛莫比乌斯函数
-vector<ll> mu, prime;
-void get_mu(ll n) {
+vector<i64> mu, prime;
+void get_mu(i64 n) {
     mu.assign(n + 1, 0);
     mu[1] = 1;
     vector<bool> vis(n + 1);
-    for(ll i = 2; i <= n; i++) {
+    for(i64 i = 2; i <= n; i++) {
         if(!vis[i]) {
             prime.push_back(i);
             mu[i] = -1;

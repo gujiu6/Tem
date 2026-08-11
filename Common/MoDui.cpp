@@ -18,10 +18,10 @@ template <class Ans, class AddL, class AddR, class DelL, class DelR, class Get>
 vector<Ans> mo(int n, vector<Query> q, AddL addL, AddR addR, DelL delL, DelR delR, Get get) {
     int m = q.size() - 1;
     int sz  = max(1, (int)(n / sqrt(m)));
-    sort(q.begin(), q.end(), [&](const Query &x, const Query &y){
+    sort(q.begin() + 1, q.end(), [&](const Query &x, const Query &y){
         auto xl = x.l / sz, yl = y.l / sz;
         if(xl != yl) return xl < yl;
-        return xl & 1 ? x.r > y.r : x.r < x.r;
+        return xl & 1 ? x.r > y.r : x.r < y.r;
     });
     vector<Ans> ans(m + 1);
     for(int l = 1, r = 0, i = 1; i <= m; i++) {
