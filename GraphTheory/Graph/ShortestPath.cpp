@@ -24,9 +24,9 @@ vector<T> Dijkstra(const vector<vector<WEdge>>& g, int s = 1) {
     while(!q.empty()) {
         auto [du, u] = q.top(); q.pop();
         if(du != d[u]) continue;
-        for(auto &e : g[u]) {
+        for(const auto &e : g[u]) {
             assert(e.w >= 0);
-            if(d[e.v] < du + e.w) {
+            if(du + e.w < d[e.v]) {
                 d[e.v] = du + e.w;
                 q.push({d[e.v], e.v});
             }

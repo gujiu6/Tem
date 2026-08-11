@@ -233,7 +233,7 @@ optional<vector<T>> DiffConstraints(const vector<vector<WEdge>>& g, int s) {
     return d;
 }
 
-//6.DAG判断是否半连通(是否任意两点间都有可达路径)
+//6.DAG判断是否半连通(是否任意两点间都有可达路径)必须是链结构
 bool pd(const vector<vector<Edge>>& g, vector<int> inDeg) {
     int n = g.size() - 1;
     queue<int> q;
