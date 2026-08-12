@@ -109,7 +109,7 @@ struct Info {
         return c;
     }
 };
-template <class Info, class Tag>
+template <class Info = Info, class Tag = Tag>
 struct LazySeg {
     int n;
     vector<Info> tr;
@@ -212,7 +212,7 @@ struct AffineInfo {
         return c;
     }
 };
-template <class Info, class Tag> 
+template <class Info = AffineInfo, class Tag = AffineTag>
 struct LazySeg {
     int n;
     vector<Info> tr;
