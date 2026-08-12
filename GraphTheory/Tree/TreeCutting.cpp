@@ -33,7 +33,7 @@ public:
         for(int i = n; i >= 1; i--) {
             int u = ord[i], p = fa[u];
             sz[p] += sz[u];
-            if(son[p] < 0 || sz[u] > sz[son[p]]) {
+            if(son[p] <= 0 || sz[u] > sz[son[p]]) {
                 son[p] = u;
             }
         }
@@ -52,7 +52,6 @@ public:
         };
         if(n) dfs(dfs, root, root);
     }
-
     int lca(int u, int v) const {
         while(top[u] != top[v]) {
             if(dep[top[u]] < dep[top[v]]) {
@@ -62,8 +61,12 @@ public:
         }
         return dep[u] < dep[v] ? u : v;
     }
+    int dis(int u, int v) const {
+        int p = lca(u, v);
+        return dep[u] + dep[v] - 2 * dep[p];
+    }
     //op(l,r,rev)：区间为 [l,r], rev: 表示沿路径应逆序读取。
-    template <typename F> void path(int u, int v, F op, bool edge = false) const {
+    template <class F> void path(int u, int v, F op, bool edge = false) const {
         vector<pair<int, int>> right;
         while(top[u] != top[v]) {
             if(dep[top[u]] >= dep[top[v]]) {
@@ -82,13 +85,46 @@ public:
             right.push_back({in[u] + edge, in[v]});
         }
         reverse(right.begin(), right.end());
-        for(auto [l, r] : right) {
+        for(auto &[l, r] : right) {
             op(l, r, false);
         }
     }
+    //固定初始根下的普通子树
     pair<int, int> subtree(int u) const {
         return {in[u], in[u] + sz[u] - 1};
     }
+    //2.换根树剖
+    vector<pair<int, int>> subtree(int u, int root) const {
+        //1.u就是当前根
+        if(u == root) return {{1, n}};
+        //2.root不在u的原始子树中,换根以后u的子树不发生变化
+        if (!(in[u] <= in[root] && in[root] <= in[u] + sz[u] - 1)) {
+            return {{in[u], in[u] + sz[u] - 1}};
+        }
+        //3.root在u的原始子树中,找到u->root路径上紧邻u的儿子
+        int child = childOnPath(u, root);
+        vector<pair<int, int>> res;
+        //整棵树-subtree(child)
+        if (in[child] > 1) {
+            res.push_back({1, in[child] - 1});
+        }
+        if (in[child] + sz[child] <= n) {
+            res.push_back({in[child] + sz[child], n});
+        }
+        return res;
+    }
+private:
+    //ancestor是descendant的祖先,返回ancestor->descendant路径上,紧邻ancestor的那个儿子
+    int childOnPath(int ancestor, int descendant) const {
+        while (top[ancestor] != top[descendant]) {
+            if (fa[top[descendant]] == ancestor) {
+                return top[descendant];
+            }
+            descendant = fa[top[descendant]];
+        }
+        //两者在同一条重链上,ancestor后面的节点就是所求儿子
+        return rev[in[ancestor] + 1];
+    }
 };
 
-//2.换根树剖
+
