@@ -93,7 +93,7 @@ public:
     pair<int, int> subtree(int u) const {
         return {in[u], in[u] + sz[u] - 1};
     }
-    //2.换根树剖
+    //2.换根树剖,当前根为root时的subtree(u)
     vector<pair<int, int>> subtree(int u, int root) const {
         //1.u就是当前根
         if(u == root) return {{1, n}};
