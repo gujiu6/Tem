@@ -12,14 +12,15 @@ struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {
 
 //1.重链
 struct HLD {
-    int n, tim = 1;
+    int n, tim = 0;
     vector<int> fa, dep, sz, son, top, in, rev;
-    HLD(const vector<vector<Edge>>& g, int root = 1): n(g.size() - 1), fa(n + 1), sz(n + 1, 1), son(n + 1), top(n + 1), in(n + 1), rev(n + 1), dep(n + 1) {
+    HLD(const vector<vector<Edge>>& g, const int root = 1): n(g.size() - 1), fa(n + 1), sz(n + 1, 1), son(n + 1), top(n + 1), in(n + 1), rev(n + 1), dep(n + 1) {
+        //son:重儿子,top:当前入选的前 k 个元素,in:DFS 进入时间,rev:标记当前辅助子树是否需要翻转
         sz[0] = 0;
         vector<int> ord{0, root};
         for(int i = 1; i < ord.size(); i++) {
             int u = ord[i];
-            for(auto &e : g[u]) {
+            for(const auto &e : g[u]) {
                 if(e.v == fa[u]) continue;
                 fa[e.v] = u;
                 dep[e.v] = dep[u] + 1;
@@ -35,8 +36,8 @@ struct HLD {
         }
         auto dfs = [&](auto &&self, int u, int h)->void {
             top[u] = h;
+            in[u] = ++tim;
             rev[tim] = u;
-            in[u] = tim++;
             if(son[u] > 0) {
                 self(self, son[u], h);
             }
