@@ -1,18 +1,20 @@
 /*树剖                       时间复杂度                           空间复杂度
-1.重链(HLD)  
+1.重链(HLD)
         预处理               O(n)                                O(n)
         LCA                 O(logn)                             O(1)
         路径查询path         O(logn)                             O(logn)
         子树查询subtree      O(1)                                O(1)
         HLD+线段树          路径修改:O(log²n), 子树修改O(log n)
+2.换根树剖
 */
 #include <bits/stdc++.h>
 using namespace std;
 using i64 = long long;
 struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
 
-//1.重链
-struct HLD {
+//1.重链(HLD)
+class HLD {
+public:
     int n, tim = 0;
     vector<int> fa, dep, sz, son, top, in, rev;
     HLD(const vector<vector<Edge>>& g, const int root = 1): n(g.size() - 1), fa(n + 1), sz(n + 1, 1), son(n + 1), top(n + 1), in(n + 1), rev(n + 1), dep(n + 1) {
@@ -88,3 +90,5 @@ struct HLD {
         return {in[u], in[u] + sz[u] - 1};
     }
 };
+
+//2.换根树剖

@@ -22,7 +22,8 @@ struct Sum {
     }
 };
 template <class Info>
-struct Seg {
+class Seg {
+public:
     int n;
     vector<Info> tr;
     Seg(int n = 0) {init(n);}
@@ -41,9 +42,11 @@ struct Seg {
             pull(i);
         }
     }
+private:
     void pull(int p) {
         tr[p] = tr[p << 1] + tr[p << 1 | 1];
     }
+public:
     void set(int p, Info v) {
         p = p + n - 1;
         tr[p] = v;
@@ -110,7 +113,8 @@ struct Info {
     }
 };
 template <class Info = Info, class Tag = Tag>
-struct LazySeg {
+class LazySeg {
+public:
     int n;
     vector<Info> tr;
     vector<Tag> tag;
@@ -128,6 +132,7 @@ struct LazySeg {
         tag.assign((n << 2) + 4, Tag{});
         if(n) build(1, 1, n, a);
     }
+private:
     void build(int p, int l, int r) {
         tr[p].len = r - l + 1;
         tr[p].sum = 0;
@@ -178,6 +183,7 @@ struct LazySeg {
         if(ql > mid) return qry(p << 1 | 1, mid + 1, r, ql, qr);
         return qry(p << 1, l, mid, ql, qr) + qry(p << 1 | 1, mid + 1, r, ql, qr);
     }
+public:
     // 区间加 x
     void add(int l, int r, i64 x) {
         modify(1, 1, n, l, r, Tag{.has_set = false, .set = 0, .add = x});
@@ -223,7 +229,8 @@ struct AffineInfo {
     }
 };
 template <class Info = AffineInfo, class Tag = AffineTag>
-struct LazySeg {
+class LazySeg {
+public:
     int n;
     vector<Info> tr;
     vector<Tag> tag;
@@ -241,6 +248,7 @@ struct LazySeg {
         tag.assign((n << 2) + 4, Tag{});
         if(n) build(1, 1, n, a);
     }
+private:
     void build(int p, int l, int r) {
         tr[p].len = r - l + 1;
         tr[p].sum = 0;
@@ -304,6 +312,7 @@ struct LazySeg {
         mod(p << 1 | 1, mid + 1, r, ql, qr, x);
         pull(p);
     }
+public:
     // 通用仿射:x -> mul * x + add
     void affine(int l, int r, i64 mul, i64 add) {
         modify(1, 1, n, l, r, Tag{mul, add});

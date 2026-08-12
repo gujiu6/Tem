@@ -10,7 +10,8 @@ const int INF = 1e9+7;
 
 //1.普通ST
 template <class T , class F>
-struct ST1 {
+class ST1 {
+public:
     int n, lg2;
     vector<vector<T>> st;
     F op;

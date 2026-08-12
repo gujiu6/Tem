@@ -11,7 +11,8 @@ const int MAXX = 5e5+10, LIMIT = 20;
 struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
 
 //1.倍增LCA
-struct LCA {
+class LCA {
+public:
     int n, lg2, tim = 0;
     vector<int> dep, in, out;
     vector<vector<int>> up;
@@ -74,8 +75,11 @@ struct LCA {
 };
 
 //2.ST表/RMQ 求LCA
+namespace {
+
 template <class T , class F>
-struct ST1 {
+class ST1 {
+public:
     int n, lg2;
     vector<vector<T>> st;
     F op;
@@ -98,13 +102,15 @@ struct ST1 {
         return ans;
     }
 };
-struct LCARMQ {
+class LCARMQ {
+private:
     using pii = pair<int, int>;
     struct MinDepth {
         pii operator() (pii a, pii b) const {
             return min(a, b);
         }
     };
+public:
     vector<int> first;
     ST1 <pii, MinDepth> st;
     static pair<vector<int>, vector<pii>> tour(const vector<vector<Edge>>& g, int root) {
@@ -133,6 +139,9 @@ struct LCARMQ {
 private:
     LCARMQ(pair<vector<int>, vector<pii>> p): first(move(p.first)), st(move(p.second), MinDepth{}){}
 };
+
+}
+
 
 
 //3.Tarjan离线LCA

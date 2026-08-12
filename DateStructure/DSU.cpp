@@ -12,7 +12,8 @@ using i64 = long long;
 
 
 //1.普通DSU
-struct DSU {
+class DSU {
+public:
     int n;
     vector<int> fa,sz;
     DSU(int n): n(n), fa(n + 1), sz(n + 1, 1) {
@@ -42,7 +43,8 @@ struct DSU {
 
 //2.带权DSU
 template <typename T = i64>
-struct WDSU {
+class WDSU {
+public:
     int n;
     vector<int> fa, sz;
     vector<T> w;
@@ -85,7 +87,8 @@ struct WDSU {
 };
 
 //3.可撤销DSU
-struct RollbackDSU {
+class RollbackDSU {
+public:
     vector<int> fa, sz;
     struct History {
         int x, px, sx;
@@ -141,12 +144,14 @@ struct RollbackDSU {
 
 //4.可持久化DSU
 struct PerDSU {
+public:
     struct Node {
         int l = 0, r = 0, p = 0, sz = 0;
     };
     int n;
     vector<Node> t{{}};
     PerDSU(int n = 0): n(n){}
+private:
     int build(int l, int r) {
         int i = t.size();
         t.push_back({});
@@ -161,10 +166,6 @@ struct PerDSU {
         }
         return i;
     }
-    //初始版本
-    int build() {
-        return build(1, n);
-    }
     pair<int, int> qry(int i, int l, int r, int p) const {
         //i:第一个元素编号;p:节点编号或当前位置;返回当前位置,节点或结构保存的查询值
         if(l == r) {
@@ -173,6 +174,11 @@ struct PerDSU {
         int mid = (l + r) >> 1;
         if(p <= mid) return qry(t[i].l, l, mid, p);
         else return qry(t[i].r, mid + 1, r, p);
+    }
+public:
+    //初始版本
+    int build() {
+        return build(1, n);
     }
     pair<int, int> qry(int root, int p) const{
         //root:版本根编号;p:节点编号或当前位置;返回当前位置,节点或结构保存的查询值
