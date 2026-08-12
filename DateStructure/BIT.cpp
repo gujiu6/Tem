@@ -68,10 +68,6 @@ struct BIT1 {
         }
         return pos + 1;
     }
-    void clear() {
-        fill(bit.begin(), bit.end(), 0);
-        fill(a.begin(), a.end(), 0);
-    }
 };
 
 //2.区间修改, 区间和
@@ -122,10 +118,6 @@ struct BIT2 {
     }
     T sum(int l, int r) const{
         return sum(r) - sum(l - 1);
-    }
-    void clear() {
-        fill(bit1.begin(), bit1.end(), 0);
-        fill(bit2.begin(), bit2.end(), 0);
     }
 };
 
