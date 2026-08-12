@@ -186,12 +186,8 @@ struct LazySeg {
     void set(int l, int r, i64 x) {
         modify(1, 1, n, l, r, Tag{.has_set = true, .set = x, .add = 0});
     }
-    // 区间求和
-    i64 qry(int l, int r) {
-        return qry(1, 1, n, l, r).sum;
-    }
-    //区间信息
-    Info qry_info(int l, int r) {
+    // 区间信息
+    Info qry(int l, int r) {
         return qry(1, 1, n, l, r);
     }
 };
@@ -328,16 +324,8 @@ struct LazySeg {
     void mod(int l, int r, i64 x) {
         mod(1, 1, n, l, r, x);
     }
-    // 区间求和
-    i64 qry(int l, int r) {
-        return qry(1, 1, n, l, r).sum;
-    }
-    // 区间最大值
-    i64 max(int l, int r) {
-        return qry(1, 1, n, l, r).mx;
-    }
-    //区间信息
-    Info qry_info(int l, int r) {
+    // 区间信息
+    Info qry(int l, int r) {
         return qry(1, 1, n, l, r);
     }
 };
