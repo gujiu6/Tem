@@ -84,6 +84,6 @@ struct HLD {
         }
     }
     pair<int, int> subtree(int u) const {
-        return {in[u], in[u] + sz[u]};
+        return {in[u], in[u] + sz[u] - 1};
     }
 };
