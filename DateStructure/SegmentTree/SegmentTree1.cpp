@@ -197,7 +197,7 @@ struct AffineTag {
 struct AffineInfo {
     i64 sum = 0;
     int len = 0;
-    i64 mx = 0;
+    i64 mx = -INF;
     AffineInfo() = default;
     AffineInfo(i64 x): sum(x), len(1), mx(x) {}
     void apply(const AffineTag& t) {
