@@ -1,11 +1,13 @@
-/*
-1.单点修改线段树
-2.懒标记线段树
+/*线段树家族
+1.单点修改
+2.懒标记
 3.仿射懒更新
+4.区间最值与历史最值
 */
 #include <bits/stdc++.h>
 using namespace std;
 using i64 = long long;
+const i64 INF = 1e18;
 
 
 //1.单点修改线段树
@@ -69,7 +71,6 @@ struct Seg {
 };
 
 }
-
 
 //2.懒标记线段树
 namespace LazySeg{
@@ -313,3 +314,5 @@ struct LazySeg {
     }
 };
 }
+
+//4.区间最值与历史最值(吉司机线段树)
