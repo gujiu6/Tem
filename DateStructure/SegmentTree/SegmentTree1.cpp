@@ -120,16 +120,22 @@ struct LazySeg {
         n = _n;
         tr.assign((n << 2) + 4, Info{});
         tag.assign((n << 2) + 4, Tag{});
-        for (int p = n; p < (n << 1); ++p)
-            tr[p].len = 1;
-        for (int p = n - 1; p; --p)
-            tr[p].len = tr[p << 1].len + tr[p << 1 | 1].len;
+        if(n) build(1, 1, n);
     }
     void init(const vector<Info>& a) {
         n = a.size() - 1;
         tr.assign((n << 2) + 4, Info{});
         tag.assign((n << 2) + 4, Tag{});
         if(n) build(1, 1, n, a);
+    }
+    void build(int p, int l, int r) {
+        tr[p].len = r - l + 1;
+        tr[p].sum = 0;
+        tr[p].mx = 0;
+        if (l == r) return;
+        int mid = (l + r) >> 1;
+        build(p << 1, l, mid);
+        build(p << 1 | 1, mid + 1, r);
     }
     void build(int p, int l, int r, const vector<Info>& a) {
         if(l == r) {
@@ -183,6 +189,10 @@ struct LazySeg {
     // 区间求和
     i64 qry(int l, int r) {
         return qry(1, 1, n, l, r).sum;
+    }
+    //区间信息
+    Info qry_info(int l, int r) {
+        return qry(1, 1, n, l, r);
     }
 };
 
@@ -325,6 +335,10 @@ struct LazySeg {
     // 区间最大值
     i64 max(int l, int r) {
         return qry(1, 1, n, l, r).mx;
+    }
+    //区间信息
+    Info qry_info(int l, int r) {
+        return qry(1, 1, n, l, r);
     }
 };
 
