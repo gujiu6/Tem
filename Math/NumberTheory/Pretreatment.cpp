@@ -11,45 +11,49 @@ const int MAXX=2e5;
 
 namespace Prime{
 
-vector<i64> prime;
-//埃氏筛素数
-void Prime_Eratoasthenes(i64 n){
-    vector<bool>nums(n + 1);
-    for(int i = 2;i <= n; i++){
-        if(!nums[i]) prime.emplace_back(i);
-        for(int j = 0;j < prime.size() && i * prime[j] <= n; j++){
-            nums[i * prime[j]]=1;
-            if(i % prime[j] == 0) break;
-        }
-    }
-}
+vector<int> prime, minp;
 //欧拉筛素数
-void Prime_Euler(i64 n){
-    vector<bool> nums(n + 1);
+void Prime_Euler(int n){
+    minp.assign(n + 1, 0);
     for(int i = 2; i <= n; i++){
-        if(!nums[i]) prime.emplace_back(i);
+        if(!minp[i]) {
+            minp[i] = i;
+            prime.emplace_back(i);
+        }
         for(int j = 0;j < prime.size() && i * prime[j] <= n; j++){
-            nums[i * prime[j]]=1;
+            minp[i * prime[j]] = prime[j];
             if(i % prime[j] == 0) break;
         }
     }
 }
 //区间筛素数[l, r]
-vector<i64> segment_sieve(i64 l, i64 r) {
-    Prime_Euler(sqrt(r));
-    int n = r - l + 1;
-    vector<bool> nums(n, 1);
-    if(l == 1) nums[0] = 0;
-    for(int i = 0; i < prime.size() && 1LL * prime[i] * prime[i] <= r; i++) {
-        i64 p = prime[i];
-        i64 start = max(p * p, (l + p - 1) / p * p);
-        for(int j = start; j <= r; j += p) {
-            nums[j] = 0;
+vector<i64> SegmentPrimes(i64 l, i64 r) {
+    l = max(l, 2LL);
+    if(l > r) return {};
+    int n = sqrtl(r) + 1;
+    vector<bool> a(n + 1, true);
+    vector<bool> b(r - l + 1, true);
+    vector<int> p;
+    for(int i = 2; i <= n; i++) {
+        if(!a[i]) continue;
+        p.emplace_back(i);
+        if(1LL * i * i <= n) {
+            for(int j = i * i; j <= n; j += i) {
+                a[j] = false;
+            }
+        }
+    }
+    for (i64 x : p) {
+        i64 s = max(x * x, (l + x - 1) / x * x);
+        for (i64 y = s; y <= r; y += x) {
+            b[y - l] = false;
         }
     }
     vector<i64> ans;
-    for(int i = 0; i < n; i++) {
-        if(nums[i]) ans.push_back(l + i);
+    for(i64 x = l; x <= r; x++) {
+        if(b[x - l]) {
+            ans.emplace_back(x);
+        }
     }
     return ans;
 }
