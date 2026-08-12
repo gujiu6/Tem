@@ -15,8 +15,17 @@ template <typename T = i64>
 struct BIT1 {
     int n;
     vector<T> bit, a;
-    BIT1(int n): n(n), bit(n + 1, 0), a(n + 1, 0) {}
-    BIT1(const vector<T>& a):a(a), n(a.size() - 1), bit(n + 1, 0) {
+    BIT1(int n) {init(n);}
+    BIT1(const vector<T>& a) {init(a);}
+    void init(const int& _n) {
+        n = _n;
+        a.assign(n + 1, 0);
+        bit.assign(n + 1, 0);
+    }
+    void init(const vector<T>& _a) {
+        a = _a;
+        n = (a.size() - 1);
+        bit.assign(n + 1, 0);
         for(int i = 1; i <= n; i++) {
             bit[i] += a[i];
             int j = i + lowbit(i);
@@ -70,8 +79,17 @@ template <class T = i64>
 struct BIT2 {
     int n;
     vector<T> bit1, bit2;
-    BIT2(int n): n(n), bit1(n + 2, 0), bit2(n + 2, 0) {}
-    BIT2(const vector<T>& a): n(a.size() - 1), bit1(n + 2, 0), bit2(n + 2, 0){
+    BIT2(int n) {init(n);}
+    BIT2(const vector<T>& a){init(a);}
+    void init(const int& _n) {
+        n = _n;
+        bit1.assign(n + 2, 0);
+        bit2.assign(n + 2, 0);
+    }
+    void init(const vector<T>& a) {
+        n = a.size() - 1;
+        bit1.assign(n + 2, 0);
+        bit2.assign(n + 2, 0);
         for(int i = 1; i <= n; i++) {
             range_add(i, i, a[i]);
         }
@@ -102,7 +120,7 @@ struct BIT2 {
     T sum(int i) const {
         return sum(bit1, i) * i - sum(bit2, i);
     }
-    T sum(int l, int r) {
+    T sum(int l, int r) const{
         return sum(r) - sum(l - 1);
     }
     void clear() {
