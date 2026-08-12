@@ -184,7 +184,7 @@ struct LazySeg {
 }
 
 //3.仿射懒更新(区间加、乘、赋值、异或、取模)
-namespace {
+namespace AffineSeg{
 struct AffineTag {
     i64 mul = 1;
     i64 add = 0;
