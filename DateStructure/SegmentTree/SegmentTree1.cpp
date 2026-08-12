@@ -160,22 +160,22 @@ struct LazySeg {
         tag[p] = Tag{};
     }
     void modify(int p, int l, int r, int ql, int qr, const Tag& v) {
-        if(r < ql || l > qr) return;
         if(ql <= l && r <= qr) {
             apply(p, v);
             return;
         }
         push(p);
         int mid = (l + r) >> 1;
-        modify(p << 1, l, mid, ql, qr, v);
-        modify(p << 1 | 1, mid + 1, r, ql, qr, v);
+        if(ql <= mid) modify(p << 1, l, mid, ql, qr, v);
+        if(qr > mid) modify(p << 1 | 1, mid + 1, r, ql, qr, v);
         pull(p);
     }
     Info qry(int p, int l, int r, int ql, int qr) {
-        if(r < ql || l > qr) return Info{};
         if(ql <= l && r <= qr) return tr[p];
         push(p);
         int mid = (l + r) >> 1;
+        if(qr <= mid) return qry(p << 1, l, mid, ql, qr);
+        if(ql > mid) return qry(p << 1 | 1, mid + 1, r, ql, qr);
         return qry(p << 1, l, mid, ql, qr) + qry(p << 1 | 1, mid + 1, r, ql, qr);
     }
     // 区间加 x
@@ -273,16 +273,23 @@ struct LazySeg {
         tag[p] = Tag{};
     }
     void modify(int p, int l, int r, int ql, int qr, const Tag& v) {
-        if(r < ql || l > qr) return;
         if(ql <= l && r <= qr) {
             apply(p, v);
             return;
         }
         push(p);
         int mid = (l + r) >> 1;
-        modify(p << 1, l, mid, ql, qr, v);
-        modify(p << 1 | 1, mid + 1, r, ql, qr, v);
+        if(ql <= mid) modify(p << 1, l, mid, ql, qr, v);
+        if(qr > mid) modify(p << 1 | 1, mid + 1, r, ql, qr, v);
         pull(p);
+    }
+    Info qry(int p, int l, int r, int ql, int qr) {
+        if(ql <= l && r <= qr) return tr[p];
+        push(p);
+        int mid = (l + r) >> 1;
+        if(qr <= mid) return qry(p << 1, l, mid, ql, qr);
+        if(ql > mid) return qry(p << 1 | 1, mid + 1, r, ql, qr);
+        return qry(p << 1, l, mid, ql, qr) + qry(p << 1 | 1, mid + 1, r, ql, qr);
     }
     void mod(int p, int l, int r, int ql, int qr, i64 x) {
         if (r < ql || l > qr || tr[p].mx < x) return;
@@ -296,13 +303,6 @@ struct LazySeg {
         mod(p << 1, l, mid, ql, qr, x);
         mod(p << 1 | 1, mid + 1, r, ql, qr, x);
         pull(p);
-    }
-    Info qry(int p, int l, int r, int ql, int qr) {
-        if(r < ql || l > qr) return Info{};
-        if(ql <= l && r <= qr) return tr[p];
-        push(p);
-        int mid = (l + r) >> 1;
-        return qry(p << 1, l, mid, ql, qr) + qry(p << 1 | 1, mid + 1, r, ql, qr);
     }
     // 通用仿射:x -> mul * x + add
     void affine(int l, int r, i64 mul, i64 add) {
