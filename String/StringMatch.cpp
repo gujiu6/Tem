@@ -1,5 +1,6 @@
 /*
 1.字符串哈希
+2.KMP
 */
 #include <bits/stdc++.h>
 #include <cassert>
@@ -9,6 +10,7 @@ using i64 = long long;
 
 //1.字符串哈希(1-based)
 class StrHash {
+public:
     static constexpr i64 p1 = 1000000007;
     static constexpr i64 p2 = 1000000009;
     i64 base;
@@ -44,8 +46,6 @@ class StrHash {
         return ans;
     }
 };
-
-
 
 //2.KMP
 namespace KMP {
@@ -117,6 +117,58 @@ vector<int> borders(const string &s) {
 
 }
 
+//3.扩展KMP/Z函数
+
+//4.Manacher
+class Manacher {
+public:
+    vector<int> odd;//以i为中心的最长奇数回文半径,对应回文区间:[i-odd[i]+1, i+odd[i]-1]
+    vector<int> even;//以(i-1,i)之间的缝为中心的最长偶数回文半径,对应回文区间:[i-even[i], i+even[i]-1]
+    Manacher(const string& s) {
+        int n = s.size() - 1;
+        odd.resize(n + 1), even.resize(n + 1);
+        //奇数长度回文
+        for(int i = 1, l = 1, r = 0; i <= n; i++) {
+            int k = i > r ? 1 : min(odd[l + r - i], r - i + 1);
+            while (i - k >= 1 && i + k <= n && s[i - k] == s[i + k]){
+                k++;
+            }
+            odd[i] = k--;
+            if (i + k > r){
+                l = i - k;
+                r = i + k;
+            }
+        }
+         // 偶数长度回文
+        for(int i = 1, l = 1, r = 0; i <= n; i++) {
+            int k = i > r ? 0 : min(even[l + r - i + 1], r - i + 1);
+            while (i - k - 1 >= 1 && i + k <= n && s[i - k - 1] == s[i + k]){
+                k++;
+            }
+            even[i] = k--;
+            if (i + k > r){
+                l = i - k - 1;
+                r = i + k;
+            }
+        }
+    }
+    //s[l..r] 是否为回文
+    bool isPal(int l, int r) const {
+        int len = r - l + 1;
+        if (len & 1){
+            //奇数长度
+            int mid = (l + r) / 2;
+            return odd[mid] >= len / 2 + 1;
+        }
+        else{
+            //偶数长度
+            int mid = (l + r) / 2;
+            return even[mid + 1] >= len / 2;
+        }
+    }
+};
+
+
 //序列自动机(string)
 class SeqAuto {
 private:
@@ -158,43 +210,3 @@ public:
         return str.size();
     }
 };
-
-
-
-
-
-//Manacher
-namespace Manacher {
-
-string manacherss(string str) {
-    int n = str.size() * 2 + 1;
-    string s(n, ' ');    for(int i = 0, j = 0; i < n; i++) {
-        s[i] = (i & 1) == 0 ? '#' : str[j++];
-    }
-    return s;
-}
-
-string Manacher(string str) {
-    string s = manacherss(str);
-    int mx = 0, n = s.size(), bestLen = 0, bestCenter = 0;
-    vector<int> p(n + 1);
-    for(int i = 0, c = 0, r = 0, len; i < n; i++) {
-        len = r > i ? min(p[2 * c - i], r - i) : 1;
-        while(i + len < n && i - len >= 0 && s[i + len] == s[i - len]) {
-            len++;
-        }
-        if(i + len > r) {
-            r = i + len;
-            c = i;
-        }
-        p[i] = len;
-        if(len > bestLen) {
-            bestLen = len;
-            bestCenter = i;
-        }    
-    }
-    int start = (bestCenter - bestLen + 1) / 2;
-    return str.substr(start, bestLen - 1);
-}
-
-}
