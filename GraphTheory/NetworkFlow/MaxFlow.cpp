@@ -5,6 +5,7 @@ using i64 = long long;
 
 template <class T = int>
 class Flow {
+public:
     struct E {
         int to, rev;//to:转移目标状态;rev:反向边编号
         T cap;//剩余容量
@@ -16,7 +17,7 @@ class Flow {
     //添加有向边u->v,容量c
     int add(int u, int v, T c) {
         int id = e[u].size();
-        e[u].push_back({v, e[v].size(), c});
+        e[u].push_back({v, (int)e[v].size(), c});
         e[v].push_back({u, id, 0});
         return id;
     }
