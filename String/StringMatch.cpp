@@ -120,24 +120,39 @@ vector<int> borders(const string &s) {
 }
 
 //3.扩展KMP/Z函数
+//z[i]:记录后缀s[i,n]与整串前缀的最长公共前缀长度
 vector<int> Zfunc(const string& s) {
     int n = s.size() - 1;
     vector<int> z(n + 1);
     z[1] = n;
-    for(int i = 2, l = 1, r = 1; i <= n; i++) {
-        if(i <= r) {
-            z[i] = min(r - i + 1, z[i - l - 1]);
-        }
-        while(i + z[i] <= n && s[z[i] + 1] == s[i + z[i]]) {
-            z[i]++;
-        }
-        if(i + z[i] - 1 > r) {
+    for(int i = 2, l = 1, r = 1, len; i <= n; i++) {
+        len = r >= i ? min(r - i + 1, z[i - l + 1]) : 0;
+        while(i + len <= n && s[i + len] == s[1 + len])
+            len++;
+        if(i + len - 1 > r) {
             l = i;
-            r = i + z[i] - 1;
+            r = i + len - 1;
         }
+        z[i] = len;
     }
     return z;
 }
+vector<int> Efunc(const string& s, const string& t) {
+    int n = s.size() - 1, m = t.size() - 1;
+    vector<int> e(n + 1), z = Zfunc(t);
+    for(int i = 1, c = 1, r = 0, len; i <= n; i++) {
+        len = r >= i ? min(r - i + 1, z[i - c + 1]) : 0;
+        while(i + len <= n && len < m && s[i + len] == t[1 + len]) 
+            len++;
+        if(i + len - 1 > r) {
+            c = i;
+            r = i + len - 1;
+        }
+        e[i] = len;
+    }
+    return e;
+}
+
 //4.Manacher
 class Manacher {
 public:
