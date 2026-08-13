@@ -6,9 +6,6 @@ typedef long long ll;
 
 
 
-
-
-
 ll exgcd(ll a,ll b,ll &x,ll &y){
     if(b == 0){
         x = 1;
