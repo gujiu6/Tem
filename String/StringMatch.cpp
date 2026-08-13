@@ -158,7 +158,8 @@ class Manacher {
 public:
     vector<int> odd;//以i为中心的最长奇数回文半径,对应回文区间:[i-odd[i]+1, i+odd[i]-1]
     vector<int> even;//以(i-1,i)之间的缝为中心的最长偶数回文半径,对应回文区间:[i-even[i], i+even[i]-1]
-    Manacher(const string& s) {
+    string s;
+    Manacher(const string& s):s(s) {
         int n = s.size() - 1;
         odd.resize(n + 1), even.resize(n + 1);
         //奇数长度回文
@@ -200,6 +201,43 @@ public:
             return even[mid + 1] >= len / 2;
         }
     }
+    //最长奇数长度回文串
+    string longestOdd() const {
+        int best = 0;
+        int center = 1;
+        for (int i = 1; i < (int)odd.size(); i++) {
+            int len = 2 * odd[i] - 1;
+            if (len > best) {
+                best = len;
+                center = i;
+            }
+        }
+        int l = center - odd[center] + 1;
+        int r = center + odd[center] - 1;
+        return s.substr(l, r - l + 1);
+    }
+    // 最长偶数长度回文串
+    string longestEven() const {
+        int best = 0;
+        int center = 1;
+        for (int i = 1; i < (int)even.size(); i++) {
+            int len = 2 * even[i];
+            if (len > best) {
+                best = len;
+                center = i;
+            }
+        }
+        if (best == 0) return "";
+        int l = center - even[center];
+        int r = center + even[center] - 1;
+        return s.substr(l, r - l + 1);
+    }
+    string longest() const {
+        string a = longestOdd();
+        string b = longestEven();
+        return a.size() >= b.size() ? a : b;
+    }
+
 };
 
 
