@@ -1,6 +1,8 @@
 /*
 1.字符串哈希
 2.KMP
+3.扩展KMP/Z函数
+4.Manacher
 */
 #include <bits/stdc++.h>
 #include <cassert>
@@ -118,7 +120,24 @@ vector<int> borders(const string &s) {
 }
 
 //3.扩展KMP/Z函数
-
+vector<int> Zfunc(const string& s) {
+    int n = s.size() - 1;
+    vector<int> z(n + 1);
+    z[1] = n;
+    for(int i = 2, l = 1, r = 1; i <= n; i++) {
+        if(i <= r) {
+            z[i] = min(r - i + 1, z[i - l - 1]);
+        }
+        while(i + z[i] <= n && s[z[i] + 1] == s[i + z[i]]) {
+            z[i]++;
+        }
+        if(i + z[i] - 1 > r) {
+            l = i;
+            r = i + z[i] - 1;
+        }
+    }
+    return z;
+}
 //4.Manacher
 class Manacher {
 public:
