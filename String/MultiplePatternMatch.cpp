@@ -1,6 +1,7 @@
 /*Trie与多模式匹配
 1.Trie
 2.AC自动机
+3.AC自动机fail树应用
 */
 #include <bits/stdc++.h>
 #include <cassert>
@@ -186,3 +187,13 @@ public:
         return endpoints;
     }
 };
+//3.AC自动机fail树应用
+template <int A, class F>
+vector<vector<int>> failTree(const AhoCorasick<A, F> &ac) {
+    const auto &tr = ac.getNodes();
+    vector<vector<int>> g(tr.size());
+    for (int u = 1; u < (int)tr.size(); u++){
+        g[tr[u].suffixLink].push_back(u);
+    }
+    return g;
+}
