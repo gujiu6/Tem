@@ -1,5 +1,6 @@
 /*Trie与多模式匹配
 1.Trie
+2.AC 自动机
 */
 #include <bits/stdc++.h>
 #include <cassert>
@@ -25,6 +26,7 @@ private:
         ed.emplace_back(0);
         return ch.size() - 1;
     }
+public:
     //插入字符串,返回终点节点
     int insert(const string& s) {
         int cur = 0;
@@ -98,3 +100,5 @@ private:
         return true;
     }
 };
+
+//2.AC自动机
