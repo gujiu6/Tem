@@ -186,14 +186,13 @@ public:
     const vector<int> &getEndpoints() const {
         return endpoints;
     }
-};
-//3.AC自动机fail树应用
-template <int A, class F>
-vector<vector<int>> failTree(const AhoCorasick<A, F> &ac) {
-    const auto &tr = ac.getNodes();
-    vector<vector<int>> g(tr.size());
-    for (int u = 1; u < (int)tr.size(); u++){
-        g[tr[u].suffixLink].push_back(u);
+    //3.AC自动机fail树应用,建立FailTree:fail[u]->u
+    vector<vector<int>> failTree() const {
+        vector<vector<int>> g(nodes.size());
+        for (int u = 1; u < (int)nodes.size(); ++u) {
+            g[nodes[u].suffixLink].push_back(u);
+        }
+        return g;
     }
-    return g;
-}
+};
+//
