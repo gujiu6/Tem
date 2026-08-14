@@ -122,7 +122,7 @@ private:
 public:
     AhoCorasick(F Path): Path(Path) {}
     //加入模式串,返回终点节点
-    int add(const string &s) {
+    int insert(const string &s) {
         int cur = 0;
         for(const auto &c : s) {
             int path = Path(c);
@@ -194,5 +194,41 @@ public:
         }
         return g;
     }
+    vector<int> count(const string &text) const {
+        vector<int> cnt(nodes.size());
+        //扫描文本统计直接到达每个状态的次数
+        int state = 0;
+        for(char c : text) {
+            state = transition(state, c);
+            cnt[state]++;
+        }
+        // 建立fail树
+        auto g = failTree();
+        // BFS得到fail树遍历顺序
+        vector<int> order;
+        order.reserve(nodes.size());
+        queue<int> q;
+        q.push(0);
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            order.push_back(u);
+            for (int v : g[u]) {
+                q.push(v);
+            }
+        }
+        //逆序把子节点贡献累加到fail父节点
+        for (int i = (int)order.size() - 1; i > 0; --i) {
+            int u = order[i];
+            cnt[nodes[u].suffixLink] += cnt[u];
+        }
+        //按模式串加入顺序返回答案
+        vector<int> ans;
+        ans.reserve(endpoints.size());
+        for (int u : endpoints) {
+            ans.push_back(cnt[u]);
+        }
+        return ans;
+    }
 };
-//
+
