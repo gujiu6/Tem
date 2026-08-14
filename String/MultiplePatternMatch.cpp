@@ -109,7 +109,8 @@ public:
     struct Node {
         array<int, Alphabet> child;//Trie原始边
         array<int, Alphabet> next;//AC自动机补全后的转移
-        int suffixLink = 0;//失配指针
+        int fail = 0;//失配指针
+        bool bad = false;
         Node() {
             child.fill(-1);
             next.fill(0);
@@ -149,34 +150,29 @@ public:
             q.push(child);
         }
         while (!q.empty()) {
-            int node = q.front();
+            int cur = q.front();
             q.pop();
             //继承fail节点的自动机转移
-            nodes[node].next = nodes[nodes[node].suffixLink].next;
+            nodes[cur].bad |= nodes[nodes[cur].fail].bad;
+            nodes[cur].next = nodes[nodes[cur].fail].next;
             for(int path = 0; path < Alphabet; ++path) {
-                int child = nodes[node].child[path];
+                int child = nodes[cur].child[path];
                 if(child == -1) {
                     continue;
                 }
                 // 建立 fail 指针
-                nodes[child].suffixLink = nodes[node].next[path];
+                nodes[child].fail = nodes[cur].next[path];
                 // 真实边覆盖自动机默认转移
-                nodes[node].next[path] = child;
+                nodes[cur].next[path] = child;
                 q.push(child);
             }
         }
     }
-    // 根据离散后的字符编号进行转移
-    int transition(int node, int path) const {
-        assert(0 <= node && node < (int)nodes.size());
-        assert(0 <= path && path < Alphabet);
-        return nodes[node].next[path];
-    }
     //根据字符直接进行转移
-    int transition(int node, char c) const {
+    int transition(int cur, char c) const {
         int path = Path(c);
         assert(0 <= path && path < Alphabet);
-        return nodes[node].next[path];
+        return nodes[cur].next[path];
     }
     //获取所有节点
     const vector<Node> &getNodes() const {
@@ -190,7 +186,7 @@ public:
     vector<vector<int>> failTree() const {
         vector<vector<int>> g(nodes.size());
         for (int u = 1; u < (int)nodes.size(); ++u) {
-            g[nodes[u].suffixLink].push_back(u);
+            g[nodes[u].fail].push_back(u);
         }
         return g;
     }
@@ -220,7 +216,7 @@ public:
         //逆序把子节点贡献累加到fail父节点
         for (int i = (int)order.size() - 1; i > 0; --i) {
             int u = order[i];
-            cnt[nodes[u].suffixLink] += cnt[u];
+            cnt[nodes[u].fail] += cnt[u];
         }
         //按模式串加入顺序返回答案
         vector<int> ans;
@@ -229,6 +225,9 @@ public:
             ans.push_back(cnt[u]);
         }
         return ans;
+    }
+    bool hit(int cur) const {
+        return nodes[cur].bad;
     }
 };
 
