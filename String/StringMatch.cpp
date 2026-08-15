@@ -173,8 +173,8 @@ public:
         for (int i = 1, j = 1; i <= m; i++) {
             ss[i] = (i & 1) ? '#' : s[j++];
         }
-        //c:当前最右回文的中心, 当前最右回文的右边界的下一位
-        for (int i = 1, c = 0, r = 0, len; i <= m; i++) {
+        //c:当前最右回文的中心;r:当前最右回文的右边界的下一位
+        for (int i = 1, c = 1, r = 1, len; i <= m; i++) {
             len = r > i ? min(p[2 * c - i], r - i) : 1;
             while (i - len >= 1 && i + len <= m && ss[i - len] == ss[i + len]) {
                 len++;
@@ -184,6 +184,7 @@ public:
                 r = i + len;
             }
             p[i] = len;
+            //原串回文长度:p[i]-1
         }
     }
     //最长奇数长度回文子串
