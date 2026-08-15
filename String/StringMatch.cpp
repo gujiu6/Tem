@@ -157,91 +157,72 @@ vector<int> Efunc(const string& s, const string& t) {
 
 }
 
-//4.Manacher
+//4.Manacher(zuo神)
 class Manacher {
 public:
-    vector<int> odd;//以i为中心的最长奇数回文半径,对应回文区间:[i-odd[i]+1, i+odd[i]-1]
-    vector<int> even;//以(i-1,i)之间的缝为中心的最长偶数回文半径,对应回文区间:[i-even[i], i+even[i]-1]
     string s;
-    Manacher(const string& s):s(s) {
-        int n = s.size() - 1;
-        odd.resize(n + 1), even.resize(n + 1);
-        //奇数长度回文
-        for(int i = 1, l = 1, r = 0; i <= n; i++) {
-            int len = i > r ? 1 : min(odd[l + r - i], r - i + 1);
-            while (i - len >= 1 && i + len <= n && s[i - len] == s[i + len]){
+    string ss;//ss[1..m] = #a#b#c#
+    vector<int> p;//以 ss[i] 为中心的回文半径
+    int n, m;
+    Manacher(const string& str) : s(str) {
+        n = s.size() - 1;
+        m = 2 * n + 1;
+        ss.assign(m + 1, '#');
+        p.assign(m + 1, 0);
+        // 构造 #a#b#c#
+        for (int i = 1, j = 1; i <= m; i++) {
+            ss[i] = (i & 1) ? '#' : s[j++];
+        }
+        int c = 0, r = 0;
+        for (int i = 1; i <= m; i++) {
+            int len = r > i ? min(p[2 * c - i], r - i) : 1;
+            while (i - len >= 1 && i + len <= m && ss[i - len] == ss[i + len]) {
                 len++;
             }
-            odd[i] = len--;
-            if (i + len > r){
-                l = i - len;
+            if (i + len > r) {
+                c = i;
                 r = i + len;
             }
-        }
-         // 偶数长度回文
-        for(int i = 1, l = 1, r = 0; i <= n; i++) {
-            int len = i > r ? 0 : min(even[l + r - i + 1], r - i + 1);
-            while (i - len - 1 >= 1 && i + len <= n && s[i - len - 1] == s[i + len]){
-                len++;
-            }
-            even[i] = len--;
-            if (i + len > r){
-                l = i - len - 1;
-                r = i + len;
-            }
+            p[i] = len;
         }
     }
-    //s[l..r] 是否为回文
-    bool isPal(int l, int r) const {
-        int len = r - l + 1;
-        if (len & 1){
-            //奇数长度
-            int mid = (l + r) / 2;
-            return odd[mid] >= len / 2 + 1;
-        }
-        else{
-            //偶数长度
-            int mid = (l + r) / 2;
-            return even[mid + 1] >= len / 2;
-        }
-    }
-    //最长奇数长度回文串
+    //最长奇数长度回文子串
     string longestOdd() const {
-        int best = 0;
-        int center = 1;
-        for (int i = 1; i < (int)odd.size(); i++) {
-            int len = 2 * odd[i] - 1;
-            if (len > best) {
-                best = len;
-                center = i;
+        int pos = 1;
+        for (int i = 1; i <= m; i += 2) {
+            if (p[i] > p[pos]) {
+                pos = i;
             }
         }
-        int l = center - odd[center] + 1;
-        int r = center + odd[center] - 1;
-        return s.substr(l, r - l + 1);
+        int len = p[pos] - 1;
+        int l = (pos - p[pos] + 1) / 2 + 1;
+        return s.substr(l - 1, len);
     }
-    // 最长偶数长度回文串
+    //最长偶数长度回文子串
     string longestEven() const {
-        int best = 0;
-        int center = 1;
-        for (int i = 1; i < (int)even.size(); i++) {
-            int len = 2 * even[i];
-            if (len > best) {
-                best = len;
-                center = i;
+        int pos = 2;
+        for (int i = 2; i <= m; i += 2) {
+            if (p[i] > p[pos]) {
+                pos = i;
             }
         }
-        if (best == 0) return "";
-        int l = center - even[center];
-        int r = center + even[center] - 1;
-        return s.substr(l, r - l + 1);
+        int len = p[pos] - 1;
+        int l = (pos - p[pos] + 1) / 2 + 1;
+        return s.substr(l - 1, len);
     }
+    //最长回文子串
     string longest() const {
         string a = longestOdd();
         string b = longestEven();
         return a.size() >= b.size() ? a : b;
     }
-
+    //判断原字符串 s[l..r] 是否为回文串
+    bool isPal(int l, int r) const {
+        if(l > r || l < 1 || r > n) {
+            return false;
+        }
+        int center = l + r;//原串 [l,r] 在处理串中的中心
+        int len = r - l + 1;//原串长度
+        return p[center] >= len + 1;
+    }
 };
-
-
