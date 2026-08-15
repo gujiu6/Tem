@@ -164,26 +164,26 @@ public:
         odd.resize(n + 1), even.resize(n + 1);
         //奇数长度回文
         for(int i = 1, l = 1, r = 0; i <= n; i++) {
-            int k = i > r ? 1 : min(odd[l + r - i], r - i + 1);
-            while (i - k >= 1 && i + k <= n && s[i - k] == s[i + k]){
-                k++;
+            int len = i > r ? 1 : min(odd[l + r - i], r - i + 1);
+            while (i - len >= 1 && i + len <= n && s[i - len] == s[i + len]){
+                len++;
             }
-            odd[i] = k--;
-            if (i + k > r){
-                l = i - k;
-                r = i + k;
+            odd[i] = len--;
+            if (i + len > r){
+                l = i - len;
+                r = i + len;
             }
         }
          // 偶数长度回文
         for(int i = 1, l = 1, r = 0; i <= n; i++) {
-            int k = i > r ? 0 : min(even[l + r - i + 1], r - i + 1);
-            while (i - k - 1 >= 1 && i + k <= n && s[i - k - 1] == s[i + k]){
-                k++;
+            int len = i > r ? 0 : min(even[l + r - i + 1], r - i + 1);
+            while (i - len - 1 >= 1 && i + len <= n && s[i - len - 1] == s[i + len]){
+                len++;
             }
-            even[i] = k--;
-            if (i + k > r){
-                l = i - k - 1;
-                r = i + k;
+            even[i] = len--;
+            if (i + len > r){
+                l = i - len - 1;
+                r = i + len;
             }
         }
     }
