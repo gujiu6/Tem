@@ -173,13 +173,14 @@ public:
         for (int i = 1, j = 1; i <= m; i++) {
             ss[i] = (i & 1) ? '#' : s[j++];
         }
-        for (int i = 1, l = 0, r = 0, len; i <= m; i++) {
-            len = r > i ? min(p[2 * l - i], r - i) : 1;
+        //c:当前最右回文的中心, 当前最右回文的右边界的下一位
+        for (int i = 1, c = 0, r = 0, len; i <= m; i++) {
+            len = r > i ? min(p[2 * c - i], r - i) : 1;
             while (i - len >= 1 && i + len <= m && ss[i - len] == ss[i + len]) {
                 len++;
             }
             if (i + len > r) {
-                l = i;
+                c = i;
                 r = i + len;
             }
             p[i] = len;
