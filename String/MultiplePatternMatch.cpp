@@ -231,3 +231,44 @@ public:
     }
 };
 
+//子序列自动机(string)
+class SeqAuto {
+private:
+    static const int SIGMA = 26;
+    vector<array<int, SIGMA>> nxt;
+    string s;
+    int n;
+public:
+    SeqAuto(string str) : s(" " + str), n(str.size()){
+        nxt.assign(n + 2, {});
+        for(int c = 0; c < SIGMA; c++) {
+            nxt[n + 1][c] = n + 1; 
+        }
+        for(int i = n; i >= 1; i--) {
+            nxt[i] = nxt[i + 1];
+            nxt[i][s[i] - 'a'] = i;
+        }
+    }
+    //str为s的子序列
+    bool check(string str) {
+        int pos = 1;
+        for(char ch : str) {
+            pos = nxt[pos][ch - 'a'];
+            if(pos == n + 1)
+                return false;
+            pos++;
+        }
+        return true;
+    }
+    //str最长匹配s的前缀序列
+    int match(string str) {
+        int pos = 1;
+        for(int i = 0; i < str.size(); i++){
+            pos = nxt[pos][str[i] - 'a'];
+            if(pos == n + 1)
+                return i;
+            pos++;
+        }
+        return str.size();
+    }
+};
