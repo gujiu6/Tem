@@ -164,7 +164,7 @@ public:
     string ss;//ss[1..m] = #a#b#c#
     vector<int> p;//以 ss[i] 为中心的回文半径
     int n, m;
-    Manacher(const string& str) : s(str) {
+    Manacher(const string& s) : s(s) {
         n = s.size() - 1;
         m = 2 * n + 1;
         ss.assign(m + 1, '#');
@@ -173,14 +173,13 @@ public:
         for (int i = 1, j = 1; i <= m; i++) {
             ss[i] = (i & 1) ? '#' : s[j++];
         }
-        int c = 0, r = 0;
-        for (int i = 1; i <= m; i++) {
-            int len = r > i ? min(p[2 * c - i], r - i) : 1;
+        for (int i = 1, l = 0, r = 0, len; i <= m; i++) {
+            len = r > i ? min(p[2 * l - i], r - i) : 1;
             while (i - len >= 1 && i + len <= m && ss[i - len] == ss[i + len]) {
                 len++;
             }
             if (i + len > r) {
-                c = i;
+                l = i;
                 r = i + len;
             }
             p[i] = len;
