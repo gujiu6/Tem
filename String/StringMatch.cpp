@@ -157,7 +157,6 @@ vector<int> Efunc(const string& s, const string& t) {
 
 }
 
-
 //4.Manacher
 class Manacher {
 public:

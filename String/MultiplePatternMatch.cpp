@@ -2,6 +2,7 @@
 1.Trie
 2.AC自动机
 3.AC自动机fail树应用
+4.子序列自动机(string)
 */
 #include <bits/stdc++.h>
 #include <cassert>
@@ -231,7 +232,7 @@ public:
     }
 };
 
-//子序列自动机(string)
+//4.子序列自动机(string)
 class SeqAuto {
 private:
     static const int SIGMA = 26;
