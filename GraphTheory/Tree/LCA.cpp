@@ -142,8 +142,6 @@ private:
 
 }
 
-
-
 //3.Tarjan离线LCA
 vector<int> TarjanLCA(const vector<vector<Edge>>& g, const vector<pair<int, int>> &q, int root = 1) {
     //q:按输入顺序给出的节点对询问;按输入询问顺序返回每对节点的最近公共祖先

@@ -6,6 +6,7 @@
         子树查询subtree      O(1)                                O(1)
         HLD+线段树          路径修改:O(log²n), 子树修改O(log n)
 2.换根树剖
+3.虚树
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -127,4 +128,103 @@ private:
     }
 };
 
+//3.虚树
+namespace {
 
+class LCA {
+public:
+    int n, lg2, tim = 0;
+    vector<int> dep, in, out;
+    vector<vector<int>> up;
+    LCA(const vector<vector<Edge>>& g, int root = 1)
+    : n(g.size() - 1), lg2(bit_width((unsigned)max(1, n))), dep(n + 1), in(n + 1), out(n + 1), up(lg2, vector<int>(n + 1)) {
+        auto dfs = [&](auto &&self, int u, int f)->void {
+            in[u] = ++tim;
+            dep[u] = dep[f] + 1;
+            up[0][u] = f;
+            for(int p = 1; p < lg2; p++) {
+                up[p][u] = up[p - 1][up[p - 1][u]];
+            }
+            for(const auto &e : g[u]) {
+                if(e.v == f) continue;
+                self(self, e.v, u);
+            }
+            out[u] = tim;
+        };
+        if(n) dfs(dfs, root, 0);
+    }
+    //u是否为v的祖先
+    bool ancestor(int u, int v) const {
+        return in[u] <= in[v] && out[v] <= out[u];
+    }
+    //u向上跳k层
+    int jump(int u, int k) const {
+        if(k >= dep[u]) return -1;
+        for(int p = 0; k; p++, k >>= 1) {
+            if(k & 1) {
+                u = up[p][u];
+            }
+        }
+        return u;
+    }
+    //lca
+    int lca(int u, int v) const {
+        if(ancestor(u, v)) return u;
+        if(ancestor(v, u)) return v;
+        for(int p = lg2 - 1; p >= 0; p--) {
+            if(!ancestor(up[p][u], v)) {
+                u = up[p][u];
+            }
+        }
+        return up[0][u];
+    }
+    //u到v的距离(边数)
+    int dist(int u, int v) const {
+        int f = lca(u, v);
+        return dep[u] + dep[v] - 2 * dep[f];
+    }
+    // 路径u->v上的第k(0-base)个节点
+    int pathKth(int u, int v, int k) const {
+        int p = lca(u, v);
+        int a = dep[u] - dep[p];
+        int b = dep[v] - dep[p];
+        if(k < 0 || k > a + b) return -1;
+        if(k <= a) return jump(u, k);
+        return jump(v, a + b - k);
+    }
+};
+struct VTree {
+    int root = -1;
+    vector<int> nodes;//节点池或有效节点列表
+    vector<DEdge> edges;
+};
+VTree VirtualTree(vector<int> a, const LCA& lca) {
+    if(a.empty()) return {};
+    sort(a.begin(), a.end(), [&](auto x, auto y){
+        return lca.in[x] < lca.in[y];
+    });
+    a.erase(unique(a.begin(), a.end()), a.end());
+    int n = a.size();
+    for(int i = 1; i < n; i++) {
+        a.push_back(lca.lca(a[i - 1], a[i]));
+    }
+    sort(a.begin(), a.end(), [&](auto x, auto y){
+        return lca.in[x] < lca.in[y];
+    });
+    a.erase(unique(a.begin(), a.end()), a.end());
+    vector<int> st;
+    VTree ans;
+    ans.root = a[0];
+    ans.nodes = a;
+    for(int u : a) {
+        while(!st.empty() && !lca.ancestor(st.back(), u)) {
+            st.pop_back();
+        }
+        if(!st.empty()) {
+            ans.edges.push_back({st.back(), u});
+        }
+        st.push_back(u);
+    }
+    return  ans;
+}
+}
