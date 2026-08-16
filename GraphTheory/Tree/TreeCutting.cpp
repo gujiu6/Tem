@@ -129,7 +129,7 @@ private:
 };
 
 //3.虚树
-namespace {
+namespace VTree {
 
 class LCA {
 public:
