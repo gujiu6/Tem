@@ -31,7 +31,7 @@ public:
             }
             out[u] = tim;
         };
-        if(n) dfs(dfs, root, 0);
+        if(n) dfs(dfs, root, root);
     }
     //u是否为v的祖先
     bool ancestor(int u, int v) const {
