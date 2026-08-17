@@ -36,8 +36,6 @@ public:
     }
 };
 
-
-
 //4.笛卡尔树Cartesian
 namespace Cartesian {
 
