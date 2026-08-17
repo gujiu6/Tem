@@ -23,8 +23,8 @@ i64 power(i64 a, i64 b, i64 mod = MOD) {
 	return ans;
 }
 //费马小
-i64 getinv(int n, int MOD = 1e9+7){
-    return power(n, MOD - 2, MOD);
+i64 getinv(int n, int mod = MOD){
+    return power(n, mod - 2, mod);
 }
 
 //矩阵快速幂
