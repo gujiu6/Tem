@@ -45,7 +45,7 @@ struct Cart {
     int root = 0;
     vector<int> fa, left, right;
 };
-template <class T>
+template <class T = int>
 Cart Cartesian(const vector<T>& a) {
     int n = (int)a.size() - 1;
     Cart c{0, vector<int>(n + 1, 0), vector<int>(n + 1, 0), vector<int>(n + 1, 0)};
