@@ -1,5 +1,6 @@
 /*RMQ与静态区间结构
 1.普通ST
+4.笛卡尔树Cartesian
 */
 #include <bits/stdc++.h>
 #include <cassert>
@@ -34,3 +35,45 @@ public:
         return ans;
     }
 };
+
+
+
+//4.笛卡尔树Cartesian
+namespace Cartesian {
+
+struct Cart {
+    int root = 0;
+    vector<int> fa, left, right;
+};
+template <class T>
+Cart Cartesian(const vector<T>& a) {
+    int n = (int)a.size() - 1;
+    Cart c{0, vector<int>(n + 1, 0), vector<int>(n + 1, 0), vector<int>(n + 1, 0)};
+    vector<int> s;
+    s.reserve(n);
+    for(int i = 1; i <= n; i++) {
+        int last = 0;
+        //维护单调不降栈
+        while(!s.empty() && a[i] < a[s.back()]) {
+            last = s.back();
+            s.pop_back();
+        }
+        //i成为栈顶的右儿子
+        if(!s.empty()) {
+            c.fa[i] = s.back();
+            c.right[s.back()] = i;
+        }
+        //最后弹出的节点成为i的左儿子
+        if(last != 0) {
+            c.fa[last] = i;
+            c.left[i] = last;
+        }
+        s.push_back(i);
+    }
+    if(n) {
+        c.root = s[0];
+    }
+    return c;
+}
+
+}
