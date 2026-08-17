@@ -38,16 +38,16 @@ private:
             visitSubtree(e.v, u, callback);
         }
     }
-    template <class Add, class Remove, class Answer>
-    void dfs(int u, bool keep, Add& add, Remove& remove, Answer& answer) {
+    template <class Add, class Del, class Ans>
+    void dfs(int u, bool keep, Add& add, Del& del, Ans& ans) {
         //先处理所有轻儿子，并清除贡献
         for (const auto &e : g[u]) {
             if (e.v == fa[u] || e.v == son[u]) continue;
-            dfs(e.v, false, add, remove, answer);
+            dfs(e.v, false, add, del, ans);
         }
         //再处理重儿子，并保留贡献
         if (son[u] != -1) {
-            dfs(son[u], true, add, remove, answer);
+            dfs(son[u], true, add, del, ans);
         }
         //把所有轻儿子的贡献重新加入
         for (const auto &e : g[u]) {
@@ -57,16 +57,16 @@ private:
         //加入自己
         add(u);
         //此时当前状态就是 subtree(u)
-        answer(u);
+        ans(u);
         //如果不需要保留，则清除整棵子树
         if (!keep) {
-            visitSubtree(u, fa[u], remove);
+            visitSubtree(u, fa[u], del);
         }
     }
 public:
-    template <class Add, class Remove, class Answer>
-    void run(Add& add, Remove& remove, Answer& answer, int root = 1) {
+    template <class Add, class Del, class Ans>
+    void run(Add& add, Del& del, Ans& ans, int root = 1) {
         prepare(root, root);
-        dfs(root, false, add, remove, answer);
+        dfs(root, false, add, del, ans);
     }
 };
