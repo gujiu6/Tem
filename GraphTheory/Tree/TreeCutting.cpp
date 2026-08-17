@@ -131,7 +131,6 @@ private:
 //3.虚树
 namespace VTree {
 
-//1.倍增LCA
 class LCA {
 public:
     int n, lg2, tim = 0;
