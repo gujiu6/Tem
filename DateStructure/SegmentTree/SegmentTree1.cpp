@@ -16,7 +16,9 @@ namespace Seg {
 struct Sum {
     i64 val = 0;
     Sum() = default;
-    Sum(i64 x): val(x) {}
+    Sum(i64 x) {
+        val = x;
+    }
     friend Sum operator+ (const Sum& a, const Sum& b) {
         return Sum(a.val + b.val);
     }
@@ -98,7 +100,10 @@ struct Info {
     i64 sum = 0;
     int len = 0;
     Info() = default;
-    Info(i64 x): sum(x), len(1) {}
+    Info(i64 x) {
+        sum = x;
+        len = 1;
+    }
     void apply(const Tag& t) {
         if(t.has_set) {
             sum = t.set * len;
@@ -214,7 +219,11 @@ struct AffineInfo {
     int len = 0;
     i64 mx = -INF;
     AffineInfo() = default;
-    AffineInfo(i64 x): sum(x), len(1), mx(x) {}
+    AffineInfo(i64 x) {
+        sum = x;
+        mx = x;
+        len = 1;
+    }
     void apply(const AffineTag& t) {
         sum = sum * t.mul + t.add * len;
         mx = mx * t.mul + t.add;

@@ -38,7 +38,7 @@ public:
     }
 };
 
-//4.笛卡尔树Cartesian
+//4.笛卡尔树Cartesian, index:BST, value:Heap
 namespace Cartesian {
 
 struct Cart {
