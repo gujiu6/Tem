@@ -24,7 +24,7 @@ private:
         seed ^= seed << 5;
         return seed;
     }
-    int size(int u) {
+    int size(int u) const {
         return u ? t[u].sz : 0;
     }
     void pull(int u) {
@@ -189,7 +189,7 @@ public:
         }
         return ans;
     }
-    //是否存在x
+    //x的数量
     int count(const T& x) const {
         int u = root;
         while(u) {
