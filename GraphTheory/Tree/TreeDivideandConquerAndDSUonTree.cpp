@@ -14,12 +14,13 @@ class DsuOnTree {
 public:
     int n;
     vector<vector<Edge>> g;
-    vector<int> fa, sz, son;
-    DsuOnTree(const vector<vector<Edge>>& g): n(g.size() - 1), g(g), fa(n + 1), sz(n + 1), son(n + 1, -1) {}
+    vector<int> fa, sz, son, dep;
+    DsuOnTree(const vector<vector<Edge>>& g): n(g.size() - 1), g(g), fa(n + 1), sz(n + 1),dep(n + 1), son(n + 1, -1) {}
 private:
     void prepare(int u, int f) {
         fa[u] = f;
         sz[u] = 1;
+        dep[u] = dep[f] + 1;
         for (const auto &e : g[u]) {
             if (e.v == f) continue;
             prepare(e.v, u);
