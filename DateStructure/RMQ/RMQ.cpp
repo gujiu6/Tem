@@ -1,6 +1,8 @@
-/*RMQ与静态区间结构
-1.普通ST
-4.笛卡尔树Cartesian
+/*RMQ与静态区间结构                   时间复杂度       空间复杂度
+1.普通ST                                            O(nlogn)
+    建表                            O(nlogn)
+    查询                            O(1)
+4.笛卡尔树Cartesian                  O(n)           O(n)
 */
 #include <bits/stdc++.h>
 #include <cassert>
