@@ -136,8 +136,9 @@ public:
     int n, lg2, tim = 0;
     vector<int> dep, in, out;
     vector<vector<int>> up;
-    LCA(const vector<vector<Edge>>& g, int root = 1)
-    : n(g.size() - 1), lg2(bit_width((unsigned)max(1, n))), dep(n + 1), in(n + 1), out(n + 1), up(lg2, vector<int>(n + 1)) {
+    vector<i64> dis;
+    LCA(const vector<vector<WEdge>>& g, int root = 1)
+    : n(g.size() - 1), lg2(bit_width((unsigned)max(1, n))), dep(n + 1), in(n + 1), out(n + 1), dis(n + 1), up(lg2, vector<int>(n + 1)) {
         auto dfs = [&](auto &&self, int u, int f)->void {
             in[u] = ++tim;
             dep[u] = dep[f] + 1;
@@ -147,6 +148,7 @@ public:
             }
             for(const auto &e : g[u]) {
                 if(e.v == f) continue;
+                dis[e.v] = dis[u] + e.w;
                 self(self, e.v, u);
             }
             out[u] = tim;
@@ -182,6 +184,11 @@ public:
     int dist(int u, int v) const {
         int f = lca(u, v);
         return dep[u] + dep[v] - 2 * dep[f];
+    }
+    //u到v的边权和(边数)
+    i64 distW(int u, int v) const {
+        int f = lca(u, v);
+        return dis[u] + dis[v] - 2 * dis[f];
     }
     // 路径u->v上的第k(0-base)个节点
     int pathKth(int u, int v, int k) const {
