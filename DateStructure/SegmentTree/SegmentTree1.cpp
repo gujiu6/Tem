@@ -136,7 +136,6 @@ private:
     void build(int p, int l, int r) {
         tr[p].len = r - l + 1;
         tr[p].sum = 0;
-        tr[p].mx = 0;
         if (l == r) return;
         int mid = (l + r) >> 1;
         build(p << 1, l, mid);
@@ -186,11 +185,11 @@ private:
 public:
     // 区间加 x
     void add(int l, int r, i64 x) {
-        modify(1, 1, n, l, r, Tag{.has_set = false, .set = 0, .add = x});
+        modify(1, 1, n, l, r, Tag{.has_set = false, .add = x, .set = 0});
     }
     // 区间赋值 x
     void set(int l, int r, i64 x) {
-        modify(1, 1, n, l, r, Tag{.has_set = true, .set = x, .add = 0});
+        modify(1, 1, n, l, r, Tag{.has_set = true, .add = 0, .set = x});
     }
     // 区间信息
     Info qry(int l, int r) {
