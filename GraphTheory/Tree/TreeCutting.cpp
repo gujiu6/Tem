@@ -131,18 +131,20 @@ private:
 //3.虚树
 namespace VTree {
 
+//1.倍增LCA
 class LCA {
 public:
     int n, lg2, tim = 0;
-    vector<int> dep, in, out;
+    vector<int> dep, in, out, sz;
     vector<vector<int>> up;
     vector<i64> dis;
     LCA(const vector<vector<WEdge>>& g, int root = 1)
-    : n(g.size() - 1), lg2(bit_width((unsigned)max(1, n))), dep(n + 1), in(n + 1), out(n + 1), dis(n + 1), up(lg2, vector<int>(n + 1)) {
+    : n(g.size() - 1), lg2(bit_width((unsigned)max(1, n))), dep(n + 1), in(n + 1), out(n + 1), dis(n + 1), sz(n + 1), up(lg2, vector<int>(n + 1)) {
         auto dfs = [&](auto &&self, int u, int f)->void {
             in[u] = ++tim;
             dep[u] = dep[f] + 1;
             up[0][u] = f;
+            sz[u] = 1;
             for(int p = 1; p < lg2; p++) {
                 up[p][u] = up[p - 1][up[p - 1][u]];
             }
@@ -150,6 +152,7 @@ public:
                 if(e.v == f) continue;
                 dis[e.v] = dis[u] + e.w;
                 self(self, e.v, u);
+                sz[u] += sz[e.v];
             }
             out[u] = tim;
         };
