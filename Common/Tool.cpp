@@ -12,7 +12,7 @@ using i64 = long long;
 
 
 //快速幂
-i64 power(i64 a, i64 b, i64 mod = 1e9+7) {
+i64 power(i64 a, i64 b, i64 mod = MOD) {
 	i64 ans = 1;
 	a = (a % mod + mod) % mod;
 	while(b > 0) {
