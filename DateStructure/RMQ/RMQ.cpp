@@ -39,6 +39,7 @@ public:
 };
 
 //4.笛卡尔树Cartesian, index:BST, value:Heap
+//中序遍历仍是原下标顺序
 namespace Cartesian {
 
 struct Cart {
