@@ -1,29 +1,15 @@
 /*
-
+1.快读快写
+2.i128转十进制字符串
 */
 #include <bits/stdc++.h>
 using namespace std;
 const int MAXX = 2e5, MOD = 1e9+7;
 using i64 = long long;
 
+//1.快读快写
+namespace fast {
 
-
-
-
-//整数开方
-i64 my_sqrt(i64 a)
-{
-    i64 l = 0, r = 5e9+10;
-    while(r - l > 1)
-    {
-        i64 mid = (l + r) / 2;
-        if(1ll * mid * mid <= a)l = mid;
-        else r = mid;
-    }
-    return l;
-}
-
-//快读
 i64 read(){
     bool flag = false;
     i64 ans = 0;
@@ -38,7 +24,6 @@ i64 read(){
     }
     return flag ? -ans : ans;
 }
-//快写
 void write(i64 x){
     if(x == 0){
         putchar('0');
@@ -58,7 +43,10 @@ void write(i64 x){
         putchar(ch[i]);
     }
 }
-//i128转十进制字符串
+
+}
+
+//2.i128转十进制字符串
 string toString(__int128 x){
     if (!x){
         return "0";
