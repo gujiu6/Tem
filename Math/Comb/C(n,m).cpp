@@ -14,7 +14,7 @@ private:
     vector<i64>f, inv;
     int mod;
 public:
-    i64 power(i64 a, i64 b){
+    i64 pow(i64 a, i64 b){
         i64 ans = 1;
         a %= mod;
         while(b > 0){
@@ -28,7 +28,7 @@ public:
         for(int i = 1; i <= n; i++){
             f[i] = f[i-1] * i % mod;
         }
-        inv[n] = power(f[n], mod - 2);
+        inv[n] = pow(f[n], mod - 2);
         for(int i = n - 1; i >= 0; i--){
             inv[i] = inv[i + 1] * (i + 1) % mod;
         }
@@ -43,7 +43,7 @@ public:
     }
     i64 prefix_sum_C(int n, int m) {
         if (m < 0) return 0;
-        if (m >= n) return power(2,n);
+        if (m >= n) return pow(2,n);
         i64 sum = 0;
         for (int k = 0; k <= m; k++) {
             sum = (sum + C(n, k)) % mod;
@@ -62,7 +62,7 @@ private:
     vector<i64>f, inv;
     int mod;
 public:
-    i64 power(i64 a, i64 b){
+    i64 pow(i64 a, i64 b){
         i64 ans = 1;
         a %= mod;
         while(b > 0){
@@ -76,7 +76,7 @@ public:
         for(int i = 1; i < mod; i++){
             f[i] = f[i-1] * i % mod;
         }
-        inv[mod - 1] = power(f[mod], mod - 2);
+        inv[mod - 1] = pow(f[mod], mod - 2);
         for(int i = mod - 2; i >= 0; i--){
             inv[i] = inv[i + 1] * (i + 1) % mod;
         }
@@ -91,7 +91,7 @@ public:
     }
     i64 prefix_sum_C(int n, int m) {
         if (m < 0) return 0;
-        if (m >= n) return power(2,n);
+        if (m >= n) return pow(2,n);
         i64 sum = 0;
         for (int k = 0; k <= m; k++) {
             sum = (sum + C(n, k)) % mod;

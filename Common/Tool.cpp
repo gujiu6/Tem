@@ -12,7 +12,7 @@ using i64 = long long;
 
 
 //快速幂
-i64 power(i64 a, i64 b, i64 mod = MOD) {
+i64 pow(i64 a, i64 b, i64 mod = MOD) {
 	i64 ans = 1;
 	a = (a % mod + mod) % mod;
 	while(b > 0) {
@@ -24,7 +24,7 @@ i64 power(i64 a, i64 b, i64 mod = MOD) {
 }
 //费马小
 i64 getinv(int n, int mod = MOD){
-    return power(n, mod - 2, mod);
+    return pow(n, mod - 2, mod);
 }
 
 //矩阵快速幂
@@ -53,7 +53,6 @@ vector<vector<i64>> power(vector<vector<i64>> A,int p,const vector<vector<i64>>&
     }
     return ans;
 }
-
 
 //整数开方
 i64 my_sqrt(i64 a)
@@ -102,4 +101,22 @@ void write(i64 x){
     for(int i = index - 1; i >= 0; i--) {
         putchar(ch[i]);
     }
+}
+//i128转十进制字符串
+string toString(__int128 x){
+    if (!x){
+        return "0";
+    }
+    auto neg = x < 0;
+    auto y = neg ? 0 - (unsigned __int128)x : (unsigned __int128)x;
+    string s;
+    while (y){
+        s.push_back(char('0' + y % 10));
+        y /= 10;
+    }
+    if (neg){
+        s.push_back('-');
+    }
+    reverse(s.begin(), s.end());
+    return s;
 }
