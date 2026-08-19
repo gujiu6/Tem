@@ -1,7 +1,7 @@
 /*
 1.快读快写
 2.i128转十进制字符串
-3.防hack哈希
+3.手写Hash函数
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -68,8 +68,10 @@ string toString(__int128 x){
     return s;
 }
 
-//3.防hack哈希
-class CustomHash{
+//3.手写Hash函数
+namespace {
+//重量Hash(防Hack)
+class Hash{
 private:
     static u64 mix(u64 x){
         // SplitMix64 finalizer：雪崩扰动
@@ -113,3 +115,24 @@ public:
         return h;
     }
 };
+//快速hash(防超时)
+struct Key {
+    int pos;
+    i64 mask;
+    int rem;
+    bool operator==(const Key& other) const {
+        return pos == other.pos && mask == other.mask && rem == other.rem;
+    }
+};
+class Hash2 {
+public:
+    size_t operator()(const Key& x) const {
+        size_t h1 = hash<int>{}(x.pos);
+        size_t h2 = hash<i64>{}(x.mask);
+        size_t h3 = hash<int>{}(x.rem);
+        return h1 ^ (h2 << 1) ^ (h3 << 2);
+    }
+};
+}
+
+
