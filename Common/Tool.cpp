@@ -8,9 +8,6 @@ using i64 = long long;
 
 
 
-
-
-
 //快速幂
 i64 pow(i64 a, i64 b, i64 mod = MOD) {
 	i64 ans = 1;
@@ -25,33 +22,6 @@ i64 pow(i64 a, i64 b, i64 mod = MOD) {
 //费马小
 i64 getinv(int n, int mod = MOD){
     return pow(n, mod - 2, mod);
-}
-
-//矩阵快速幂
-vector<vector<i64>> mul(const vector<vector<i64>>& a,const vector<vector<i64>>& b) {
-    //a : n * k, b : n * m
-    int n = a.size();
-    int k = a[0].size();
-    int m = b[0].size();
-    vector<vector<i64>> ans(n, vector<i64>(m));
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < m; j++){
-            for(int c = 0; c < k; c++){
-                ans[i][j] = (ans[i][j] + 1LL * a[i][c] * b[c][j]) % MOD;
-            }
-        }
-    }
-    return ans;
-}
-vector<vector<i64>> power(vector<vector<i64>> A,int p,const vector<vector<i64>>& f) {
-    //f : 初始矩阵
-    vector<vector<i64>>ans = f;
-    while(p > 0) {
-        if(p & 1) ans = mul(A, ans);
-        A = mul(A, A);
-        p >>= 1;
-    }
-    return ans;
 }
 
 //整数开方
