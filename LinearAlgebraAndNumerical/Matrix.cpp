@@ -6,7 +6,7 @@
 #include <cassert>
 using namespace std;
 using i64 = long long;
-using ui64 = unsigned long long;
+using u64 = unsigned long long;
 const int MOD = 1e9+7;
 
 
@@ -61,7 +61,7 @@ public:
 
 //2.矩阵快速幂
 template <class T = int>
-vector<vector<T>> matPow(vector<vector<T>> A, ui64 p, const vector<vector<T>> &f){
+vector<vector<T>> matPow(vector<vector<T>> A, u64 p, const vector<vector<T>> &f){
     //返回 A^p * f, A:n*n, f:初始矩阵,行数n
     int n = A.size();
     auto ans = f;
