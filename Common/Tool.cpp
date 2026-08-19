@@ -6,6 +6,7 @@
 using namespace std;
 const int MAXX = 2e5, MOD = 1e9+7;
 using i64 = long long;
+using i128 = __int128;
 
 //1.快读快写
 namespace fast {
