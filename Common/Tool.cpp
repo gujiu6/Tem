@@ -8,21 +8,7 @@ using i64 = long long;
 
 
 
-//快速幂
-i64 pow(i64 a, i64 b, i64 mod = MOD) {
-	i64 ans = 1;
-	a = (a % mod + mod) % mod;
-	while(b > 0) {
-		if(b & 1) ans = ans * a % mod;
-		a = a * a % mod;
-		b >>= 1;
-	}
-	return ans;
-}
-//费马小
-i64 getinv(int n, int mod = MOD){
-    return pow(n, mod - 2, mod);
-}
+
 
 //整数开方
 i64 my_sqrt(i64 a)
