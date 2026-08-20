@@ -111,7 +111,7 @@ public:
     using Node = array<int, 3>;// Node[0],Node[1]：0/1 儿子,Node[2]：经过该节点的元素个数
     vector<Node> tr;//tr[0]:空节点,tr[1]:根节点
     //n:预计插入次数,仅用于 reserve
-    BinaryTrie(int n = 0){
+    BinaryTrie(const int n = 0){
         static_assert(1 <= W && W <= 64);
         if(n) {
             tr.reserve(1LL * n * (W + 1) + 2);
@@ -125,7 +125,7 @@ private:
     }
 public:
     //判断x是否能用W位无符号整数表示
-    bool valid(u64 x) const{
+    bool valid(const u64& x) const{
         if constexpr (W == 64){
             return true;
         }
@@ -146,7 +146,7 @@ public:
         newNode(); // 1：根节点
     }
     //查询x出现次数
-    int count(u64 x) const{
+    int count(const u64& x) const{
         assert(valid(x));
         int p = 1;
         for (int i = W - 1; i >= 0; i--){
@@ -159,7 +159,7 @@ public:
         return tr[p][2];
     }
     //插入x,共插入v次
-    void insert(u64 x, int v = 1){
+    void insert(const u64& x, const int& v = 1){
         assert(valid(x) && v > 0);
         int p = 1;
         tr[p][2] += v;
@@ -174,7 +174,7 @@ public:
         }
     }
     //返回 max(x xor y)
-    u64 maxXor(u64 x) const{
+    u64 maxXor(const u64& x) const{
         assert(valid(x) && !empty());
         int p = 1;
         u64 ans = 0;
@@ -191,11 +191,11 @@ public:
         return ans;
     }
     //返回使x xor y最大的 y
-    u64 maxElement(u64 x) const{
+    u64 maxElement(const u64& x) const{
         return x ^ maxXor(x);
     }
     // 返回 min(x xor y)
-    u64 minXor(u64 x) const{
+    u64 minXor(const u64& x) const{
         assert(valid(x) && !empty());
         int p = 1;
         u64 ans = 0;
@@ -212,11 +212,11 @@ public:
         return ans;
     }
     // 返回使 x xor y 最小的 y
-    u64 minElement(u64 x) const{
+    u64 minElement(const u64& x) const{
         return x ^ minXor(x);
     }
     //返回第k小的x xor y;k 从 0 开始
-    u64 kthXor(u64 x, int k) const{
+    u64 kthXor(const u64& x, int k) const{
         assert(valid(x) && 0 <= k && k < size());
         int p = 1;
         unsigned long long ans = 0;
@@ -237,11 +237,11 @@ public:
         return ans;
     }
     //返回使x xor y第k小的元素 y;k 从 0 开始
-    u64 kthElement(u64 x, int k) const{
+    u64 kthElement(const u64& x, const int& k) const{
         return x ^ kthXor(x, k);
     }
-    //返回满足 (x xor y) < k 的元素个数
-    int countXorLess(u64 x, u64 k) const{
+    //返回满足 (x xor y) < k 的元素y个数
+    int countXorLess(const u64& x, const u64& k) const{
         assert(valid(x));
         //k超过W位的最大范围
         if constexpr (W < 64){
