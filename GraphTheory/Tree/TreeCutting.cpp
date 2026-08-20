@@ -67,7 +67,7 @@ public:
         int p = lca(u, v);
         return dep[u] + dep[v] - 2 * dep[p];
     }
-    //op(l,r,rev)：区间为 [l,r], rev: 表示沿路径应逆序读取; edge:点权:false, 边权: true
+    //op(l,r,rev)：区间为 [l,r], rev: 表示沿路径应逆序读取; edge:点权:false,边权: true,判断l<=r即可
     template <class F> void path(int u, int v, F op, bool edge = false) const {
         vector<pair<int, int>> right;
         while(top[u] != top[v]) {
