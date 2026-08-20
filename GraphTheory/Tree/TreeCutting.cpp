@@ -35,7 +35,7 @@ public:
         for(int i = n; i >= 1; i--) {
             int u = ord[i], p = fa[u];
             sz[p] += sz[u];
-            if(son[p] <= 0 || sz[u] > sz[son[p]]) {
+            if(sz[u] > sz[son[p]]) {
                 son[p] = u;
             }
         }
@@ -43,7 +43,7 @@ public:
             top[u] = h;
             in[u] = ++tim;
             rev[tim] = u;
-            if(son[u] > 0) {
+            if(son[u]) {
                 self(self, son[u], h);
             }
             for(const auto &e : g[u]) {
