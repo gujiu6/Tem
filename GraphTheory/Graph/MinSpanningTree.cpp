@@ -57,6 +57,7 @@ optional<pair<T, vector<DEdge>>> KrusKal(vector<DEdge> edge, int n) {
         if(!d.merge(e.u, e.v)) continue;
         ans += e.w;
         use.push_back(e);
+        if(use.size() == n - 1) break;
     }
     if(use.size() + 1 != n && n) {
         return nullopt;
