@@ -1,5 +1,6 @@
 /*                          时间复杂度      空间复杂度
 4.DSU on Tree
+5.长链剖分O(1)求k级祖先
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -71,3 +72,4 @@ public:
         dfs(root, false, add, del, ans);
     }
 };
+//5.
