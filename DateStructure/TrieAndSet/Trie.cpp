@@ -237,11 +237,11 @@ public:
         return ans;
     }
     //返回使x xor y第k小的元素 y;k 从 0 开始
-    unsigned long long kthElement(unsigned long long x, int k) const{
+    u64 kthElement(u64 x, int k) const{
         return x ^ kthXor(x, k);
     }
     //返回满足 (x xor y) < k 的元素个数
-    int countXorLess(unsigned long long x, unsigned long long k) const{
+    int countXorLess(u64 x, u64 k) const{
         assert(valid(x));
         //k超过W位的最大范围
         if constexpr (W < 64){
