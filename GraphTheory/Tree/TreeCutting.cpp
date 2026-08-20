@@ -14,6 +14,7 @@ using i64 = long long;
 struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
 
 //1.重链(HLD)
+//边权转化点权:边权都给边的下方节点;修改/查询边权:边的下方节点;修改/查询子树边权:忽略子树头节点点权;修改/查询路径边权:忽略LCA点权
 class HLD {
 public:
     int n, tim = 0;
