@@ -201,6 +201,7 @@ vector<int> TarjanLCA(const vector<vector<Edge>>& g, const vector<pair<int, int>
     dfs(dfs, root, 0);
     return ans;
 }
+
 //4.树上差分
 template <class LCA, class T = i64>
 class TreeDiff {
