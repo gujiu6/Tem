@@ -2,6 +2,7 @@
 1.倍增LCA            O(nlogn)         O(logn)        O(nlogn)
 2.ST表/RMQ 求LCA     O(nlogn)         O(1)           O(nlogn)
 3.Tarjan离线LCA      O(n+qα(n))                      O(n+q)
+4.树上差分
 */
 #include <bits/stdc++.h>
 #include <cassert>
@@ -200,3 +201,43 @@ vector<int> TarjanLCA(const vector<vector<Edge>>& g, const vector<pair<int, int>
     dfs(dfs, root, 0);
     return ans;
 }
+//4.树上差分
+template <class LCA, class T = i64>
+class TreeDiff {
+private:
+    int n, root;
+    const vector<vector<WEdge>>& g;
+    const LCA& lca;
+    vector<T> pointDiff, edgeDiff;
+public:
+    TreeDiff(const vector<vector<WEdge>>& g, const LCA& lca, int root = 1): n(g.size() - 1), root(root), lca(lca), pointDiff(n + 1), edgeDiff(n + 1) {}
+    //路径 u -> v上所有点+w
+    void addPoint(const int& u, const int& v, T w = 1) {
+        int c = lca.lca(u, v);
+        pointDiff[u] += w;
+        pointDiff[v] += w;
+        pointDiff[c] -= w;
+        if(c != root) {
+            pointDiff[lca.up[0][c]] -= w;
+        }
+    }
+    //路径u -> v上所有边+w
+    void addEdge(const int& u, const int& v, T w = 1) {
+        int c = lca.lca(u, v);
+        edgeDiff[u] += w;
+        edgeDiff[v] += w;
+        edgeDiff[c] -= 2LL * w;
+    }
+    void build() {
+        auto dfs = [&](auto&& self, int u, int f)->void {
+            for(const auto& e : g[u]) {
+                if(e.v == f) continue;
+                self(self, e.v, u);
+                pointDiff[u] += pointDiff[e.v];
+                edgeDiff[u] += pointDiff[e.v];
+            }
+        };
+        dfs(dfs, root, root);
+    }
+
+};
