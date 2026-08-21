@@ -86,11 +86,11 @@ vector<T> depthMode(const vector<vector<Edge>>& g, int root = 1){
             at1[e.v] = ptr1; ptr1 += len[e.v];
             at2[e.v] = ptr2 + len[e.v]; ptr2 += 2 * len[e.v] + 5;
             self(self, e.v, u);
-            // dp1[u][d] += dp1[v][d - 1]
+            //dp1[u][d] += dp1[v][d - 1]
             for (int d = 1; d <= len[e.v]; d++) {
                 dp1[at1[u] + d] += dp1[at1[e.v] + d - 1];
             }
-            // dp2[u][d] += dp2[v][d + 1]
+            //dp2[u][d] += dp2[v][d + 1]
             for(int d = 0; d < len[e.v]; d++) {
                 dp2[at2[u] + d] += dp2[at2[e.v] + d + 1];
             }
