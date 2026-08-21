@@ -82,8 +82,8 @@ namespace LazySeg{
 
 struct Tag {
     bool has_set = false;
-    i64 add = 0;
     i64 set = 0;
+    i64 add = 0;
     // 先执行当前 Tag，再执行 t
     void apply(const Tag& t) {
         if(t.has_set) {
@@ -190,11 +190,11 @@ private:
 public:
     // 区间加 x
     void add(int l, int r, i64 x) {
-        modify(1, 1, n, l, r, Tag{.has_set = false, .add = x, .set = 0});
+        modify(1, 1, n, l, r, Tag{.has_set = false, .set = 0, .add = x});
     }
     // 区间赋值 x
     void set(int l, int r, i64 x) {
-        modify(1, 1, n, l, r, Tag{.has_set = true, .add = 0, .set = x});
+        modify(1, 1, n, l, r, Tag{.has_set = true, .set = x, .add = 0});
     }
     // 区间信息
     Info qry(int l, int r) {

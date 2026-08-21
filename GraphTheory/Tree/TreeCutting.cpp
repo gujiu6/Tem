@@ -24,7 +24,7 @@ public:
         sz[0] = 0;
         vector<int> ord{root};
         for(int i = 0; i < ord.size(); i++) {
-            int &u = ord[i];
+            int u = ord[i];
             for(const auto &e : g[u]) {
                 if(e.v == fa[u]) continue;
                 fa[e.v] = u;
