@@ -53,9 +53,9 @@ vector<int> depthMode(const vector<vector<Edge>>& g, int root = 1){
     vector<int> at(n + 1), dp(n + 1);
     vector<int> ans(n + 1);//u的子树中,距离u为多少的节点最多,并且如果有多个深度节点数相同,取最小的那个深度
     //求最长链
-    auto dfs1 = [&](auto&& self, int u, int fa) -> void{
+    auto dfs1 = [&](auto&& self, int u, int f) -> void{
         for (const auto &e : g[u]) {
-            if (e.v == fa)
+            if (e.v == f)
                 continue;
             self(self, e.v, u);
             if (len[e.v] + 1 > len[u]) {
@@ -67,7 +67,7 @@ vector<int> depthMode(const vector<vector<Edge>>& g, int root = 1){
     dfs1(dfs1, root, 0);
     int ptr = len[root];//给轻儿子分配 DP 空间
     //DP
-    auto dfs2 = [&](auto&& self, int u, int fa) -> void {
+    auto dfs2 = [&](auto&& self, int u, int f) -> void {
         int h = son[u];
         //长儿子直接复用 u 的 DP 数组
         if (h != 0) {
@@ -83,7 +83,7 @@ vector<int> depthMode(const vector<vector<Edge>>& g, int root = 1){
         }
         //合并轻儿子
         for (const auto &e : g[u]){
-            if (e.v == fa || e.v == h) continue;
+            if (e.v == f || e.v == h) continue;
             //给轻儿子单独分配空间
             at[e.v] = ptr;
             ptr += len[e.v];
