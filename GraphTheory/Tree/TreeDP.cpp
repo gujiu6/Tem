@@ -50,7 +50,8 @@ vector<T> TreePack(const vector<vector<Edge>>& g, const vector<T>& val, int k, i
 vector<int> depthMode(const vector<vector<Edge>>& g, int root = 1){
     int n = (int)g.size() - 1;
     vector<int> len(n + 1, 1), son(n + 1);
-    vector<int> at(n + 1), dp(n + 1);
+    vector<int> at1(n + 1), dp1(n + 1);
+    vector<int> at2(n + 1), dp2(2 * n + 5);
     vector<int> ans(n + 1);//u的子树中,距离u为多少的节点最多,并且如果有多个深度节点数相同,取最小的那个深度
     //求最长链
     auto dfs1 = [&](auto&& self, int u, int f) -> void{
@@ -65,38 +66,45 @@ vector<int> depthMode(const vector<vector<Edge>>& g, int root = 1){
         }
     };
     dfs1(dfs1, root, 0);
-    int ptr = len[root];//给轻儿子分配 DP 空间
+    //给轻儿子分配 DP 空间
+    int ptr1 = len[root]; at1[root] = 0;
+    int ptr2 = len[root] - 1; at2[root] = len[root] - 1;
     //DP
     auto dfs2 = [&](auto&& self, int u, int f) -> void {
         int h = son[u];
         //长儿子直接复用 u 的 DP 数组
         if (h != 0) {
-            at[h] = at[u] + 1;
+            at1[h] = at1[u] + 1;
+            at2[h] = at2[u] - 1;
             self(self, h, u);
             //长儿子的答案转换成 u 的相对深度
             ans[u] = ans[h] + 1;
         }
-        dp[at[u]] = 1;//u自己,距离u为 0
+        dp1[at1[u]] = 1;//u自己,距离u为 0
         //如果当前最大值只有1,最小深度显然是0
-        if (dp[at[u] + ans[u]] == 1) {
+        if (dp1[at1[u] + ans[u]] == 1) {
             ans[u] = 0;
         }
         //合并轻儿子
         for (const auto &e : g[u]){
             if (e.v == f || e.v == h) continue;
             //给轻儿子单独分配空间
-            at[e.v] = ptr;
-            ptr += len[e.v];
+            at1[e.v] = ptr1; ptr1 += len[e.v];
+            at2[e.v] = ptr2; ptr2 += len[e.v] + 1;
             self(self, e.v, u);
-            // dp[u][d] += dp[v][d - 1]
+            // dp1[u][d] += dp1[v][d - 1]
             for (int d = 1; d <= len[e.v]; d++) {
-                dp[at[u] + d] += dp[at[e.v] + d - 1];
-                int cur = dp[at[u] + d];
-                int best = dp[at[u] + ans[u]];
+                dp1[at1[u] + d] += dp1[at1[e.v] + d - 1];
+                int cur = dp1[at1[u] + d];
+                int best = dp1[at1[u] + ans[u]];
                 //次数更多,或者次数相同但深度更小
                 if (cur > best || (cur == best && d < ans[u])){
                     ans[u] = d;
                 }
+            }
+            // dp2[u][d] += dp2[v][d + 1]
+            for(int d = 0; d < len[e.v]; d++) {
+                dp2[at2[u] + d] += dp2[at2[e.v] + d + 1];
             }
         }
     };
