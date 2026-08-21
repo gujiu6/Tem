@@ -73,7 +73,7 @@ public:
     }
 };
 
-//5.长链
+//5.长链 + O(1)k级祖先
 class LCD {
 public:
     int n, lg2, tim = 0;
