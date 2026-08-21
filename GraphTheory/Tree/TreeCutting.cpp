@@ -24,7 +24,7 @@ public:
         sz[0] = 0;
         vector<int> ord{root};
         for(int i = 0; i < ord.size(); i++) {
-            int u = ord[i];
+            int &u = ord[i];
             for(const auto &e : g[u]) {
                 if(e.v == fa[u]) continue;
                 fa[e.v] = u;
@@ -33,10 +33,10 @@ public:
             }
         }
         for(int i = n - 1; i >= 0; i--) {
-            int u = ord[i], p = fa[u];
-            sz[p] += sz[u];
-            if(sz[u] > sz[son[p]]) {
-                son[p] = u;
+            int &u = ord[i], &f = fa[u];
+            sz[f] += sz[u];
+            if(sz[u] > sz[son[f]]) {
+                son[f] = u;
             }
         }
         auto dfs = [&](auto &&self, int u, int h)->void {
@@ -47,9 +47,8 @@ public:
                 self(self, son[u], h);
             }
             for(const auto &e : g[u]) {
-                if(e.v != fa[u] && e.v != son[u]) {
-                    self(self, e.v, e.v);
-                }
+                if(e.v == fa[u] || e.v == son[u]) continue;
+                self(self, e.v, e.v);
             }
         };
         if(n) dfs(dfs, root, root);
@@ -87,7 +86,7 @@ public:
             right.push_back({in[u] + edge, in[v]});
         }
         reverse(right.begin(), right.end());
-        for(auto &[l, r] : right) {
+        for(const auto &[l, r] : right) {
             op(l, r, false);
         }
     }
