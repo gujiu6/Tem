@@ -88,14 +88,14 @@ vector<int> depthMode(const vector<vector<Edge>>& g, int root = 1){
             at[e.v] = ptr;
             ptr += len[e.v];
             self(self, e.v, u);
-            // dp[u][d + 1] += dp[v][d]
-            for (int d = 0; d < len[e.v]; d++) {
-                dp[at[u] + d + 1] += dp[at[e.v] + d];
-                int cur = dp[at[u] + d + 1];
+            // dp[u][d] += dp[v][d - 1]
+            for (int d = 1; d <= len[e.v]; d++) {
+                dp[at[u] + d] += dp[at[e.v] + d - 1];
+                int cur = dp[at[u] + d];
                 int best = dp[at[u] + ans[u]];
                 //次数更多,或者次数相同但深度更小
-                if (cur > best || (cur == best && d + 1 < ans[u])){
-                    ans[u] = d + 1;
+                if (cur > best || (cur == best && d < ans[u])){
+                    ans[u] = d;
                 }
             }
         }
