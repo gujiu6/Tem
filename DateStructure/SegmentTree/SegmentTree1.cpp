@@ -229,23 +229,15 @@ struct AffineInfo {
     }
 };
 template <class Info = AffineInfo, class Tag = AffineTag>
-class LazySeg {
+class AffineSeg {
 public:
     int n;
     vector<Info> tr;
     vector<Tag> tag;
-    LazySeg(int n = 0) {init(n);}
-    LazySeg(const vector<Info>& a) {init(a);}
-    void init(int _n) {
-        n = _n;
-        tr.assign((n << 2) + 4, Info{});
-        tag.assign((n << 2) + 4, Tag{});
+    AffineSeg(int n = 0):n(n), tr((n << 2) + 4, Info{}), tag((n << 2) + 4, Tag{}) {
         if(n) build(1, 1, n);
     }
-    void init(const vector<Info>& a) {
-        n = a.size() - 1;
-        tr.assign((n << 2) + 4, Info{});
-        tag.assign((n << 2) + 4, Tag{});
+    AffineSeg(const vector<Info>& a): n(a.size() - 1), tr((n << 2) + 4, Info{}), tag((n << 2) + 4, Tag{}) {
         if(n) build(1, 1, n, a);
     }
 private:
