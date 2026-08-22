@@ -151,24 +151,24 @@ private:
     void pull(int p) {
         tr[p] = tr[p << 1] + tr[p << 1 | 1];
     }
-    void apply(int p, const Tag& v) {
-        tr[p].apply(v);
-        tag[p].apply(v);
+    void apply(int p, const Tag& t) {
+        tr[p].apply(t);
+        tag[p].apply(t);
     }
     void push(int p) {
         apply(p << 1, tag[p]);
         apply(p << 1 | 1, tag[p]);
         tag[p] = Tag{};
     }
-    void modify(int p, int l, int r, int ql, int qr, const Tag& v) {
+    void modify(int p, int l, int r, int ql, int qr, const Tag& t) {
         if(ql <= l && r <= qr) {
-            apply(p, v);
+            apply(p, t);
             return;
         }
         push(p);
         int mid = (l + r) >> 1;
-        if(ql <= mid) modify(p << 1, l, mid, ql, qr, v);
-        if(qr > mid) modify(p << 1 | 1, mid + 1, r, ql, qr, v);
+        if(ql <= mid) modify(p << 1, l, mid, ql, qr, t);
+        if(qr > mid) modify(p << 1 | 1, mid + 1, r, ql, qr, t);
         pull(p);
     }
     Info qry(int p, int l, int r, int ql, int qr) {
@@ -263,24 +263,24 @@ private:
     void pull(int p) {
         tr[p] = tr[p << 1] + tr[p << 1 | 1];
     }
-    void apply(int p, const Tag& v) {
-        tr[p].apply(v);
-        tag[p].apply(v);
+    void apply(int p, const Tag& t) {
+        tr[p].apply(t);
+        tag[p].apply(t);
     }
     void push(int p) {
         apply(p << 1, tag[p]);
         apply(p << 1 | 1, tag[p]);
         tag[p] = Tag{};
     }
-    void modify(int p, int l, int r, int ql, int qr, const Tag& v) {
+    void modify(int p, int l, int r, int ql, int qr, const Tag& t) {
         if(ql <= l && r <= qr) {
-            apply(p, v);
+            apply(p, t);
             return;
         }
         push(p);
         int mid = (l + r) >> 1;
-        if(ql <= mid) modify(p << 1, l, mid, ql, qr, v);
-        if(qr > mid) modify(p << 1 | 1, mid + 1, r, ql, qr, v);
+        if(ql <= mid) modify(p << 1, l, mid, ql, qr, t);
+        if(qr > mid) modify(p << 1 | 1, mid + 1, r, ql, qr, t);
         pull(p);
     }
     Info qry(int p, int l, int r, int ql, int qr) {
