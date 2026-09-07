@@ -33,24 +33,24 @@ public:
             if(j <= n) bit[j] += bit[i];
         }
     }
-    inline int lowbit(int i) {
-        return i & -i;
+    inline int lowbit(int p) {
+        return p & -p;
     }
-    void add(int i, T v) {
-        while(i <= n){
-            bit[i] += v;
-            i += lowbit(i);
+    void add(int p, T v) {
+        while(p <= n){
+            bit[p] += v;
+            p += lowbit(p);
         }
     }
-    void set(int i, T v) {
-        add(i, v - a[i]);
-        a[i] = v;
+    void set(int p, T v) {
+        add(p, v - a[p]);
+        a[p] = v;
     }
-    T sum(int i) const{
+    T sum(int p) const{
         T ans = 0;
-        while(i > 0) {
-            ans += bit[i];
-            i -= lowbit(i);
+        while(p > 0) {
+            ans += bit[p];
+            p -= lowbit(p);
         }
         return ans;
     }
@@ -92,20 +92,20 @@ public:
             range_add(i, i, a[i]);
         }
     }
-    inline int lowbit(int i) {
-        return i & -i;
+    inline int lowbit(int p) {
+        return p & -p;
     }
-    void add(vector<T>& bit, int i, T v) {
-        while(i <= n){
-            bit[i] += v;
-            i += lowbit(i);
+    void add(vector<T>& bit, int p, T v) {
+        while(p <= n){
+            bit[p] += v;
+            p += lowbit(p);
         }
     }
-    T sum(const vector<T>& bit, int i) const {
+    T sum(const vector<T>& bit, int p) const {
         T ans = 0;
-        while(i > 0) {
-            ans += bit[i];
-            i -= lowbit(i);
+        while(p > 0) {
+            ans += bit[p];
+            p -= lowbit(p);
         }
         return ans;
     }
@@ -115,8 +115,8 @@ public:
         add(bit2, l, v * (l - 1));
         add(bit2, r + 1, -v * r);
     }
-    T sum(int i) const {
-        return sum(bit1, i) * i - sum(bit2, i);
+    T sum(int p) const {
+        return sum(bit1, p) * p - sum(bit2, p);
     }
     T sum(int l, int r) const{
         return sum(r) - sum(l - 1);

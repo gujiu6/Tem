@@ -12,9 +12,9 @@ using i64 = long long;
 namespace Common {
 
 struct Query {
-    int l, r, t, id;
+    int l, r, id;
 };
-template <class Ans, class AddL, class AddR, class DelL, class DelR, class Get>
+template <class Ans = int, class AddL, class AddR, class DelL, class DelR, class Get>
 vector<Ans> mo(int n, vector<Query> q, AddL addL, AddR addR, DelL delL, DelR delR, Get get) {
     int m = q.size() - 1;
     int sz  = max(1, (int)(n / sqrt(m)));
@@ -44,7 +44,7 @@ struct Query {
     int l, r, t, id;
 };
 //change要交换数组元素和修改元素达到兼容效果
-template <class Ans, class Add, class Del, class Change, class Get>
+template <class Ans = int, class Add, class Del, class Change, class Get>
 vector<Ans> moModify(int n, vector<Query> q, Add add, Del del, Change change, Get get) {
     int m = q.size() - 1;
     int sz  = max(1, (int)pow(n, 2.0 / 3));

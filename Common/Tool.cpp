@@ -38,13 +38,12 @@ void write(T x){
         putchar('-');
         x = -x;
     }
-    char ch[50];
-    int index = 0;
+    vector<char> ch;
     while(x){
-        ch[index++] = x % 10 + '0';
+        ch.push_back(x % 10 + '0');
         x /= 10;
     }
-    for(int i = index - 1; i >= 0; i--) {
+    for(int i = ch.size() - 1; i >= 0; i--) {
         putchar(ch[i]);
     }
 }
