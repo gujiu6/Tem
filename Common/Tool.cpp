@@ -13,9 +13,10 @@ using i128 = __int128;
 //1.快读快写
 namespace fast {
 
-i64 read(){
+template <typename T = i64>
+T read(){
     bool flag = false;
-    i64 ans = 0;
+    T ans = 0;
     char c = getchar();
     while(c < '0' || c > '9') {
         if(c == '-') flag = true;
@@ -27,7 +28,8 @@ i64 read(){
     }
     return flag ? -ans : ans;
 }
-void write(i64 x){
+template <typename T = i64>
+void write(T x){
     if(x == 0){
         putchar('0');
         return;
