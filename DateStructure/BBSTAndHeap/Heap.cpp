@@ -13,7 +13,7 @@ template <class T = int, class Cmp = less<T>>
 class ErasableHeap {
 public:
     priority_queue<T, vector<T>, Cmp> a, b;
-    int n;
+    int n = 0;
     void clear() {
         while(!a.empty() && !b.empty() && a.top() == b.top()) {
             a.pop();
