@@ -28,11 +28,8 @@ class Seg {
 public:
     int n;
     vector<Info> tr;
-    Seg(int n = 0): n(n) {
-        tr.assign((n << 1) + 2, Info{});
-    }
-    Seg(const vector<Info>& a): n(a.size() - 1){
-        tr.assign((n << 1) + 2, Info{});
+    Seg(int n = 0): n(n), tr((n << 1) + 2, Info{}) {}
+    Seg(const vector<Info>& a): n(a.size() - 1), tr((n << 1) + 2, Info{}){
         for(int i = 1; i <= n; i++) {
             tr[n + i - 1] = a[i];
         }
