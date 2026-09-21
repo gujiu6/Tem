@@ -10,17 +10,14 @@ using i64 = long long;
 using i128 = __int128;
 const int MOD = 1e9+7;
 
-i64 mulMod(i64 a, i64 b, i64 mod = MOD) {
-    return (i128)((a % mod + mod) % mod) * ((b % mod + mod) % mod) % mod;
-}
 //1.快速幂
 i64 pow(i64 a, i64 b, i64 mod = MOD) {
     assert(mod > 0);
 	i64 ans = 1 % mod;
     a = (a % mod + mod) % mod;
 	while(b > 0) {
-		if(b & 1) ans = mulMod(ans, a, mod);
-		a = mulMod(a, a, mod);
+		if(b & 1) ans = ans * a % mod;
+		a = a * a % mod;
 		b >>= 1;
 	}
 	return ans;
