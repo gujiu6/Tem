@@ -98,7 +98,7 @@ struct SpfaCostFlow {
     int n;
     vector<vector<E>> edges;
     vector<optional<Cost>> d;// 是本轮从源点出发的最短距离,空值表示不可达
-    vector<int> in, cur, vis;// in 标记 SPFA 队列中的点,cur 是紧边 DFS 的当前弧,vis 标记递归栈中的点
+    vector<int> in, cur, vis;
 
     SpfaCostFlow(int n = 0) : n(n + 1), edges(n + 1), d(n + 1), in(n + 1), cur(n + 1), vis(n + 1) {}
     void add(int u, int v, T cap, Cost cost) {
@@ -109,7 +109,6 @@ struct SpfaCostFlow {
     }
 
     bool shortest(int s, int t) {
-        // s、t 是源汇点；用 SPFA 建立残量最短距离，返回 t 是否可达。
         fill(d.begin(), d.end(), nullopt);
         fill(in.begin(), in.end(), 0);
         queue<int> q;
@@ -127,8 +126,8 @@ struct SpfaCostFlow {
                 if (!d[e.v].has_value() || nd < *d[e.v]) {
                     d[e.v] = nd;
                     if (!in[e.v]) {
-                        q.push(e.to);
-                        in[e.to] = 1;
+                        q.push(e.v);
+                        in[e.v] = 1;
                     }
                 }
             }
@@ -136,55 +135,40 @@ struct SpfaCostFlow {
         return d[t].has_value();
     }
 
-    T dfs(int u, int t, T lim)
-    {
-        // u、t 是当前点与汇点，lim 是流量上限；沿本轮紧边尽量增广并返回实际流量。
-        if (u == t)
-        {
+    T dfs(int u, int t, T lim) {
+        if (u == t) {
             return lim;
         }
         vis[u] = 1;
         T f = 0;
-        for (int &i = cur[u]; i < (int)edges[u].size() && f < lim; i++)
-        {
-            auto &a = edges[u][i];
-            if (a.cap == 0 || vis[a.to] || !d[a.to].has_value() ||
-                *d[u] + a.cost != *d[a.to])
-            {
+        for (int &i = cur[u]; i < (int)edges[u].size() && f < lim; i++) {
+            auto &e = edges[u][i];
+            if (e.cap == 0 || vis[e.v] || !d[e.v].has_value() || *d[u] + e.cost != *d[e.v]) {
                 continue;
             }
-            T x = dfs(a.to, t, min(lim - f, a.cap));
-            if (x == 0)
-            {
-                continue;
-            }
-            a.cap -= x;
-            edges[a.to][a.rev].cap += x;
+            T x = dfs(e.v, t, min(lim - f, e.cap));
+            e.cap -= x;
+            edges[e.to][e.rev].cap += x;
             f += x;
         }
         vis[u] = 0;
         return f;
     }
 
-    pair<T, Cost> flow(int s, int t, T lim = numeric_limits<T>::max())
-    {
-        // s、t 是源汇点，lim 是最多发送的流量；返回实际流量与最小费用。
-        if (s == t)
-        {
+    pair<T, Cost> flow(int s, int t, T lim = numeric_limits<T>::max()) {
+        // s、t 是源汇点,lim 是最多发送的流量,返回实际流量与最小费用.
+        if (s == t) {
             return {0, 0};
         }
-        assert(lim >= 0); // 调试检查，可删。
         T f = 0;
         Cost cost = 0;
-        while (f < lim && shortest(s, t))
-        {
+        while (f < lim && shortest(s, t)) {
             fill(cur.begin(), cur.end(), 0);
             fill(vis.begin(), vis.end(), 0);
             T x = dfs(s, t, lim - f);
-            assert(x > 0); // 调试检查，可删：最短路存在时紧边 DFS 必须能增广。
             if (x == 0) break;
             f += x;
-            cost += (Cost)x * *d[t];
+            cost += (Cost)x * (*d[t]);
         }
         return {f, cost};
     }
