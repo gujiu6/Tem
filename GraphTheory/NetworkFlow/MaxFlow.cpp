@@ -123,10 +123,10 @@ struct SpfaCostFlow {
                 if (e.cap == 0) {
                     continue;
                 }
-                Cost nd = *d[u] + e.cost;
-                if (!d[e.to].has_value() || nd < *d[e.to]) {
-                    d[e.to] = nd;
-                    if (!in[e.to]) {
+                auto nd = *d[u] + e.cost;
+                if (!d[e.v].has_value() || nd < *d[e.v]) {
+                    d[e.v] = nd;
+                    if (!in[e.v]) {
                         q.push(e.to);
                         in[e.to] = 1;
                     }
