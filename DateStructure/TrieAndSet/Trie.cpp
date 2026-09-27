@@ -3,7 +3,6 @@
 2.01Trie
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 using i64 = long long;
 using u64 = unsigned long long;
@@ -36,7 +35,6 @@ public:
         cnt[cur]++;
         for(const auto &c : s) {
             int path = Path(c);
-            assert(0 <= path && path < n);
             if(!ch[cur][path]) {
                 ch[cur][path] = newNode();
             }

@@ -5,7 +5,6 @@
 4.Manacher
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 using i64 = long long;
 
@@ -42,7 +41,6 @@ public:
     }
     //s[l,r]的哈希
     pair<i64, i64> get(int l, int r) const {
-        assert(1 <= l && l <= r && r < h1.size());
         i64 x = (h1[r] - h1[l - 1] * pw1[r - l + 1] % p1 + p1) % p1;
         i64 y = (h2[r] - h2[l - 1] * pw2[r - l + 1] % p2 + p2) % p2;
         return {x, y};

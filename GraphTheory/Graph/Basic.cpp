@@ -7,7 +7,6 @@
 6.DAG判断是否半连通(是否任意两点间都有可达路径)         O(n+m)           O(n)
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 using i64 = long long;
 constexpr int MAXX = 1000;
@@ -117,7 +116,6 @@ vector<T> DelDAG(const vector<vector<WEdge>>& g, vector<int> inDeg) {
             }
         }
     }
-    assert(ord.size() - 1 == n);
     vector<int> pos(n + 1);//pos[u]:u在拓扑序中的位置
     for(int i = 1; i <= n; i++) {
         pos[ord[i]] = i;

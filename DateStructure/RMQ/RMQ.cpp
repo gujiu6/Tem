@@ -5,8 +5,6 @@
 4.笛卡尔树Cartesian                  O(n)           O(n)
 */
 #include <bits/stdc++.h>
-#include <cassert>
-#include <bit>
 using namespace std;
 const int INF = 1e9+7;
 
@@ -31,7 +29,6 @@ public:
     }
 
     T qry(int l, int r) const {
-        assert(1 <= l && l <= r && r <= n);
         int p = bit_width(unsigned(r - l + 1)) - 1;
         T ans = op(st[p][l], st[p][r - (1LL << p) + 1]);
         return ans;

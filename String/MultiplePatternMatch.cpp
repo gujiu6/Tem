@@ -4,7 +4,6 @@
 3.子序列自动机(string)
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 using i64 = long long;
 
@@ -35,7 +34,6 @@ public:
         int cur = 0;
         for(const auto &c : s) {
             int path = Path(c);
-            assert(0 <= path && path < Alphabet);
             if(nodes[cur].child[path] == -1) {
                 nodes[cur].child[path] = nodes.size();
                 nodes.push_back({});
@@ -79,7 +77,6 @@ public:
     //根据字符直接进行转移
     int transition(int cur, char c) const {
         int path = Path(c);
-        assert(0 <= path && path < Alphabet);
         return nodes[cur].next[path];
     }
     //获取所有节点

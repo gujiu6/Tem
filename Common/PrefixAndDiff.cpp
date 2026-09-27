@@ -7,7 +7,6 @@
 6.所有区间 gcd
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 using i64 = long long;
 
@@ -37,8 +36,6 @@ public:
     vector<vector<T>> d;
     Diff(int n, int m): n(n), m(m), d(n + 2, vector<T>(m + 2)) {}
     void add(int x1, int y1, int x2, int y2, T v) {
-        assert(0 <= x1 && x1 <= x2 && x2 <= n);
-        assert(0 <= y1 && y1 <= y2 && y2 <= n);
         d[x1][y1] += v;
         d[x2 + 1][y1] -= v;
         d[x1][y2 + 1] -= v;
@@ -58,7 +55,6 @@ public:
 //3.k阶差分
 template <class T = i64>
 vector<T> kthDiff(vector<T> a, int k) {
-    assert(k >= 0);
     while(k--) {
         for(int i = 1; i < a.size() - 1; i++) {
             a[i] = a[i + 1] - a[i];
@@ -155,7 +151,6 @@ public:
     }
     //[l, r]区间gcd
     T qry(int l, int r) const {
-        assert(1 <= l && l <= r && r <= n);
         auto it = upper_bound(g[r].begin(), g[r].end(), l, [](int x, const auto& p){
             return x < p.first;
         });

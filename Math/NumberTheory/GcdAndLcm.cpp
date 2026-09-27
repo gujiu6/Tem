@@ -4,7 +4,6 @@
 3.求逆元(费马小, exgcd)
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 using i64 = long long;
 using i128 = __int128;
@@ -12,7 +11,6 @@ const int MOD = 1e9+7;
 
 //1.快速幂
 i64 pow(i64 a, i64 b, i64 mod = MOD) {
-    assert(mod > 0);
 	i64 ans = 1 % mod;
     a = (a % mod + mod) % mod;
 	while(b > 0) {

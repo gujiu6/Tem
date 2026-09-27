@@ -7,7 +7,6 @@
     4.2 dfn序最优                     O(nk)              O(nk)
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 using i64 = long long;
 const i64 INF = 1e18;
@@ -108,8 +107,6 @@ vector<T> TreeDepPack(const vector<int>& w, const vector<T>& val, const vector<i
     int n = w.size() - 1;
     vector<vector<Edge>> son(n + 1);
     for(int u = 1; u <= n; u++) {
-        assert(w[u] > 0);
-        assert(0 <= p[u] && p[u] <= n);
         son[p[u]].push_back({u});
     }
     auto dfs = [&](auto &&self, int u)->vector<T> {

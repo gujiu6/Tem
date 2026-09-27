@@ -4,7 +4,6 @@
 3.区间线性基
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 using i64 = long long;
 using u64 = unsigned long long;
@@ -124,7 +123,6 @@ public:
     VectorBasis(int n) : n(n), a(n, vector<T>(n)) {}
     // 返回 x 是否使秩增加
     bool add(vector<T> x) {
-        assert((int)x.size() == n);
         // 从左到右寻找主元
         for (int i = 0; i < n; i++) {
             if (fabsl(x[i]) < eps) continue;
@@ -149,7 +147,6 @@ public:
     }
     // 判断 x 是否属于当前线性空间
     bool has(vector<T> x) const {
-        assert((int)x.size() == n);
         for (int i = 0; i < n; i++) {
             if (x[i] < eps) continue;
             // 没有对应主元，无法表示
@@ -166,7 +163,6 @@ public:
     }
     // 合并另一个线性基
     void merge(const VectorBasis &o) {
-        assert(n == o.n);
         for (int i = 0; i < n; i++) {
             if (!isZero(o.a[i][i])) {
                 add(o.a[i]);

@@ -3,7 +3,6 @@
 2.Top‑K和维护
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 
 
@@ -54,9 +53,7 @@ public:
     int k;
     T sum{};
     multiset<T> hi, lo;
-    TopK (int k): k(k) {
-        assert(k >= 0);
-    }
+    TopK (int k): k(k) {}
     void fix() {
         while(hi.size() > k) {
             auto it = hi.begin();

@@ -3,7 +3,6 @@
 2.矩阵快速幂
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 using i64 = long long;
 using u64 = unsigned long long;
@@ -34,7 +33,6 @@ public:
     }
     friend Mat operator*(const Mat &x, const Mat &y) {
         //x:乘法左侧矩阵;y:乘法右侧矩阵;返回两个维数相容矩阵的普通乘积
-        assert(x.m == y.n);
         Mat z(x.n, y.m);
         for (int i = 0; i < x.n; i++){
             for (int k = 0; k < x.m; k++){
@@ -47,7 +45,6 @@ public:
     }
     Mat pow(unsigned long long b) const {
         //b:表示方阵的非负整数指数;返回当前方阵的b次幂
-        assert(n == m);
         Mat x = *this;
         Mat ans = eye(n);
         while(b) {

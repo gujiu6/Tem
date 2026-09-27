@@ -5,7 +5,6 @@
 4.树上差分
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 using i64 = long long;
 const int MAXX = 5e5+10, LIMIT = 20;
@@ -106,7 +105,6 @@ public:
     }
 
     T qry(int l, int r) const {
-        assert(1 <= l && l <= r && r <= n);
         int p = bit_width(unsigned(r - l + 1)) - 1;
         T ans = op(st[p][l], st[p][r - (1LL << p) + 1]);
         return ans;

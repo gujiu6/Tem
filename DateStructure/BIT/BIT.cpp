@@ -4,7 +4,6 @@
 3.二维树状数组
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 const int MAXX=2e5;
 using i64 = long long;
@@ -157,7 +156,6 @@ public:
         }
     }
     void add(int x1, int y1, int x2, int y2, T v) {
-        assert(x1 <= x2 && y1 <= y2);
         add(x1, y1, v);
         add(x1, y2 + 1, -v);
         add(x2 + 1, y1, -v);

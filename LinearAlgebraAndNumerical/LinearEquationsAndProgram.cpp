@@ -4,7 +4,6 @@
 3.高斯消元:bitset优化(异或方程组)
 */
 #include <bits/stdc++.h>
-#include <cassert>
 using namespace std;
 using i64 = long long;
 using i128 = __int128;
