@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <cassert>
 //#include <ranges>
 using namespace std;
 #define ONLINE_JUDGE
@@ -10,9 +9,9 @@ using namespace std;
 #define per(i,r,l) for(int i=r;i>=l;i--)
 #define dbg(x) cout<<#x<<"="<<x<<endl;
 using i64 = long long;
-using i128 = __int128_t;
+using i128 = __int128;
 using ld = long double;
-using ui64 = unsigned long long;
+using u64 = unsigned long long;
 using cd = complex<double>;
 using pii = array<int, 2>;
 constexpr i64 INF = 1e18;
@@ -49,7 +48,7 @@ signed main() {
 	int t = 1;
 	//cin >> t;
 	for(int i = 1; i <= t; i++){
-	
+		
 		solve();
 	
 	}

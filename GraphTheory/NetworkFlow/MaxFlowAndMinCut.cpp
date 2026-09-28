@@ -1,12 +1,12 @@
 /*                      时间复杂度       空间复杂度
-1.Dinic最大流             O(V^2E)        O(V+E)
+1.Dinic最大流最小割       O(V^2E)        O(V+E)
 2.SPFA最小费用最大流
 */
 #include <bits/stdc++.h>
 using namespace std;
 using i64 = long long;
 
-//1.Dinic最大流
+//1.Dinic最大流最小割
 template <class T = i64>
 class Flow {
 public:
