@@ -91,9 +91,25 @@ void get_segement_phi(i64 l, i64 r) {
 //2.莫比乌斯函数
 namespace Mobius {
 
+//求n的莫比乌斯函数
+int get_mu(int n) {
+    int ans = 1;
+    for(int i = 2; i * i <= n; i++) {
+        if(n % i == 0) {
+            n /= i;
+            if(n % i == 0) {
+                return 0;
+            }
+            ans = -ans;
+        }
+    }
+    if(n > 1) ans = -ans;
+    return ans;
+}
+
 //欧拉筛莫比乌斯函数
 vector<int> mu, prime, minp;
-void get_mu(int n) {
+void muTable(int n) {
     mu.assign(n + 1, 0);
     minp.assign(n + 1, 0);
     mu[1] = 1;
