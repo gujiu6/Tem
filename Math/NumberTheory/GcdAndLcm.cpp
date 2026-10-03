@@ -37,3 +37,20 @@ optional<i64> invMod(i64 a, i64 mod = MOD) {
     if(g != 1) return nullopt;
     return (x % mod + mod) % mod;
 }
+//4.CRT
+// x ≡ a[0] (mod a[1])
+optional<array<i64, 2>> crt(array<i64, 2> a, array<i64, 2> b) {
+    auto [g, x, y] = exgcd(a[1], b[1]);
+    i128 d = b[0] - a[0];
+    if(d % g) {
+        return nullopt;
+    }
+    i64 q = b[1] / g;
+    i128 k = 0;
+    if(q > 1) {
+        k = ((i128)d / g * x % q + q) % q;
+    }
+    i64 m = (i128)a[1] / g * b[1] ;
+    i64 r = (((i128)a[1] * k + a[0]) % m + m) % m;
+    return array{r, m};
+}
