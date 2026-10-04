@@ -148,7 +148,7 @@ struct SpfaCostFlow {
             }
             T x = dfs(e.v, t, min(lim - f, e.cap));
             e.cap -= x;
-            edges[e.to][e.rev].cap += x;
+            edges[e.v][e.rev].cap += x;
             f += x;
         }
         vis[u] = 0;
