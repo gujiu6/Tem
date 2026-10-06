@@ -28,9 +28,9 @@ public:
     static constexpr i64 p1 = 1000000007;
     static constexpr i64 p2 = 1000000009;
     i64 base;
+    int n;
     vector<i64> h1, h2, pw1, pw2;
-    StrHash(const string& s, i64 base = 911382323): base(base), h1(s.size() + 1), h2(s.size() + 1), pw1(s.size() + 1, 1), pw2(s.size() + 1, 1) {
-        int n = s.size() - 1;
+    StrHash(const string& s, i64 base = 911382323): base(base), n(s.size() - 1), h1(n + 1), h2(n + 1), pw1(n + 1, 1), pw2(n + 1, 1) {
         for(int i = 1; i <= n; i++) {
             int c = (unsigned char)s[i] + 1;
             h1[i] = (h1[i - 1] * base + c) % p1;
@@ -43,6 +43,12 @@ public:
     pair<i64, i64> get(int l, int r) const {
         i64 x = (h1[r] - h1[l - 1] * pw1[r - l + 1] % p1 + p1) % p1;
         i64 y = (h2[r] - h2[l - 1] * pw2[r - l + 1] % p2 + p2) % p2;
+        return {x, y};
+    }
+    //a+b
+    pair<i64, i64> merge(const pair<i64, i64> &a, const pair<i64, i64> &b, int lenb) {
+        i64 x = (a.first * pw1[lenb] + b.first) % p1;
+        i64 y = (a.second * pw2[lenb] + b.second) % p2;
         return {x, y};
     }
     //在s中寻找t的所有出现位置
