@@ -1,5 +1,7 @@
 /*
 1.DFT/IDFT
+2.FFT
+3.NTT
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -83,7 +85,7 @@ vector<ld> mul(const vector<ld> &a, const vector<ld> &b) {
         x[i] *= y[i];
     }
     fft(x, true);
-    vector<long double> c(sz);
+    vector<ld> c(sz);
     for (int i = 0; i < sz; i++) {
         c[i] = x[i].real();
     }
