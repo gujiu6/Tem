@@ -68,8 +68,8 @@ void fft(vector<cd> &a, bool inv = false) {
         }
     }
 }
-
-vector<ld> mul(const vector<ld> &a, const vector<ld> &b) {
+template <class T = ld>
+vector<T> mul(const vector<T> &a, const vector<T> &b) {
     // a,b 是实系数序列;返回二者的线性卷积,任一输入为空时返回空.
     if (a.empty() || b.empty()) {
         return {};
@@ -85,9 +85,9 @@ vector<ld> mul(const vector<ld> &a, const vector<ld> &b) {
         x[i] *= y[i];
     }
     fft(x, true);
-    vector<ld> c(sz);
+    vector<T> c(sz);
     for (int i = 0; i < sz; i++) {
-        c[i] = x[i].real();
+        c[i] = llround(x[i].real());
     }
     return c;
 }
