@@ -133,6 +133,29 @@ vector<int> borders(const string &s) {
     return ans;
 }
 
+//最小表示法(最小字典序循环串)
+string min_rotation(string s) {
+    int n = s.size();
+    s = " " + s + s;
+    int i = 1, j = 2, k = 0;
+    while(i <= n && j <= n && k < n) {
+        if(s[i + k] == s[j + k]) {
+            k++;
+        }
+        else {
+            if(s[i + k] > s[j + k]) {
+                i += k + 1;
+                if(i <= j) i = j + 1;
+            }
+            else {
+                j += k + 1;
+                if(j <= i) j = i + 1;
+            }
+            k = 0;
+        }
+    }
+    return s.substr(min(i, j), n);
+}
 
 }
 
