@@ -134,27 +134,31 @@ vector<int> borders(const string &s) {
 }
 
 //最小表示法(最小字典序循环串)
-string min_rotation(string s) {
-    int n = s.size();
-    s = " " + s + s;
-    int i = 1, j = 2, k = 0;
-    while(i <= n && j <= n && k < n) {
-        if(s[i + k] == s[j + k]) {
+template <class T = int>
+int minRepr(const vector<T> &a) {
+    // a 是循环序列；返回其字典序最小旋转的起点。
+    int n = a.size();
+    if (!n) return 0;
+    int i = 0, j = 1, k = 0;
+    while (i < n && j < n && k < n) {
+        T x = a[(i + k) % n], y = a[(j + k) % n];
+        if (x == y) {
             k++;
         }
         else {
-            if(s[i + k] > s[j + k]) {
+            if (x > y) {
                 i += k + 1;
-                if(i <= j) i = j + 1;
             }
             else {
                 j += k + 1;
-                if(j <= i) j = i + 1;
+            }
+            if (i == j) {
+                j++;
             }
             k = 0;
         }
     }
-    return s.substr(min(i, j), n);
+    return min(i, j);
 }
 
 }
