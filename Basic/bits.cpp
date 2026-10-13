@@ -5,7 +5,7 @@ using i64 = long long;
 
 
 
-
+//最低位
 int lowbit(int i){
 	return i & -i;
 }
