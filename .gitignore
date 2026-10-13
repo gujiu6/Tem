@@ -1,0 +1,10 @@
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.xdv
+*.pdf
+*.synctex.gz
+_minted/

@@ -1,0 +1,24 @@
+\chapter*{前言}
+\markboth{前言}{}
+
+本手册以 \texttt{Kendieer/XCPC-Templates} 的 LaTeX 排版框架为基础，并将其中全部算法代码替换为 \texttt{gujiu6/Tem} 仓库的 C++ 模板。
+
+\section*{使用说明}
+\begin{itemize}[leftmargin=2em]
+  \item 代码按基础算法、数据结构、图论、数学、线性代数与数值计算、字符串等专题编排；
+  \item 所有代码均从 \texttt{code/} 目录直接读取，源码内容保持原仓库版本，不在 LaTeX 中二次改写；
+  \item 算法的具体使用条件、复杂度和注释请以对应 C++ 源文件为准；
+  \item 修改章节或代码文件后，请在项目根目录重新编译两遍，以刷新目录和页码。
+\end{itemize}
+
+\section*{编译方式}
+需要支持中文的 XeLaTeX、\texttt{minted} 宏包以及 Python Pygments。于项目根目录执行：
+\begin{verbatim}
+xelatex -shell-escape -interaction=nonstopmode -halt-on-error main.tex
+xelatex -shell-escape -interaction=nonstopmode -halt-on-error main.tex
+\end{verbatim}
+
+\begin{flushright}
+    gujiu6\\
+    \today
+\end{flushright}
