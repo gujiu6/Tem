@@ -188,7 +188,7 @@ public:
         return bridge;
     }
 
-    vector<int> comps() const {
+    pair<int, vector<int>> comps() const {
         // 无参数,返回删除全部桥后每个点的边双连通分量编号.
         vector<int> bel(n + 1, -1);
         int cc = 0;
@@ -209,6 +209,6 @@ public:
                 }
             }
         }
-        return bel;
+        return {cc, bel};
     }
 };
