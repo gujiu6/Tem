@@ -135,12 +135,13 @@ pair<int, vector<int>> BitsetSCC(const vector<vector<Edge>>& g) {
 
 // 4.割边与边双连通分量
 class EdgeBCC {
+public:
     int n, tim = 0;
     vector<array<int, 2>> edges;
     vector<vector<array<int, 2>>> g;
     vector<int> dfn, low; // dfn[u] 是进入时间，low[u] 是不经过父边能到达的最早时间
     vector<bool> bridge; // bridge[i] 标记第 i 条边是否为桥
-
+private:
     void dfs(int u, int pe) {
         // u 是当前点,pe 是进入 u 的边编号,计算 low 并标记桥，无返回值
         dfn[u] = low[u] = ++tim;
