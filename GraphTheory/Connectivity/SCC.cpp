@@ -145,14 +145,14 @@ private:
     void dfs(int u, int pe) {
         // u 是当前点,pe 是进入 u 的边编号,计算 low 并标记桥，无返回值
         dfn[u] = low[u] = ++tim;
-        for (const auto &[v, id] : g[u]) {
-            if (id == pe) {
+        for(const auto &[v, id] : g[u]) {
+            if(id == pe) {
                 continue;
             }
-            if (!dfn[v]) {
+            if(!dfn[v]) {
                 dfs(v, id);
                 low[u] = min(low[u], low[v]);
-                if (low[v] > dfn[u]) {
+                if(low[v] > dfn[u]) {
                     bridge[id] = true;
                 }
             }
@@ -177,7 +177,7 @@ public:
         fill(dfn.begin(), dfn.end(), 0);
         fill(low.begin(), low.end(), 0);
         bridge.assign(edges.size(), false);
-        for (int u = 1; u <= n; u++) {
+        for(int u = 1; u <= n; u++) {
             if (!dfn[u]) {
                 dfs(u, -1);
             }
@@ -192,16 +192,16 @@ public:
         // 无参数,返回删除全部桥后每个点的边双连通分量编号.
         vector<int> bel(n + 1, -1);
         int cc = 0;
-        for (int s = 1; s <= n; s++) {
-            if (bel[s] != -1) {
+        for(int s = 1; s <= n; s++) {
+            if(bel[s] != -1) {
                 continue;
             }
             queue<int> q;
             q.push(s);
             bel[s] = ++cc;
-            while (!q.empty()) {
+            while(!q.empty()) {
                 auto u = q.front(); q.pop();
-                for (const auto &[v, id] : g[u]) {
+                for(const auto &[v, id] : g[u]) {
                     if (!bridge[id] && bel[v] == -1) {
                         bel[v] = bel[u];
                         q.push(v);
