@@ -2,6 +2,7 @@
 1.Tarjan 强连通分量                      O(n+m)          O(n)
 2.Kosaraju 强连通分量                    O(n+m)          O(n+m)
 3.Bitset 优化 Kosaraju                  O(n^3/64)       O(n^2/64)
+4.割边与边双连通分量
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -9,7 +10,7 @@ using i64 = long long;
 using ui64 = unsigned long long;
 struct WEdge {int v;i64 w = 0;};struct DEdge {int u, v;i64 w = 0;};struct Edge {int v;};
 
-//1.Tarjan 强连通分量
+// 1.Tarjan 强连通分量
 pair<int, vector<int>> TarjanSCC(const vector<vector<Edge>>& g) {
     int n = g.size() - 1;
     int tim = 0, cc = 0;//时间戳,SCC编号
@@ -47,7 +48,7 @@ pair<int, vector<int>> TarjanSCC(const vector<vector<Edge>>& g) {
     return {cc, bel};
 }
 
-//2.Kosaraju 强连通分量
+// 2.Kosaraju 强连通分量
 pair<int, vector<int>> KosarajuSCC(const vector<vector<Edge>>& g) {
     int n = g.size() - 1;
     int cc = 0;
@@ -96,7 +97,7 @@ pair<int, vector<int>> KosarajuSCC(const vector<vector<Edge>>& g) {
     return {cc, bel};
 }
 
-//3.Bitset 优化 Kosaraju
+// 3.Bitset 优化 Kosaraju
 pair<int, vector<int>> BitsetSCC(const vector<vector<Edge>>& g) {
     int n = g.size() - 1;
     int w = (n + 64 - 1) / 64;//w表示需要多少个64位整数保存一行bitset(向上取整)
@@ -131,3 +132,82 @@ pair<int, vector<int>> BitsetSCC(const vector<vector<Edge>>& g) {
     }
     return {cc, bel};
 }
+
+// 4.割边与边双连通分量
+class EdgeBCC {
+    int n, tim = 0;
+    vector<array<int, 2>> edges;
+    vector<vector<array<int, 2>>> g;
+    vector<int> dfn, low; // dfn[u] 是进入时间，low[u] 是不经过父边能到达的最早时间
+    vector<bool> bridge; // bridge[i] 标记第 i 条边是否为桥
+
+    void dfs(int u, int pe) {
+        // u 是当前点,pe 是进入 u 的边编号,计算 low 并标记桥，无返回值
+        dfn[u] = low[u] = ++tim;
+        for (const auto &[v, id] : g[u]) {
+            if (id == pe) {
+                continue;
+            }
+            if (!dfn[v]) {
+                dfs(v, id);
+                low[u] = min(low[u], low[v]);
+                if (low[v] > dfn[u]) {
+                    bridge[id] = true;
+                }
+            }
+            else {
+                low[u] = min(low[u], dfn[v]);
+            }
+        }
+    }
+public:
+    EdgeBCC(int n) : n(n), g(n + 1), dfn(n + 1), low(n + 1) {}
+    int addEdge(int u, int v) {
+        int id = edges.size();
+        edges.push_back({u, v});
+        g[u].push_back({v, id});
+        g[v].push_back({u, id});
+        return id;
+    }
+
+    void build() {
+        // 无参数,重新计算全部桥,无返回值.
+        tim = 0;
+        fill(dfn.begin(), dfn.end(), 0);
+        fill(low.begin(), low.end(), 0);
+        bridge.assign(edges.size(), false);
+        for (int u = 1; u <= n; u++) {
+            if (!dfn[u]) {
+                dfs(u, -1);
+            }
+        }
+    }
+
+    const vector<bool> &bridges() const {
+        return bridge;
+    }
+
+    vector<int> comps() const {
+        // 无参数,返回删除全部桥后每个点的边双连通分量编号.
+        vector<int> bel(n + 1, -1);
+        int cc = 0;
+        for (int s = 1; s <= n; s++) {
+            if (bel[s] != -1) {
+                continue;
+            }
+            queue<int> q;
+            q.push(s);
+            bel[s] = ++cc;
+            while (!q.empty()) {
+                auto u = q.front(); q.pop();
+                for (const auto &[v, id] : g[u]) {
+                    if (!bridge[id] && bel[v] == -1) {
+                        bel[v] = bel[u];
+                        q.push(v);
+                    }
+                }
+            }
+        }
+        return bel;
+    }
+};
