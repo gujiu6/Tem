@@ -215,13 +215,14 @@ public:
 
 // 5.割点与点双连通分量
 class VertexBCC {
+public:
     int n, tim = 0;
     vector<array<int, 2>> ed;
     vector<vector<array<int, 2>>> g;
     vector<int> dfn, low, st;
     vector<bool> cut;
     vector<vector<int>> bcc;
-
+private:
     void dfs(int u, int pe) {
         dfn[u] = low[u] = ++tim;
         int son = 0;
@@ -262,7 +263,7 @@ class VertexBCC {
     }
 
 public:
-    VertexBCC(int n) : n(n), g(n + 1), dfn(n + 1), low(n + 1), cut(n + 1){}
+    VertexBCC(int n) : n(n), g(n + 1), dfn(n + 1), low(n + 1), cut(n + 1) {}
 
     int addEdge(int u, int v) {
         int id = ed.size();
