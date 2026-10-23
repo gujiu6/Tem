@@ -212,3 +212,106 @@ public:
         return {cc, bel};
     }
 };
+
+// 5.割点与点双连通分量
+class VertexBCC {
+    int n, tim = 0;
+    vector<array<int, 2>> ed;
+    vector<vector<array<int, 2>>> g;
+    vector<int> dfn, low, st;
+    vector<bool> cut;
+    vector<vector<int>> bcc;
+
+    void dfs(int u, int pe) {
+        dfn[u] = low[u] = ++tim;
+        int son = 0;
+        for (const auto &[v, id] : g[u]) {
+            if (id == pe) {
+                continue;
+            }
+            if (!dfn[v]) {
+                son++;
+                st.push_back(id);
+                dfs(v, id);
+                low[u] = min(low[u], low[v]);
+                if (low[v] >= dfn[u]) {
+                    if (pe != -1 || son > 1) {
+                        cut[u] = true;
+                    }
+                    vector<int> cur;
+                    while (true) {
+                        int x = st.back();
+                        st.pop_back();
+                        cur.push_back(ed[x][0]);
+                        cur.push_back(ed[x][1]);
+                        if (x == id) {
+                            break;
+                        }
+                    }
+                    bcc.push_back(move(cur));
+                }
+            }
+            else if (dfn[v] < dfn[u]) {
+                st.push_back(id);
+                low[u] = min(low[u], dfn[v]);
+            }
+        }
+        if (pe == -1 && son == 0) {
+            bcc.push_back({u});
+        }
+    }
+
+public:
+    VertexBCC(int n) : n(n), g(n + 1), dfn(n + 1), low(n + 1), cut(n + 1){}
+
+    int addEdge(int u, int v) {
+        int id = ed.size();
+        ed.push_back({u, v});
+        g[u].push_back({v, id});
+        g[v].push_back({u, id});
+        return id;
+    }
+
+    void build() {
+        tim = 0;
+        fill(dfn.begin(), dfn.end(), 0);
+        fill(low.begin(), low.end(), 0);
+        fill(cut.begin(), cut.end(), false);
+        st.clear();
+        bcc.clear();
+
+        for (int u = 1; u <= n; u++) {
+            if (!dfn[u]) {
+                dfs(u, -1);
+            }
+        }
+
+        vector<int> head(n + 1, -1);
+        vector<array<int, 2>> link;
+        link.reserve(n + ed.size());
+        for (int i = 0; i < (int)bcc.size(); i++) {
+            for (int u : bcc[i]) {
+                if (head[u] != -1 && link[head[u]][0] == i) {
+                    continue;
+                }
+                link.push_back({i, head[u]});
+                head[u] = (int)link.size() - 1;
+            }
+            bcc[i].clear();
+        }
+
+        for (int u = 1; u <= n; u++) {
+            for (int j = head[u]; j != -1; j = link[j][1]) {
+                bcc[link[j][0]].push_back(u);
+            }
+        }
+    }
+
+    const vector<bool> &cutVertices() const {
+        return cut;
+    }
+
+    const vector<vector<int>> &comps() const {
+        return bcc;
+    }
+};
