@@ -2,6 +2,7 @@
 1.浮点误差与精确整数几何
 2.Point / Vector
 3.点积、叉积、长度、夹角、旋转
+4.极角排序与象限分类
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -163,4 +164,29 @@ template <class T> Point<T> rot(const Point<T> &a) {
     return {-a.y, a.x};
 }
 
+}
+//4.极角排序与象限分类
+template <class T> int half(Point<T> p) {
+    // p 是向量;返回其所在的极角半平面编号.
+    return p.y < 0 || (p.y == 0 && p.x < 0);
+}
+
+// 以原点为极点，按 [-pi, pi) 逆时针排序；同射线按距离升序。
+template <class T> bool polarCmp(Point<T> a, Point<T> b) {
+    // a、b 是相对同一原点的向量;返回 a 是否应排在 b 前面.
+    int x = half(a);
+    int y = half(b);
+    if (x != y) {
+        return x < y;
+    }
+    auto c = cross(a, b);
+    return c ? c > 0 : square(a) < square(b);
+}
+
+// 绕极点 o 排序。
+template <class T> void polarSort(vector<Point<T>> &a, Point<T> o = {0, 0}) {
+    // 参数 a 表示 要原地按极角排序的点或向量序列;o 表示 极角排序使用的原点;以 o 为原点原地按极角排序点集，无返回值.
+    sort(a.begin(), a.end(), [&](Point<T> x, Point<T> y) {
+        return polarCmp(x - o, y - o);
+    });
 }
