@@ -121,6 +121,8 @@ template <class T> bool eq(Point<T> a, Point<T> b) {
 }
 
 //3.点积、叉积、长度、夹角、旋转
+namespace {
+
 template <class T> T dot(const Point<T> &a, const Point<T> &b) {
     // a、b 表示两个向量;返回点积.
     return a.x * b.x + a.y * b.y;
@@ -159,4 +161,6 @@ template <class T> Point<ld> rotate(const Point<T> &a, ld t) {
 template <class T> Point<T> rot(const Point<T> &a) {
     // a 表示向量;返回逆时针旋转 90 度后的向量.
     return {-a.y, a.x};
+}
+
 }
