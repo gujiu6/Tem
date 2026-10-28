@@ -4,6 +4,7 @@
 2.Point / Vector
 3.点积、叉积、长度、夹角、旋转
 4.极角排序与象限分类
+5.Line(直线) / Ray(射线) / Segment(线段)
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -166,6 +167,7 @@ template <class T> Point<T> rot(const Point<T> &a) {
 }
 
 }
+
 //4.极角排序与象限分类
 namespace {
 
@@ -192,6 +194,34 @@ template <class T> void polarSort(vector<Point<T>> &a, Point<T> o = {0, 0}) {
     sort(a.begin(), a.end(), [&](Point<T> x, Point<T> y) {
         return polarCmp(x - o, y - o);
     });
+}
+
+}
+
+//5.Line(直线) / Ray(射线) / Segment(线段)
+namespace {
+
+template <class T> struct Line {
+    Point<T> a; // a 保存直线、射线或线段的起点.
+    Point<T> b; // b 保存直线上的第二点;作为射线时方向为 b-a.
+
+    Line(Point<T> a = {}, Point<T> b = {}) : a(a), b(b) {}
+};
+
+struct DirLine {
+    Point<ld> p; // p 保存直线上一点.
+    Point<ld> v; // v 保存非零方向向量.
+
+    Point<ld> at(ld t) const {
+        // t 表示方向参数;返回 p+v*t.
+        return p + v * t;
+    }
+};
+
+template <class T> DirLine toDir(const Line<T> &l) {
+    // l 表示端点式直线;返回供浮点算法使用的点方向式直线.
+    auto v = l.b - l.a;
+    return {(Point<ld>)l.a, (Point<ld>)v};
 }
 
 }
