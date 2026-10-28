@@ -5,6 +5,7 @@
 3.点积、叉积、长度、夹角、旋转
 4.极角排序与象限分类
 5.Line(直线) / Ray(射线) / Segment(线段)
+6.平行、垂直、共线、同侧/异侧
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -222,6 +223,31 @@ template <class T> DirLine toDir(const Line<T> &l) {
     // l 表示端点式直线;返回供浮点算法使用的点方向式直线.
     auto v = l.b - l.a;
     return {(Point<ld>)l.a, (Point<ld>)v};
+}
+
+}
+
+//6.平行、垂直、共线、同侧/异侧
+namespace {
+
+template <class T> bool parallel(const Line<T> &a, const Line<T> &b) {
+    // a、b 表示两条端点式直线;返回方向是否平行.
+    return sgn(cross(a.b - a.a, b.b - b.a)) == 0;
+}
+
+template <class T> bool perp(const Line<T> &a, const Line<T> &b) {
+    // a、b 表示两条端点式直线;返回方向是否垂直.
+    return sgn(dot(a.b - a.a, b.b - b.a)) == 0;
+}
+
+template <class T> int side(const Line<T> &l, const Point<T> &p) {
+    // l 表示有向直线,p 表示查询点;返回叉积符号,正数在左侧.
+    return sgn(cross(l.b - l.a, p - l.a));
+}
+
+bool parallel(DirLine a, DirLine b) {
+    // a、b 表示两条点方向式直线；返回方向是否平行.
+    return sgn(cross(a.v, b.v)) == 0;
 }
 
 }
