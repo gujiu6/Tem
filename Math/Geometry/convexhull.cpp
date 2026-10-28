@@ -16,7 +16,7 @@ template <class T> vector<Point<T>> hull(vector<Point<T>> a) {
     vector<Point<T>> h;
     for (int t = 0; t < 2; t++) {
         int z = h.size();
-        for (auto p : a) {
+        for (const auto &p : a) {
             while ((int)h.size() >= z + 2 && sgn(cross(h.back() - h[h.size() - 2], p - h.back())) <= 0) {
                 h.pop_back();
             }
@@ -27,4 +27,4 @@ template <class T> vector<Point<T>> hull(vector<Point<T>> a) {
     }
     return h;
 }
-// 
+
