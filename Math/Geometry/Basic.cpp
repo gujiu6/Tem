@@ -1,5 +1,5 @@
 /*
-注:逆时针:叉乘 > 0 : 凸点;叉乘 < 0 : 凹点
+注:逆时针:叉乘 > 0 : 凸点;叉乘 < 0 : 凹点;
 1.浮点误差与精确整数几何
 2.Point / Vector
 3.点积、叉积、长度、夹角、旋转
@@ -13,7 +13,7 @@ using ld = long double;
 using i64 = long long;
 constexpr ld eps = 1e-12;
 
-//1.浮点误差与精确整数几何
+// 1.浮点误差与精确整数几何
 namespace {
 
 template <class T> int sgn(T x) {
@@ -39,7 +39,7 @@ bool eq(ld x, ld y) {
 
 }
 
-//2.Point / Vector
+// 2.Point / Vector
 template <class T> struct Point {
     T x, y;
     Point(const T &x = 0, const T &y = 0) : x(x), y(y) {}
@@ -124,7 +124,7 @@ template <class T> bool eq(Point<T> a, Point<T> b) {
     return eq(a.x, b.x) && eq(a.y, b.y);
 }
 
-//3.点积、叉积、长度、夹角、旋转
+// 3.点积、叉积、长度、夹角、旋转
 namespace {
 
 template <class T> T dot(const Point<T> &a, const Point<T> &b) {
@@ -169,7 +169,7 @@ template <class T> Point<T> rot(const Point<T> &a) {
 
 }
 
-//4.极角排序与象限分类
+// 4.极角排序与象限分类
 namespace {
 
 template <class T> int half(Point<T> p) {
@@ -199,7 +199,7 @@ template <class T> void polarSort(vector<Point<T>> &a, Point<T> o = {0, 0}) {
 
 }
 
-//5.Line(直线) / Ray(射线) / Segment(线段)
+// 5.Line(直线) / Ray(射线) / Segment(线段)
 namespace {
 
 template <class T> struct Line {
@@ -227,7 +227,7 @@ template <class T> DirLine toDir(const Line<T> &l) {
 
 }
 
-//6.平行、垂直、共线、同侧/异侧
+// 6.平行、垂直、共线、同侧/异侧
 namespace {
 
 template <class T> bool parallel(const Line<T> &a, const Line<T> &b) {
@@ -248,6 +248,53 @@ template <class T> int side(const Line<T> &l, const Point<T> &p) {
 bool parallel(DirLine a, DirLine b) {
     // a、b 表示两条点方向式直线；返回方向是否平行.
     return sgn(cross(a.v, b.v)) == 0;
+}
+
+}
+
+// 7.直线交点、投影、对称点
+namespace {
+
+template <class T> Point<ld> lineMeet(const Line<T> &a, const Line<T> &b) {
+    // a、b 表示两条不平行直线;返回唯一交点.
+    auto u = (Point<ld>)a.a;
+    auto v = (Point<ld>)(a.b - a.a);
+    auto p = (Point<ld>)b.a;
+    auto q = (Point<ld>)(b.b - b.a);
+    return u + v * (cross(p - u, q) / cross(v, q));
+}
+
+template <class T> Point<ld> projection(const Line<T> &l, const Point<T> &p) {
+    // l 表示非退化直线,p 表示查询点;返回 p 在直线上的正交投影.
+    auto a = (Point<ld>)l.a;
+    auto v = (Point<ld>)(l.b - l.a);
+    auto q = (Point<ld>)p;
+    return a + v * (dot(q - a, v) / square(v));
+}
+
+template <class T> Point<ld> reflection(const Line<T> &l, const Point<T> &p) {
+    // l 表示非退化直线,p 表示查询点;返回 p 关于直线的对称点.
+    return projection(l, p) * 2 - (Point<ld>)p;
+}
+
+Point<ld> isect(DirLine a, DirLine b) {
+    // a、b 表示两条不平行的点方向式直线;返回唯一交点.
+    return a.at(cross(b.p - a.p, b.v) / cross(a.v, b.v));
+}
+
+Point<ld> proj(DirLine l, Point<ld> p) {
+    // l 表示非退化点方向式直线,p 表示查询点;返回正交投影.
+    return l.at(dot(p - l.p, l.v) / square(l.v));
+}
+
+Point<ld> refl(DirLine l, Point<ld> p) {
+    // l 表示非退化点方向式直线,p 表示查询点;返回关于直线的对称点.
+    return proj(l, p) * 2 - p;
+}
+
+ld dis(DirLine l, Point<ld> p) {
+    // l 表示非退化点方向式直线,p 表示查询点;返回点到直线距离.
+    return fabsl(cross(l.v, p - l.p)) / abs(l.v);
 }
 
 }
