@@ -7,6 +7,7 @@
 5.Line(直线) / Ray(射线) / Segment(线段)
 6.平行、垂直、共线、同侧/异侧
 7.直线交点、投影、对称点
+8.点到 直线/线段 距离
 */
 #include <bits/stdc++.h>
 using namespace std;
@@ -296,6 +297,30 @@ Point<ld> refl(DirLine l, Point<ld> p) {
 ld dis(DirLine l, Point<ld> p) {
     // l 表示非退化点方向式直线,p 表示查询点;返回点到直线距离.
     return fabsl(cross(l.v, p - l.p)) / abs(l.v);
+}
+
+}
+
+// 8.点到 直线/线段 距离
+namespace {
+
+template <class T> ld distancePL(const Point<T> &p, const Line<T> &l) {
+    // p 表示点,l 表示非退化直线;返回点到无限直线的距离.
+    return fabsl((ld)cross(l.b - l.a, p - l.a)) / abs(l.b - l.a);
+}
+
+template <class T> ld distancePS(const Point<T> &p, const Line<T> &l) {
+    // p 表示点,l 表示线段;返回点到闭线段的最短距离.
+    if (l.a == l.b) {
+        return abs(p - l.a);
+    }
+    if (dot(p - l.a, l.b - l.a) <= 0) {
+        return abs(p - l.a);
+    }
+    if (dot(p - l.b, l.a - l.b) <= 0) {
+        return abs(p - l.b);
+    }
+    return distancePL(p, l);
 }
 
 }
