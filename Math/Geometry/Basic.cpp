@@ -167,6 +167,8 @@ template <class T> Point<T> rot(const Point<T> &a) {
 
 }
 //4.极角排序与象限分类
+namespace {
+
 template <class T> int half(Point<T> p) {
     // p 是向量;返回其所在的极角半平面编号.
     return p.y < 0 || (p.y == 0 && p.x < 0);
@@ -190,4 +192,6 @@ template <class T> void polarSort(vector<Point<T>> &a, Point<T> o = {0, 0}) {
     sort(a.begin(), a.end(), [&](Point<T> x, Point<T> y) {
         return polarCmp(x - o, y - o);
     });
+}
+
 }
