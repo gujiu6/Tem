@@ -6,6 +6,7 @@
 4.极角排序与象限分类
 5.Line(直线) / Ray(射线) / Segment(线段)
 6.平行、垂直、共线、同侧/异侧
+7.直线交点、投影、对称点
 */
 #include <bits/stdc++.h>
 using namespace std;
