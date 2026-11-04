@@ -21,17 +21,14 @@ public:
     Bit1(const vector<T>& a):a(a), n(a.size() - 1), bit(n + 1) {
         for(int i = 1; i <= n; i++) {
             bit[i] += a[i];
-            int j = i + lowbit(i);
+            int j = i + i & -i;
             if(j <= n) bit[j] += bit[i];
         }
-    }
-    inline int lowbit(int p) {
-        return p & -p;
     }
     void add(int p, T v) {
         while(p <= n){
             bit[p] += v;
-            p += lowbit(p);
+            p += p & -p;
         }
     }
     void set(int p, T v) {
@@ -42,7 +39,7 @@ public:
         T ans = 0;
         while(p > 0) {
             ans += bit[p];
-            p -= lowbit(p);
+            p -= p & -p;
         }
         return ans;
     }
@@ -75,20 +72,17 @@ public:
             range_add(i, i, a[i]);
         }
     }
-    inline int lowbit(int p) {
-        return p & -p;
-    }
     void add(vector<T>& bit, int p, T v) {
         while(p <= n){
             bit[p] += v;
-            p += lowbit(p);
+            p += p & -p;
         }
     }
     T sum(const vector<T>& bit, int p) const {
         T ans = 0;
         while(p > 0) {
             ans += bit[p];
-            p -= lowbit(p);
+            p -= p & -p;
         }
         return ans;
     }
@@ -126,7 +120,7 @@ public:
             int px = lower_bound(xs.begin(), xs.end(), x) - xs.begin() + 1;
             while(px <= n) {
                 ys[px].emplace_back(y);
-                px += lower_bit(px);
+                px += px & -px;
             }
         }
         bit.resize(n + 1);
@@ -136,9 +130,6 @@ public:
             v.erase(unique(v.begin(), v.end()), v.end());
             bit[px].assign(v.size() + 1, 0);
         }
-    }
-    int lower_bit(int p) {
-        return p & -p;
     }
     void add(int x, int y, T v) {
         auto it = lower_bound(xs.begin(), xs.end(), v);
@@ -150,9 +141,9 @@ public:
             int py = it - ys[px].begin() + 1;
             while(py < bit[px].size()) {
                 bit[px][py] += v;
-                py += lower_bit(py);
+                py += py & -py;
             }
-            px += lower_bit(px);
+            px += px & -px;
         }
     }
     void add(int x1, int y1, int x2, int y2, T v) {
@@ -168,9 +159,9 @@ public:
             int py = lower_bound(ys[px].begin(), ys[px].end(), y) - ys[px].begin();
             while(py > 0) {
                 ans += bit[px][py];
-                py -= lower_bit(py);
+                py -= py & -py;
             }
-            px -= lower_bit(px);
+            px -= px & -px;
         }
         return ans;
     }
